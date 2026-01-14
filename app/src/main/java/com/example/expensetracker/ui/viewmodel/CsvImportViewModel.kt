@@ -91,12 +91,11 @@ class CsvImportViewModel(
             val preview = result.rows
                 .sortedWith(compareBy<BankCsvRow> { it.date }.thenBy { it.rawLineIndex })
                 .map { r ->
-                    val typeUpper = if (r.signedAmountCents < 0L) "EXPENSE" else "INCOME"
                     CsvPreviewRow(
                         date = r.date,
                         description = r.description,
-                        amountCentsAbs = abs(r.signedAmountCents),
-                        typeUpper = typeUpper
+                        amountCentsAbs = r.amountCentsAbs,
+                        typeUpper = r.typeUpper
                     )
                 }
 
@@ -143,8 +142,8 @@ class CsvImportViewModel(
                 var d = 0
 
                 for (r in lastParsed) {
-                    val type = if (r.signedAmountCents < 0L) TransactionType.EXPENSE else TransactionType.INCOME
-                    val amountAbs = abs(r.signedAmountCents)
+                    val type = if (r.typeUpper == "EXPENSE") TransactionType.EXPENSE else TransactionType.INCOME
+                    val amountAbs = r.amountCentsAbs
 
                     val catId = bestCategoryForDescription(r.description, rules) ?: fallbackCategoryId
 
