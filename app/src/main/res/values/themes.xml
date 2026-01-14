@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Main app theme (Material 3) -->
+    <style name="Theme.ExpenseTracker" parent="Theme.Material3.DayNight.NoActionBar" />
+
+    <!-- Splash theme (uses androidx core-splashscreen) -->
+    <style name="Theme.ExpenseTracker.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@android:color/white</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <item name="postSplashScreenTheme">@style/Theme.ExpenseTracker</item>
+    </style>
+
+</resources>
