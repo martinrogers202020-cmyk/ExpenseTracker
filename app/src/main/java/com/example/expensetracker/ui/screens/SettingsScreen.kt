@@ -49,8 +49,10 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import android.app.Activity
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -68,6 +70,7 @@ import com.example.expensetracker.R
 import com.example.expensetracker.data.datastore.ThemeMode
 import com.example.expensetracker.ui.viewmodel.SettingsViewModel
 import com.example.expensetracker.ui.viewmodel.SettingsViewModelFactory
+import kotlinx.coroutines.launch
 
 @Composable
 fun SettingsScreen(
@@ -84,6 +87,8 @@ fun SettingsScreen(
     val vm: SettingsViewModel = viewModel(factory = SettingsViewModelFactory(context))
     val prefs by vm.appearance.collectAsStateWithLifecycle()
     val currentLanguageTag by vm.currentLanguageTag.collectAsStateWithLifecycle()
+    val scope = rememberCoroutineScope()
+    val activity = context as? Activity
 
     val cs = MaterialTheme.colorScheme
     val accent = cs.primary
@@ -223,7 +228,14 @@ fun SettingsScreen(
             item {
                 LanguageItem(
                     languageTag = currentLanguageTag,
-                    onLanguageChange = vm::applyLanguageChange,
+                    onLanguageChange = { newTag ->
+                        scope.launch {
+                            val updated = vm.updateLanguage(newTag)
+                            if (updated) {
+                                activity?.recreate()
+                            }
+                        }
+                    },
                     accent = accent,
                     borderColor = border,
                     textPrimary = textPrimary,
@@ -874,3 +886,4 @@ private fun LazyColumnWithSpacing(
         content = content
     )
 }
+import androidx.compose.ui.platform.LocalContext

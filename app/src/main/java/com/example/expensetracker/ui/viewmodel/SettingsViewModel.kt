@@ -7,8 +7,8 @@ import com.example.expensetracker.data.datastore.AppearancePrefs
 import com.example.expensetracker.data.datastore.ThemeMode
 import com.example.expensetracker.data.repo.SettingsRepository
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -31,16 +31,14 @@ class SettingsViewModel(
             )
         )
 
-    private val _currentLanguageTag = MutableStateFlow(AppearancePrefs().languageTag)
-    val currentLanguageTag: StateFlow<String> = _currentLanguageTag
-
-    init {
-        viewModelScope.launch {
-            repo.appearance.collect { prefs ->
-                _currentLanguageTag.value = prefs.languageTag
-            }
-        }
-    }
+    val currentLanguageTag: StateFlow<String> =
+        repo.appearance
+            .map { it.languageTag }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = AppearancePrefs().languageTag
+            )
 
     fun setThemeMode(value: ThemeMode) = viewModelScope.launch { repo.setThemeMode(value) }
     fun setDynamicColor(value: Boolean) = viewModelScope.launch { repo.setDynamicColor(value) }
@@ -50,15 +48,7 @@ class SettingsViewModel(
     fun setProEnabled(value: Boolean) = viewModelScope.launch { repo.setProEnabled(value) }
     fun setLanguageTag(value: String) = viewModelScope.launch { repo.setLanguageTag(value) }
 
-    fun applyLanguageChange(value: String) = viewModelScope.launch {
-        val normalized = value.ifBlank { "en" }
-        if (_currentLanguageTag.value == normalized) {
-            return@launch
-        }
-        repo.applyLanguageIfNeeded(normalized)
-        repo.setLanguageTag(normalized)
-        if (_currentLanguageTag.value != normalized) {
-            _currentLanguageTag.value = normalized
-        }
+    suspend fun updateLanguage(value: String): Boolean {
+        return repo.updateLanguageIfNeeded(value)
     }
 }
