@@ -87,7 +87,6 @@ fun SettingsScreen(
     val vm: SettingsViewModel = viewModel(factory = SettingsViewModelFactory(context))
     val prefs by vm.appearance.collectAsStateWithLifecycle()
     val currentLanguageTag by vm.currentLanguageTag.collectAsStateWithLifecycle()
-    val scope = rememberCoroutineScope()
 
     val cs = MaterialTheme.colorScheme
     val accent = cs.primary
@@ -227,11 +226,7 @@ fun SettingsScreen(
             item {
                 LanguageItem(
                     languageTag = currentLanguageTag,
-                    onLanguageChange = { newTag ->
-                        scope.launch {
-                            vm.updateLanguage(newTag)
-                        }
-                    },
+                    onLanguageChange = { newTag -> vm.updateLanguage(newTag) },
                     accent = accent,
                     borderColor = border,
                     textPrimary = textPrimary,
@@ -469,7 +464,7 @@ private fun AppearanceItem(
 @Composable
 private fun LanguageItem(
     languageTag: String,
-    onLanguageChange: (String) -> Unit,
+    onLanguageChange: suspend (String) -> Unit,
     accent: Color,
     borderColor: Color,
     textPrimary: Color,
@@ -478,6 +473,7 @@ private fun LanguageItem(
     pill: Color
 ) {
     var expanded by rememberSaveable { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
 
     val currentLanguage = when (languageTag) {
         LanguageTags.SYSTEM -> stringResource(R.string.language_system_default)
@@ -517,7 +513,7 @@ private fun LanguageItem(
                     FilterChip(
                         selected = languageTag == LanguageTags.SYSTEM,
                         onClick = {
-                            onLanguageChange(LanguageTags.SYSTEM)
+                            scope.launch { onLanguageChange(LanguageTags.SYSTEM) }
                             expanded = false
                         },
                         label = { Text(stringResource(R.string.language_system_default)) }
@@ -525,7 +521,7 @@ private fun LanguageItem(
                     FilterChip(
                         selected = languageTag == "en",
                         onClick = {
-                            onLanguageChange("en")
+                            scope.launch { onLanguageChange("en") }
                             expanded = false
                         },
                         label = { Text(stringResource(R.string.language_english)) }
@@ -533,7 +529,7 @@ private fun LanguageItem(
                     FilterChip(
                         selected = languageTag == "tr",
                         onClick = {
-                            onLanguageChange("tr")
+                            scope.launch { onLanguageChange("tr") }
                             expanded = false
                         },
                         label = { Text(stringResource(R.string.language_turkish)) }
