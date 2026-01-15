@@ -2,6 +2,8 @@ package com.example.expensetracker.data.repo
 
 import android.content.Context
 import android.util.Log
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import androidx.datastore.preferences.core.edit
 import com.example.expensetracker.data.datastore.AccentChoice
 import com.example.expensetracker.data.datastore.AppearancePrefs
@@ -96,5 +98,29 @@ class SettingsRepository(private val context: Context) {
             Log.d(TAG, "Persisting language preference: $normalized")
         }
         context.settingsDataStore.edit { it[SettingsKeys.LANGUAGE_TAG] = normalized }
+    }
+
+    suspend fun updateLanguageIfNeeded(newTag: String): Boolean {
+        val normalized = normalizeLanguageTag(newTag)
+        val current = context.settingsDataStore.data.first()[SettingsKeys.LANGUAGE_TAG] ?: LanguageTags.DEFAULT
+        if (current == normalized) {
+            if (LOG_LANGUAGE_CHANGES) {
+                Log.d(TAG, "Language preference unchanged: $normalized")
+            }
+            return false
+        }
+
+        if (LOG_LANGUAGE_CHANGES) {
+            Log.d(TAG, "Persisting language preference: $normalized")
+        }
+        context.settingsDataStore.edit { it[SettingsKeys.LANGUAGE_TAG] = normalized }
+
+        val locales = if (normalized == LanguageTags.SYSTEM) {
+            LocaleListCompat.getEmptyLocaleList()
+        } else {
+            LocaleListCompat.forLanguageTags(normalized)
+        }
+        AppCompatDelegate.setApplicationLocales(locales)
+        return true
     }
 }
