@@ -366,10 +366,6 @@
     <string name="add_transaction_attachment_label">Add attachment</string>
     <string name="add_transaction_attachment_hint">Tap to choose a file</string>
 
-    <!-- Expense list -->
-    <string name="expenses_empty_state">No expenses yet.</string>
-    <string name="expenses_no_note">No note</string>
-
     <!-- Placeholders -->
     <string name="placeholder_home">Home (TODO)</string>
     <string name="placeholder_categories">Categories (TODO)</string>
