@@ -11,6 +11,9 @@
         android:localeConfig="@xml/locales_config"
         android:supportsRtl="true"
         android:theme="@style/Theme.ExpenseTracker">
+        <meta-data
+            android:name="android.app.locale_config"
+            android:resource="@xml/locales_config" />
 
         <!-- If you use FileProvider for sharing PDFs/CSVs -->
         <provider
@@ -33,6 +36,13 @@
             </intent-filter>
         </activity>
 
+        <service
+            android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
+            android:exported="false">
+            <meta-data
+                android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
+                android:resource="@xml/locales_config" />
+        </service>
     </application>
 
     <!-- optional: allow opening https links if you use Drive sign-in / browser -->

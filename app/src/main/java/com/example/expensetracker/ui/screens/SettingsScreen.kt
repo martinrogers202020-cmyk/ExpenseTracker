@@ -66,9 +66,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.expensetracker.R
 import com.example.expensetracker.data.datastore.ThemeMode
+import com.example.expensetracker.data.datastore.LanguageTags
 import com.example.expensetracker.ui.viewmodel.SettingsViewModel
 import com.example.expensetracker.ui.viewmodel.SettingsViewModelFactory
-import kotlinx.coroutines.launch
 
 @Composable
 fun SettingsScreen(
@@ -475,6 +475,7 @@ private fun LanguageItem(
     var expanded by rememberSaveable { mutableStateOf(false) }
 
     val currentLanguage = when (languageTag) {
+        LanguageTags.SYSTEM -> stringResource(R.string.language_system_default)
         "tr" -> stringResource(R.string.language_turkish)
         else -> stringResource(R.string.language_english)
     }
@@ -508,6 +509,14 @@ private fun LanguageItem(
                 )
 
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    FilterChip(
+                        selected = languageTag == LanguageTags.SYSTEM,
+                        onClick = {
+                            onLanguageChange(LanguageTags.SYSTEM)
+                            expanded = false
+                        },
+                        label = { Text(stringResource(R.string.language_system_default)) }
+                    )
                     FilterChip(
                         selected = languageTag == "en",
                         onClick = {
