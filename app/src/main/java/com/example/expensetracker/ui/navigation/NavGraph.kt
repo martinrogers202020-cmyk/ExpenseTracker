@@ -45,8 +45,16 @@ import com.example.expensetracker.ui.screens.PaywallScreen
 import com.example.expensetracker.ui.screens.RecurringScreen
 import com.example.expensetracker.ui.screens.ReportsScreen
 import com.example.expensetracker.ui.screens.SettingsScreen
+import com.example.expensetracker.ui.screens.puzzle.ApplyOperationScreen
+import com.example.expensetracker.ui.screens.puzzle.DailyPuzzleScreen
+import com.example.expensetracker.ui.screens.puzzle.PuzzleOperation
+import com.example.expensetracker.ui.screens.puzzle.PuzzleResultsScreen
+import com.example.expensetracker.ui.screens.puzzle.SelectNumberScreen
+import com.example.expensetracker.ui.screens.puzzle.sharePuzzleResults
 import com.example.expensetracker.ui.viewmodel.HomeViewModel
 import com.example.expensetracker.ui.viewmodel.HomeViewModelFactory
+import com.example.expensetracker.ui.viewmodel.PuzzleViewModel
+import com.example.expensetracker.ui.viewmodel.PuzzleViewModelFactory
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.util.Calendar
@@ -66,10 +74,12 @@ private fun todayEpochDayUtc(): Long {
 @Composable
 fun NavGraph() {
     val navController = rememberNavController()
-    val appContext = LocalContext.current.applicationContext
+    val context = LocalContext.current
+    val appContext = context.applicationContext
     val scope = rememberCoroutineScope()
 
     var proEnabled by rememberSaveable { mutableStateOf(false) }
+    val puzzleVm: PuzzleViewModel = viewModel(factory = PuzzleViewModelFactory(appContext))
 
     LaunchedEffect(Unit) {
         try {
@@ -102,7 +112,11 @@ fun NavGraph() {
                 route == Routes.NOTIFICATIONS ||
                 route == Routes.ADVANCED_REPORTS ||
                 route == Routes.CSV_IMPORT ||
-                route == Routes.MERCHANT_RULES // ✅ usually you want full screen here too
+                route == Routes.MERCHANT_RULES ||
+                route == Routes.DAILY_PUZZLE ||
+                route == Routes.SELECT_NUMBER ||
+                route == Routes.APPLY_OPERATION ||
+                route == Routes.PUZZLE_RESULTS // ✅ usually you want full screen here too
 
     Scaffold(
         bottomBar = { if (!hideBottomBar) AppBottomBar(navController) }
@@ -132,7 +146,8 @@ fun NavGraph() {
                     onOpenReports = { navController.navigate(Routes.REPORTS) },
                     onOpenCategories = { navController.navigate(Routes.CATEGORIES) },
                     onOpenSettings = { navController.navigate(Routes.SETTINGS) },
-                    onEditTransaction = { id -> navController.navigate("${Routes.EDIT_TX}/$id") }
+                    onEditTransaction = { id -> navController.navigate("${Routes.EDIT_TX}/$id") },
+                    onOpenDailyPuzzle = { navController.navigate(Routes.DAILY_PUZZLE) }
                 )
             }
 
@@ -289,6 +304,67 @@ fun NavGraph() {
 
             composable(Routes.MERCHANT_RULES) {
                 MerchantRulesScreen(onBack = { navController.popBackStack() })
+            }
+
+            composable(Routes.DAILY_PUZZLE) {
+                val state by puzzleVm.uiState.collectAsStateWithLifecycle()
+                LaunchedEffect(Unit) {
+                    puzzleVm.refreshDay()
+                }
+                DailyPuzzleScreen(
+                    uiState = state,
+                    onStart = {
+                        puzzleVm.resetAttempt()
+                        navController.navigate(Routes.SELECT_NUMBER)
+                    },
+                    onViewResults = { navController.navigate(Routes.PUZZLE_RESULTS) },
+                    onRefresh = { puzzleVm.refreshDay() },
+                    onBack = { navController.popBackStack() }
+                )
+            }
+
+            composable(Routes.SELECT_NUMBER) {
+                val state by puzzleVm.uiState.collectAsStateWithLifecycle()
+                SelectNumberScreen(
+                    uiState = state,
+                    onSelect = { index, value -> puzzleVm.selectCell(index, value) },
+                    onNext = { navController.navigate(Routes.APPLY_OPERATION) },
+                    onBack = { navController.popBackStack() }
+                )
+            }
+
+            composable(Routes.APPLY_OPERATION) {
+                val state by puzzleVm.uiState.collectAsStateWithLifecycle()
+                ApplyOperationScreen(
+                    uiState = state,
+                    onApply = { op ->
+                        val completed = when (op) {
+                            PuzzleOperation.AddTwo -> puzzleVm.applyOperation { it + 2 }
+                            PuzzleOperation.MinusThree -> puzzleVm.applyOperation { it - 3 }
+                            PuzzleOperation.Double -> puzzleVm.applyOperation { it * 2 }
+                            PuzzleOperation.Half -> puzzleVm.applyOperation { it / 2 }
+                        }
+
+                        if (completed) {
+                            navController.navigate(Routes.PUZZLE_RESULTS)
+                        } else {
+                            navController.popBackStack()
+                        }
+                    },
+                    onBack = { navController.popBackStack() }
+                )
+            }
+
+            composable(Routes.PUZZLE_RESULTS) {
+                val state by puzzleVm.uiState.collectAsStateWithLifecycle()
+                val shareText = puzzleVm.buildShareText(state.target, state.lastResult)
+                PuzzleResultsScreen(
+                    uiState = state,
+                    onShare = { sharePuzzleResults(context, shareText) },
+                    onPlayAgain = { navController.navigate(Routes.SELECT_NUMBER) },
+                    onBack = { navController.popBackStack() },
+                    shareText = shareText
+                )
             }
         }
     }

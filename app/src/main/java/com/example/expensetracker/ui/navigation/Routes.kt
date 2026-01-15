@@ -32,5 +32,10 @@ object Routes {
 
     const val MERCHANT_RULES = "merchant_rules"
 
+    const val DAILY_PUZZLE = "daily_puzzle"
+    const val SELECT_NUMBER = "select_number"
+    const val APPLY_OPERATION = "apply_operation"
+    const val PUZZLE_RESULTS = "puzzle_results"
+
 
 }
