@@ -378,7 +378,7 @@ private fun AppearanceItem(
             }
         )
         if (prefsDynamicColor) {
-            append(" • ")
+            append(stringResource(R.string.settings_dynamic_separator))
             append(stringResource(R.string.settings_dynamic_label))
         }
     }
@@ -877,4 +877,3 @@ private fun LazyColumnWithSpacing(
         content = content
     )
 }
-import androidx.compose.ui.platform.LocalContext
