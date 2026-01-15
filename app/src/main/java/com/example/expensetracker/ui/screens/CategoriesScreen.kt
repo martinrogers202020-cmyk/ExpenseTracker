@@ -286,12 +286,10 @@ private fun localizedDefaultCategoryNameOrNull(dbName: String): String? {
     val resId = when (normalized) {
         "bills", "faturalar" -> R.string.category_default_bills
         "coffee", "kahve" -> R.string.category_default_coffee
-        "eating out", "dışarıda yeme" -> R.string.category_default_eating_out
+        "eating out", "dışarıda yeme", "disarida yeme" -> R.string.category_default_eating_out
         "groceries", "market" -> R.string.category_default_groceries
-        "health", "sağlık" -> R.string.category_default_health
+        "health", "sağlık", "saglik" -> R.string.category_default_health
         "rent", "kira" -> R.string.category_default_rent
-        "uncategorized" -> R.string.category_default_uncategorized
-        "income" -> R.string.category_default_income
         else -> null
     }
     return resId?.let { stringResource(it) }
