@@ -91,21 +91,21 @@ class SettingsRepository(private val context: Context) {
         context.settingsDataStore.edit { it[SettingsKeys.LANGUAGE_TAG] = normalized }
     }
 
-    fun applyLanguageIfNeeded(value: String): Boolean {
-        val normalized = normalizeLanguageTag(value)
-        val newLocales = LocaleListCompat.forLanguageTags(normalized)
-        val currentLocales = AppCompatDelegate.getApplicationLocales()
-        return if (currentLocales.toLanguageTags() != newLocales.toLanguageTags()) {
-            if (LOG_LANGUAGE_CHANGES) {
-                Log.d(TAG, "Applying appcompat locales: $normalized")
-            }
-            AppCompatDelegate.setApplicationLocales(newLocales)
-            true
-        } else {
+    suspend fun updateLanguageIfNeeded(newTag: String): Boolean {
+        val normalized = normalizeLanguageTag(newTag)
+        val currentLocales = AppCompatDelegate.getApplicationLocales().toLanguageTags()
+        if (currentLocales == normalized) {
             if (LOG_LANGUAGE_CHANGES) {
                 Log.d(TAG, "Appcompat locales already set: $normalized")
             }
-            false
+            return false
         }
+        val newLocales = LocaleListCompat.forLanguageTags(normalized)
+        if (LOG_LANGUAGE_CHANGES) {
+            Log.d(TAG, "Applying appcompat locales: $normalized")
+        }
+        AppCompatDelegate.setApplicationLocales(newLocales)
+        context.settingsDataStore.edit { it[SettingsKeys.LANGUAGE_TAG] = normalized }
+        return true
     }
 }
