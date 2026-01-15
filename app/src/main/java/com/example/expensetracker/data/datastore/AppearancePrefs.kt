@@ -9,5 +9,5 @@ data class AppearancePrefs(
     val fontScale: Float = 1.0f,
     val compactSpacing: Boolean = false,
     val proEnabled: Boolean = false,
-    val languageTag: String = "en"
+    val languageTag: String = LanguageTags.DEFAULT
 )

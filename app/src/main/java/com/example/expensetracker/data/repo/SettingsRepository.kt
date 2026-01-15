@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.datastore.preferences.core.edit
 import com.example.expensetracker.data.datastore.AccentChoice
 import com.example.expensetracker.data.datastore.AppearancePrefs
+import com.example.expensetracker.data.datastore.LanguageTags
 import com.example.expensetracker.data.datastore.SettingsKeys
 import com.example.expensetracker.data.datastore.ThemeMode
 import com.example.expensetracker.data.datastore.settingsDataStore
@@ -16,11 +17,19 @@ class SettingsRepository(private val context: Context) {
     private companion object {
         const val LOG_LANGUAGE_CHANGES = false
         const val TAG = "SettingsRepository"
-        const val DEFAULT_LANGUAGE = "en"
     }
 
     private fun normalizeLanguageTag(value: String): String =
-        value.ifBlank { DEFAULT_LANGUAGE }
+        when {
+            value == LanguageTags.SYSTEM -> LanguageTags.SYSTEM
+            value.isBlank() -> LanguageTags.DEFAULT
+            else -> value
+        }
+
+    val languageTag: Flow<String> =
+        context.settingsDataStore.data.map { prefs ->
+            prefs[SettingsKeys.LANGUAGE_TAG] ?: LanguageTags.DEFAULT
+        }
 
     val appearance: Flow<AppearancePrefs> =
         context.settingsDataStore.data.map { prefs ->
@@ -44,7 +53,7 @@ class SettingsRepository(private val context: Context) {
                 fontScale = prefs[SettingsKeys.FONT_SCALE] ?: 1.0f,
                 compactSpacing = prefs[SettingsKeys.COMPACT_SPACING] ?: false,
                 proEnabled = prefs[SettingsKeys.PRO_ENABLED] ?: false,
-                languageTag = prefs[SettingsKeys.LANGUAGE_TAG] ?: DEFAULT_LANGUAGE
+                languageTag = prefs[SettingsKeys.LANGUAGE_TAG] ?: LanguageTags.DEFAULT
             )
         }
 
@@ -76,7 +85,7 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setLanguageTag(value: String) {
         val normalized = normalizeLanguageTag(value)
-        val current = context.settingsDataStore.data.first()[SettingsKeys.LANGUAGE_TAG] ?: DEFAULT_LANGUAGE
+        val current = context.settingsDataStore.data.first()[SettingsKeys.LANGUAGE_TAG] ?: LanguageTags.DEFAULT
         if (current == normalized) {
             if (LOG_LANGUAGE_CHANGES) {
                 Log.d(TAG, "Language preference unchanged: $normalized")

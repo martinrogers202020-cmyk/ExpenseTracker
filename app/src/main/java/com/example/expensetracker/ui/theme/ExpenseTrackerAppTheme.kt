@@ -14,36 +14,33 @@ import androidx.compose.ui.platform.LocalContext
 import com.example.expensetracker.data.datastore.AccentChoice
 import com.example.expensetracker.data.datastore.AppearancePrefs
 import com.example.expensetracker.data.datastore.ThemeMode
-import com.example.expensetracker.ui.locale.ProvideAppLocale
 
 @Composable
 fun ExpenseTrackerAppTheme(
     prefs: AppearancePrefs,
     content: @Composable () -> Unit
 ) {
-    ProvideAppLocale(languageTag = prefs.languageTag) {
-        val darkTheme = when (prefs.themeMode) {
-            ThemeMode.SYSTEM -> isSystemInDarkTheme()
-            ThemeMode.DARK -> true
-            ThemeMode.LIGHT -> false
-        }
-
-        val context = LocalContext.current
-        val dynamic = prefs.dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-
-        val colorScheme = when {
-            dynamic && darkTheme -> dynamicDarkColorScheme(context)
-            dynamic && !darkTheme -> dynamicLightColorScheme(context)
-            darkTheme -> appDarkScheme(prefs.accentChoice)
-            else -> appLightScheme(prefs.accentChoice)
-        }
-
-        MaterialTheme(
-            colorScheme = colorScheme,
-            typography = Typography, // or AppTypography if you have it
-            content = content
-        )
+    val darkTheme = when (prefs.themeMode) {
+        ThemeMode.SYSTEM -> isSystemInDarkTheme()
+        ThemeMode.DARK -> true
+        ThemeMode.LIGHT -> false
     }
+
+    val context = LocalContext.current
+    val dynamic = prefs.dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+
+    val colorScheme = when {
+        dynamic && darkTheme -> dynamicDarkColorScheme(context)
+        dynamic && !darkTheme -> dynamicLightColorScheme(context)
+        darkTheme -> appDarkScheme(prefs.accentChoice)
+        else -> appLightScheme(prefs.accentChoice)
+    }
+
+    MaterialTheme(
+        colorScheme = colorScheme,
+        typography = Typography, // or AppTypography if you have it
+        content = content
+    )
 }
 
 private fun accentColor(choice: AccentChoice): Color {

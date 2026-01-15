@@ -107,6 +107,7 @@
     <string name="settings_dynamic_colors_title">Dynamic colors</string>
     <string name="settings_dynamic_colors_subtitle">Uses system colors (Android 12+)</string>
     <string name="settings_language_title">Language</string>
+    <string name="language_system_default">System default</string>
     <string name="language_english">English</string>
     <string name="language_turkish">Türkçe</string>
     <string name="settings_language_picker_title">App language</string>

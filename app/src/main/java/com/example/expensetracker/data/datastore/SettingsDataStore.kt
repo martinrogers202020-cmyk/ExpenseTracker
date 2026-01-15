@@ -20,3 +20,8 @@ object SettingsKeys {
     val PRO_ENABLED = booleanPreferencesKey("pro_enabled")
     val LANGUAGE_TAG = stringPreferencesKey("language_tag")
 }
+
+object LanguageTags {
+    const val DEFAULT = "en"
+    const val SYSTEM = "system"
+}
