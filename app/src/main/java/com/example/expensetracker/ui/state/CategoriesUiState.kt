@@ -1,5 +1,8 @@
 package com.example.expensetracker.ui.state
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class CategoryRowUi(
     val id: Long,
     val name: String,
@@ -7,6 +10,7 @@ data class CategoryRowUi(
     val isDefault: Boolean
 )
 
+@Immutable
 data class CategoriesUiState(
     val categories: List<CategoryRowUi> = emptyList(),
     val error: String? = null

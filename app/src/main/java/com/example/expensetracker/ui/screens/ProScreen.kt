@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.expensetracker.R
 import com.example.expensetracker.data.prefs.ProManager
@@ -29,7 +30,7 @@ fun ProScreen(onBack: () -> Unit) {
         factory = ProViewModelFactory(proManager)
     )
 
-    val isPro by vm.isPro.collectAsState()
+    val isPro by vm.isPro.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {

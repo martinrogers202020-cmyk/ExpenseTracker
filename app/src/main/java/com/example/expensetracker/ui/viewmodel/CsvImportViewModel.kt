@@ -1,5 +1,6 @@
 package com.example.expensetracker.ui.viewmodel
 
+import androidx.compose.runtime.Immutable
 import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.ViewModel
@@ -20,6 +21,7 @@ import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import kotlin.math.abs
 
+@Immutable
 data class CsvPreviewRow(
     val date: LocalDate,
     val description: String,
@@ -27,6 +29,7 @@ data class CsvPreviewRow(
     val typeUpper: String
 )
 
+@Immutable
 data class CsvImportState(
     val loading: Boolean = false,
     val pickedName: String? = null,

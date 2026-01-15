@@ -1,8 +1,10 @@
 package com.example.expensetracker.ui.state
 
+import androidx.compose.runtime.Immutable
 import com.example.expensetracker.data.model.TransactionType
 import java.time.LocalDate
 
+@Immutable
 data class AddEditUiState(
     val isEdit: Boolean = false,
     val transactionId: Long? = null,
@@ -15,6 +17,7 @@ data class AddEditUiState(
     val error: String? = null
 )
 
+@Immutable
 data class CategoryUi(
     val id: Long,
     val label: String

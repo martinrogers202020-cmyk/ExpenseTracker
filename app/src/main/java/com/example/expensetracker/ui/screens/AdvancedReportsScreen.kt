@@ -38,8 +38,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,6 +48,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.expensetracker.R
 import com.example.expensetracker.data.db.DatabaseProvider
 import com.example.expensetracker.ui.viewmodel.AdvancedReportsViewModel
@@ -67,14 +68,14 @@ fun AdvancedReportsScreen(
         factory = AdvancedReportsViewModelFactory(db = db)
     )
 
-    val s by vm.state.collectAsState()
+    val s by vm.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) { vm.refresh() }
 
     val cs = MaterialTheme.colorScheme
     val border = cs.outlineVariant
-    val start = LocalDate.ofEpochDay(s.startEpochDay)
-    val end = LocalDate.ofEpochDay(s.endEpochDay)
+    val start = remember(s.startEpochDay) { LocalDate.ofEpochDay(s.startEpochDay) }
+    val end = remember(s.endEpochDay) { LocalDate.ofEpochDay(s.endEpochDay) }
 
     Scaffold(
         topBar = {
@@ -151,7 +152,10 @@ fun AdvancedReportsScreen(
                 )
             }
 
-            items(s.trend) { p ->
+            items(
+                items = s.trend,
+                key = { it.epochDay }
+            ) { p ->
                 TrendRow(
                     epochDay = p.epochDay,
                     incomeCents = p.incomeCents,

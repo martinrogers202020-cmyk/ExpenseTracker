@@ -51,6 +51,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -94,7 +95,9 @@ fun SettingsScreen(
     val textPrimary = cs.onSurface
     val textSecondary = cs.onSurfaceVariant
 
-    val bg = Brush.verticalGradient(listOf(cs.background, cs.background, cs.background))
+    val bg = remember(cs.background) {
+        Brush.verticalGradient(listOf(cs.background, cs.background, cs.background))
+    }
 
     Scaffold(
         containerColor = Color.Transparent,

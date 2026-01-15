@@ -36,9 +36,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -47,6 +48,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.expensetracker.R
 import com.example.expensetracker.data.db.DatabaseProvider
@@ -68,7 +70,7 @@ fun CsvImportScreen(
         factory = CsvImportViewModelFactory(context = context, db = db)
     )
 
-    val s by vm.state.collectAsState()
+    val s by vm.state.collectAsStateWithLifecycle()
 
     val picker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocument()
@@ -78,6 +80,7 @@ fun CsvImportScreen(
 
     val cs = MaterialTheme.colorScheme
     val border = cs.outlineVariant
+    val previewRows by remember(s.rows) { derivedStateOf { s.rows.take(15) } }
 
     Scaffold(
         topBar = {
@@ -215,7 +218,7 @@ fun CsvImportScreen(
                     if (s.rows.isEmpty()) {
                         Text(stringResource(R.string.csv_import_no_rows), color = cs.onSurfaceVariant)
                     } else {
-                        val fmt = DateTimeFormatter.ISO_LOCAL_DATE
+                        val fmt = remember { DateTimeFormatter.ISO_LOCAL_DATE }
                         Text(
                             stringResource(
                                 R.string.csv_import_range,
@@ -260,7 +263,10 @@ fun CsvImportScreen(
                                 .height(200.dp),
                             verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            items(s.rows.take(15)) { r ->
+                            items(
+                                items = previewRows,
+                                key = { "${it.date}-${it.description}-${it.amountCentsAbs}-${it.typeUpper}" }
+                            ) { r ->
                                 Surface(
                                     shape = RoundedCornerShape(14.dp),
                                     border = BorderStroke(1.dp, border),

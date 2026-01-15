@@ -1,5 +1,6 @@
 package com.example.expensetracker.ui.viewmodel
 
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.expensetracker.data.model.TransactionEntity
@@ -11,6 +12,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 
+@Immutable
 data class ExpenseRowUi(
     val id: Long,
     val categoryLabel: String,
@@ -19,12 +21,14 @@ data class ExpenseRowUi(
     val epochDay: Long
 )
 
+@Immutable
 data class ExpenseGroupUi(
     val categoryLabel: String,
     val totalCents: Long,
     val items: List<ExpenseRowUi>
 )
 
+@Immutable
 data class ExpensesUiState(
     val groups: List<ExpenseGroupUi> = emptyList(),
     val isLoading: Boolean = true
