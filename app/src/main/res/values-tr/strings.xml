@@ -366,10 +366,6 @@
     <string name="add_transaction_attachment_label">Ek ekle</string>
     <string name="add_transaction_attachment_hint">Dosya seçmek için dokunun</string>
 
-    <!-- Expense list -->
-    <string name="expenses_empty_state">Henüz gider yok.</string>
-    <string name="expenses_no_note">Not yok</string>
-
     <!-- Placeholders -->
     <string name="placeholder_home">Ana sayfa (TODO)</string>
     <string name="placeholder_categories">Kategoriler (TODO)</string>
