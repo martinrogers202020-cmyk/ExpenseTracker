@@ -32,6 +32,22 @@ interface CategoryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertAll(items: List<CategoryEntity>): List<Long>
 
+    @Query(
+        """
+        UPDATE categories
+        SET name = :newName
+        WHERE
+          isDefault = 1
+          AND emoji = :emoji
+          AND name IN (:knownNames)
+        """
+    )
+    suspend fun renameDefaultCategoryByEmoji(
+        emoji: String,
+        knownNames: List<String>,
+        newName: String
+    ): Int
+
     @Query("DELETE FROM categories WHERE id = :id")
     suspend fun deleteById(id: Long)
 }
