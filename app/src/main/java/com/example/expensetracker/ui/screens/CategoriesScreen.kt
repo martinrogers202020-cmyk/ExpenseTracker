@@ -136,9 +136,15 @@ fun CategoriesScreen(onBack: () -> Unit) {
                     verticalArrangement = Arrangement.spacedBy(14.dp)
                 ) {
                     items(filtered, key = { it.id }) { cat ->
+                        val displayName = if (cat.isDefault) {
+                            localizedDefaultCategoryNameOrNull(cat.name) ?: cat.name
+                        } else {
+                            cat.name
+                        }
+
                         CategoryGlassRow(
                             emoji = cat.emoji,
-                            name = cat.name,
+                            name = displayName,
                             isDefault = cat.isDefault,
                             onEdit = { editId = cat.id },
                             onDelete = { vm.deleteCategory(cat.id) }
@@ -227,9 +233,6 @@ private fun CategoryGlassRow(
     onEdit: () -> Unit,
     onDelete: () -> Unit
 ) {
-    val defaultNameResId = if (isDefault) defaultCategoryNameResId(name) else null
-    val displayName = defaultNameResId?.let { stringResource(it) } ?: name
-
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -259,7 +262,7 @@ private fun CategoryGlassRow(
             Spacer(Modifier.width(14.dp))
 
             Column(modifier = Modifier.weight(1f)) {
-                Text(text = displayName, fontWeight = FontWeight.SemiBold, color = Color(0xFF2C2746))
+                Text(text = name, fontWeight = FontWeight.SemiBold, color = Color(0xFF2C2746))
                 Spacer(Modifier.height(2.dp))
                 if (isDefault) {
                     Text(text = stringResource(R.string.categories_default_badge), color = Color(0xFF8B84A8))
@@ -277,19 +280,21 @@ private fun CategoryGlassRow(
     }
 }
 
-private fun defaultCategoryNameResId(name: String): Int? {
-    val normalized = name.trim().lowercase(Locale.ROOT)
-    return when (normalized) {
+@Composable
+private fun localizedDefaultCategoryNameOrNull(dbName: String): String? {
+    val normalized = dbName.trim().lowercase(Locale.ROOT)
+    val resId = when (normalized) {
         "bills", "faturalar" -> R.string.category_default_bills
         "coffee", "kahve" -> R.string.category_default_coffee
         "eating out", "dışarıda yeme" -> R.string.category_default_eating_out
         "groceries", "market" -> R.string.category_default_groceries
         "health", "sağlık" -> R.string.category_default_health
         "rent", "kira" -> R.string.category_default_rent
-        "uncategorized", "kategorisiz" -> R.string.category_default_uncategorized
-        "income", "gelir", "salary", "maaş" -> R.string.category_default_income
+        "uncategorized" -> R.string.category_default_uncategorized
+        "income" -> R.string.category_default_income
         else -> null
     }
+    return resId?.let { stringResource(it) }
 }
 
 @Composable
