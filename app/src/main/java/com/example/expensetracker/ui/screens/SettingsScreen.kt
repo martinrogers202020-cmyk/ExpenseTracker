@@ -49,10 +49,8 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import android.app.Activity
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -87,8 +85,6 @@ fun SettingsScreen(
     val vm: SettingsViewModel = viewModel(factory = SettingsViewModelFactory(context))
     val prefs by vm.appearance.collectAsStateWithLifecycle()
     val currentLanguageTag by vm.currentLanguageTag.collectAsStateWithLifecycle()
-    val scope = rememberCoroutineScope()
-    val activity = context as? Activity
 
     val cs = MaterialTheme.colorScheme
     val accent = cs.primary
@@ -229,12 +225,7 @@ fun SettingsScreen(
                 LanguageItem(
                     languageTag = currentLanguageTag,
                     onLanguageChange = { newTag ->
-                        scope.launch {
-                            val updated = vm.updateLanguage(newTag)
-                            if (updated) {
-                                activity?.recreate()
-                            }
-                        }
+                        vm.setLanguageTag(newTag)
                     },
                     accent = accent,
                     borderColor = border,
