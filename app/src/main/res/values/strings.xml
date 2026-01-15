@@ -78,8 +78,8 @@
     <string name="settings_backup_restore_subtitle">Export / import using Drive or files</string>
     <string name="settings_advanced_reports_title">Advanced reports</string>
     <string name="settings_advanced_reports_subtitle">Custom ranges + trends</string>
-    <string name="settings_import_csv_title">Import bank CSV</string>
-    <string name="settings_import_csv_subtitle">Add withdrawals &amp; deposits from a CSV file</string>
+    <string name="settings_import_csv_title">Import bank statement</string>
+    <string name="settings_import_csv_subtitle">Add transactions from CSV, XLSX, OFX/QFX, QIF, or PDF files</string>
     <string name="settings_security_good">Good</string>
     <string name="settings_security_status_title">Security status</string>
     <string name="settings_security_status_subtitle">Your data stays on device. Add protection features below.</string>
@@ -241,10 +241,10 @@
     <string name="expenses_no_note">No note</string>
 
     <!-- CSV Import -->
-    <string name="csv_import_step_pick_file">1) Pick CSV file</string>
-    <string name="csv_import_choose_csv">Choose CSV</string>
+    <string name="csv_import_step_pick_file">1) Pick statement file</string>
+    <string name="csv_import_choose_csv">Choose statement</string>
     <string name="csv_import_selected_file">Selected: %1$s</string>
-    <string name="csv_import_step_category">2) Category for imported transactions</string>
+    <string name="csv_import_step_category">2) Category &amp; column mapping</string>
     <string name="csv_import_select_category">Select category</string>
     <string name="csv_import_tip">Tip: you can later add rules to auto-map merchants to categories.</string>
     <string name="csv_import_step_preview">3) Preview</string>
@@ -258,7 +258,7 @@
     <string name="csv_import_warning_item">• %1$s</string>
     <string name="csv_import_error">Error: %1$s</string>
     <string name="csv_import_imported">Imported: %1$d</string>
-    <string name="csv_import_failed_parse">Failed to parse CSV: %1$s</string>
+    <string name="csv_import_failed_parse">Failed to parse statement: %1$s</string>
     <string name="csv_import_pick_category_error">Pick a category first.</string>
     <string name="csv_import_no_rows_error">No rows parsed.</string>
     <string name="csv_import_failed_import">Import failed: %1$s</string>
@@ -277,6 +277,30 @@
     <string name="csv_import_row_invalid_date">Row %1$d: could not parse date (%2$s) — skipped.</string>
     <string name="csv_import_row_invalid_amount">Row %1$d: could not parse amount (%2$s) — skipped.</string>
     <string name="csv_import_bank_import">Bank import</string>
+    <string name="import_choose_statement">Choose statement</string>
+    <string name="import_detected_format">Detected format: %1$s</string>
+    <string name="import_step_category_mapping">2) Category &amp; column mapping</string>
+    <string name="import_mapping_title">Column mapping</string>
+    <string name="import_mapping_subtitle">Select the columns that contain the date, description, and amount.</string>
+    <string name="import_mapping_date_column">Date column</string>
+    <string name="import_mapping_description_column">Description column</string>
+    <string name="import_mapping_amount_column">Amount column</string>
+    <string name="import_mapping_debit_column">Debit column</string>
+    <string name="import_mapping_credit_column">Credit column</string>
+    <string name="import_mapping_date_format">Date format</string>
+    <string name="import_date_format_auto">Auto-detect</string>
+    <string name="import_mapping_decimal_separator">Decimal separator</string>
+    <string name="import_decimal_dot">Dot (1,234.56)</string>
+    <string name="import_decimal_comma">Comma (1.234,56)</string>
+    <string name="import_mapping_optional">Optional</string>
+    <string name="import_mapping_select">Select column</string>
+    <string name="import_mapping_none">None</string>
+    <string name="import_apply_mapping">Apply mapping</string>
+    <string name="import_mapping_sample_rows">Sample rows</string>
+    <string name="import_mapping_required">Column mapping required for this file.</string>
+    <string name="import_mapping_incomplete">Choose a date column and either an amount or debit/credit column.</string>
+    <string name="import_pdf_text_warning">PDF text extraction can be imperfect. Please review the preview.</string>
+    <string name="import_pdf_scanned_warning">This PDF appears to be scanned. OCR import is optional and can be added later.</string>
 
     <!-- Notifications -->
     <string name="notifications_enable_title">Enable notifications</string>
@@ -374,7 +398,7 @@
     <string name="placeholder_home">Home (TODO)</string>
     <string name="placeholder_categories">Categories (TODO)</string>
     <string name="placeholder_reports">Reports (TODO)</string>
-    <string name="placeholder_import_csv">Import bank CSV (TODO)</string>
+    <string name="placeholder_import_csv">Import bank statement (TODO)</string>
     <string name="placeholder_backup_restore">Backup &amp; Restore (TODO)</string>
     <string name="placeholder_notifications">Notifications (TODO)</string>
     <string name="placeholder_paywall">Paywall (TODO)</string>
