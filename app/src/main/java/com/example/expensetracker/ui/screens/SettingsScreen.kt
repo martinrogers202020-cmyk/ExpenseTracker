@@ -222,7 +222,7 @@ fun SettingsScreen(
             item {
                 LanguageItem(
                     languageTag = prefs.languageTag,
-                    onLanguageChange = vm::setLanguageTag,
+                    onLanguageChange = vm::applyLanguageChange,
                     accent = accent,
                     borderColor = border,
                     textPrimary = textPrimary,
