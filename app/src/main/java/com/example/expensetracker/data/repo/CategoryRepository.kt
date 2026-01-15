@@ -51,39 +51,32 @@ class CategoryRepository(
 
     suspend fun syncLocalizedDefaultCategoryNames(context: Context) {
         data class DefaultCategoryLocalization(
-            val emoji: String,
             val knownNames: List<String>,
             val nameResId: Int
         )
 
         val mappings = listOf(
             DefaultCategoryLocalization(
-                emoji = "🧾",
                 knownNames = listOf("Bills", "Faturalar"),
                 nameResId = R.string.category_default_bills
             ),
             DefaultCategoryLocalization(
-                emoji = "☕",
                 knownNames = listOf("Coffee", "Kahve"),
                 nameResId = R.string.category_default_coffee
             ),
             DefaultCategoryLocalization(
-                emoji = "🍔",
                 knownNames = listOf("Eating Out", "Dışarıda yeme"),
                 nameResId = R.string.category_default_eating_out
             ),
             DefaultCategoryLocalization(
-                emoji = "🛒",
                 knownNames = listOf("Groceries", "Market"),
                 nameResId = R.string.category_default_groceries
             ),
             DefaultCategoryLocalization(
-                emoji = "💙",
                 knownNames = listOf("Health", "Sağlık"),
                 nameResId = R.string.category_default_health
             ),
             DefaultCategoryLocalization(
-                emoji = "🏠",
                 knownNames = listOf("Rent", "Kira"),
                 nameResId = R.string.category_default_rent
             )
@@ -91,7 +84,7 @@ class CategoryRepository(
 
         mappings.forEach { mapping ->
             val newName = context.getString(mapping.nameResId)
-            dao.renameDefaultCategoryByEmoji(mapping.emoji, mapping.knownNames, newName)
+            dao.renameDefaultCategoryIfMatches(mapping.knownNames, newName)
         }
     }
 }
