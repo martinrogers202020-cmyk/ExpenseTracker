@@ -67,6 +67,39 @@
     <string name="home_dropdown_indicator">▼</string>
     <string name="home_all_categories">All categories</string>
 
+    <!-- Puzzle -->
+    <string name="puzzle_home_title">Daily Puzzle</string>
+    <string name="puzzle_home_subtitle">Beat the grid in 4 moves</string>
+    <string name="puzzle_daily_title">Daily Grid</string>
+    <string name="puzzle_daily_header">Today’s target</string>
+    <string name="puzzle_daily_target">Target %1$d</string>
+    <string name="puzzle_daily_tries">Tries left: %1$d</string>
+    <string name="puzzle_daily_solved">Solved for today!</string>
+    <string name="puzzle_daily_out_of_tries">No more tries today.</string>
+    <string name="puzzle_daily_start">Start Attempt</string>
+    <string name="puzzle_daily_view_results">View Results</string>
+    <string name="puzzle_daily_instructions">Select a number, then apply an operation. Each move uses a new cell.</string>
+    <string name="puzzle_refresh">Refresh</string>
+    <string name="puzzle_select_title">Select Number</string>
+    <string name="puzzle_select_status">Moves left: %1$d • Running: %2$d</string>
+    <string name="puzzle_select_next">Apply Operation</string>
+    <string name="puzzle_apply_title">Apply Operation</string>
+    <string name="puzzle_apply_running_value">Running value</string>
+    <string name="puzzle_apply_moves_left">%1$d moves remaining</string>
+    <string name="puzzle_op_add_two">+2</string>
+    <string name="puzzle_op_minus_three">-3</string>
+    <string name="puzzle_op_double">×2</string>
+    <string name="puzzle_op_half">÷2</string>
+    <string name="puzzle_results_title">Results</string>
+    <string name="puzzle_results_win">You matched the target!</string>
+    <string name="puzzle_results_lose">Not quite—try again.</string>
+    <string name="puzzle_results_target">Target: %1$d</string>
+    <string name="puzzle_results_value">Result: %1$d in %2$d moves</string>
+    <string name="puzzle_results_tries_left">Tries left today: %1$d</string>
+    <string name="puzzle_results_share">Share</string>
+    <string name="puzzle_results_play_again">Play Again</string>
+    <string name="puzzle_share_title">Share daily puzzle</string>
+
     <!-- Settings -->
     <string name="settings_title">Settings</string>
     <string name="settings_section_pro_mode">Pro Mode</string>

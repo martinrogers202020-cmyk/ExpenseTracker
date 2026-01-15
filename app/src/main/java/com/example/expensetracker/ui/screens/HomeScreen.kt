@@ -23,6 +23,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.ChevronLeft
 import androidx.compose.material.icons.outlined.ChevronRight
+import androidx.compose.material.icons.outlined.GridOn
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -80,7 +81,8 @@ fun HomeScreen(
     onOpenCategories: () -> Unit,
     onOpenSettings: () -> Unit,
     onEditTransaction: (Long) -> Unit,
-    onOpenExpenses: () -> Unit
+    onOpenExpenses: () -> Unit,
+    onOpenDailyPuzzle: () -> Unit
 ) {
     val listState = rememberLazyListState()
 
@@ -164,6 +166,14 @@ fun HomeScreen(
                         expenseColor = expenseColor,
                         onAddIncome = onAddIncomeClick,
                         onAddExpense = onAddExpenseClick
+                    )
+                }
+
+                item(key = "daily_puzzle") {
+                    DailyPuzzleCard(
+                        accent = accent,
+                        border = border,
+                        onClick = onOpenDailyPuzzle
                     )
                 }
 
@@ -504,6 +514,57 @@ private fun CategoryDropdown(
                         onSelected(c.id)
                         expanded = false
                     }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun DailyPuzzleCard(
+    accent: Color,
+    border: Color,
+    onClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFF7F4FF)),
+        border = BorderStroke(1.dp, border),
+        shape = RoundedCornerShape(20.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.puzzle_home_title),
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Text(
+                    text = stringResource(R.string.puzzle_home_subtitle),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .size(44.dp)
+                    .clip(RoundedCornerShape(14.dp))
+                    .background(accent),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.GridOn,
+                    contentDescription = null,
+                    tint = Color.White
                 )
             }
         }
