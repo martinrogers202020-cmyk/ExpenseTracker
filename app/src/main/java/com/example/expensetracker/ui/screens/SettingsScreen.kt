@@ -83,6 +83,7 @@ fun SettingsScreen(
     val context = LocalContext.current
     val vm: SettingsViewModel = viewModel(factory = SettingsViewModelFactory(context))
     val prefs by vm.appearance.collectAsStateWithLifecycle()
+    val currentLanguageTag by vm.currentLanguageTag.collectAsStateWithLifecycle()
 
     val cs = MaterialTheme.colorScheme
     val accent = cs.primary
@@ -221,7 +222,7 @@ fun SettingsScreen(
 
             item {
                 LanguageItem(
-                    languageTag = prefs.languageTag,
+                    languageTag = currentLanguageTag,
                     onLanguageChange = vm::applyLanguageChange,
                     accent = accent,
                     borderColor = border,

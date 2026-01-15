@@ -7,6 +7,7 @@ import com.example.expensetracker.data.datastore.AppearancePrefs
 import com.example.expensetracker.data.datastore.ThemeMode
 import com.example.expensetracker.data.repo.SettingsRepository
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -30,6 +31,17 @@ class SettingsViewModel(
             )
         )
 
+    private val _currentLanguageTag = MutableStateFlow(AppearancePrefs().languageTag)
+    val currentLanguageTag: StateFlow<String> = _currentLanguageTag
+
+    init {
+        viewModelScope.launch {
+            repo.appearance.collect { prefs ->
+                _currentLanguageTag.value = prefs.languageTag
+            }
+        }
+    }
+
     fun setThemeMode(value: ThemeMode) = viewModelScope.launch { repo.setThemeMode(value) }
     fun setDynamicColor(value: Boolean) = viewModelScope.launch { repo.setDynamicColor(value) }
     fun setAccentChoice(value: AccentChoice) = viewModelScope.launch { repo.setAccentChoice(value) }
@@ -39,7 +51,9 @@ class SettingsViewModel(
     fun setLanguageTag(value: String) = viewModelScope.launch { repo.setLanguageTag(value) }
 
     fun applyLanguageChange(value: String) = viewModelScope.launch {
-        repo.applyLanguageIfNeeded(value)
-        repo.setLanguageTag(value)
+        val normalized = value.ifBlank { "en" }
+        _currentLanguageTag.value = normalized
+        repo.applyLanguageIfNeeded(normalized)
+        repo.setLanguageTag(normalized)
     }
 }

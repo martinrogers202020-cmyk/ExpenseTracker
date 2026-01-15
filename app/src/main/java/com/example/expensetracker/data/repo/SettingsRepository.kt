@@ -1,9 +1,6 @@
 package com.example.expensetracker.data.repo
 
-import android.app.LocaleManager
 import android.content.Context
-import android.os.Build
-import android.os.LocaleList
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
@@ -96,37 +93,19 @@ class SettingsRepository(private val context: Context) {
 
     fun applyLanguageIfNeeded(value: String): Boolean {
         val normalized = normalizeLanguageTag(value)
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            val localeManager = context.getSystemService(LocaleManager::class.java)
-            val newLocales = LocaleList.forLanguageTags(normalized)
-            val currentLocales = localeManager.applicationLocales
-            if (currentLocales.toLanguageTags() != newLocales.toLanguageTags()) {
-                if (LOG_LANGUAGE_CHANGES) {
-                    Log.d(TAG, "Applying application locales: $normalized")
-                }
-                localeManager.applicationLocales = newLocales
-                true
-            } else {
-                if (LOG_LANGUAGE_CHANGES) {
-                    Log.d(TAG, "Application locales already set: $normalized")
-                }
-                false
+        val newLocales = LocaleListCompat.forLanguageTags(normalized)
+        val currentLocales = AppCompatDelegate.getApplicationLocales()
+        return if (currentLocales.toLanguageTags() != newLocales.toLanguageTags()) {
+            if (LOG_LANGUAGE_CHANGES) {
+                Log.d(TAG, "Applying appcompat locales: $normalized")
             }
+            AppCompatDelegate.setApplicationLocales(newLocales)
+            true
         } else {
-            val newLocales = LocaleListCompat.forLanguageTags(normalized)
-            val currentLocales = AppCompatDelegate.getApplicationLocales()
-            if (currentLocales.toLanguageTags() != newLocales.toLanguageTags()) {
-                if (LOG_LANGUAGE_CHANGES) {
-                    Log.d(TAG, "Applying appcompat locales: $normalized")
-                }
-                AppCompatDelegate.setApplicationLocales(newLocales)
-                true
-            } else {
-                if (LOG_LANGUAGE_CHANGES) {
-                    Log.d(TAG, "Appcompat locales already set: $normalized")
-                }
-                false
+            if (LOG_LANGUAGE_CHANGES) {
+                Log.d(TAG, "Appcompat locales already set: $normalized")
             }
+            false
         }
     }
 }
