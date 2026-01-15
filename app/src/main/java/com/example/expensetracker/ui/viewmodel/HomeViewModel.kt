@@ -1,7 +1,9 @@
 package com.example.expensetracker.ui.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.expensetracker.R
 import com.example.expensetracker.data.model.TransactionEntity
 import com.example.expensetracker.data.model.TransactionType
 import com.example.expensetracker.data.repo.CategoryRepository
@@ -22,6 +24,7 @@ import java.time.YearMonth
 import kotlin.math.abs
 
 class HomeViewModel(
+    private val context: Context,
     private val transactionRepo: TransactionRepository,
     private val categoryRepo: CategoryRepository
 ) : ViewModel() {
@@ -105,9 +108,9 @@ class HomeViewModel(
                 )
                 .map { tx ->
                     val cat = categoryMap[tx.categoryId]
-                    val categoryName = cat?.name ?: "Unknown"
-                    val emoji = cat?.emoji ?: "❓"
-                    val displayTitle = "$emoji $categoryName"
+                    val categoryName = cat?.name ?: context.getString(R.string.categories_unknown_label)
+                    val emoji = cat?.emoji ?: context.getString(R.string.categories_unknown_emoji)
+                    val displayTitle = context.getString(R.string.transaction_item_title, emoji, categoryName)
 
                     TransactionItemUi(
                         id = tx.id,

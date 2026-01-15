@@ -1,7 +1,9 @@
 package com.example.expensetracker.ui.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.expensetracker.R
 import com.example.expensetracker.data.model.TransactionEntity
 import com.example.expensetracker.data.model.TransactionType
 import com.example.expensetracker.data.repo.CategoryRepository
@@ -16,6 +18,7 @@ import java.math.RoundingMode
 import java.time.LocalDate
 
 class AddTransactionViewModel(
+    private val context: Context,
     private val categoryRepo: CategoryRepository,
     private val txRepo: TransactionRepository
 ) : ViewModel() {
@@ -85,20 +88,20 @@ class AddTransactionViewModel(
 
             val cents = dollarsTextToCents(amountText)
             if (cents == null || cents <= 0L) {
-                _error.value = "Enter a valid amount (example: 100 or 100.50)."
+                _error.value = context.getString(R.string.transaction_error_invalid_amount)
                 return@launch
             }
 
             val epochDay = try {
                 LocalDate.parse(dateText).toEpochDay()
             } catch (_: Throwable) {
-                _error.value = "Pick a valid date."
+                _error.value = context.getString(R.string.transaction_error_invalid_date)
                 return@launch
             }
 
             val catId = categoryId
             if (catId == null) {
-                _error.value = "Pick a category."
+                _error.value = context.getString(R.string.transaction_error_pick_category)
                 return@launch
             }
 
@@ -109,7 +112,7 @@ class AddTransactionViewModel(
                 val att = attachmentUri?.trim().orEmpty()
                 if (att.isNotEmpty()) {
                     if (isNotEmpty()) append("\n")
-                    append("Attachment: ").append(att)
+                    append(context.getString(R.string.transaction_attachment_prefix, att))
                 }
             }
 
@@ -127,7 +130,7 @@ class AddTransactionViewModel(
                 )
                 _saved.value = true
             } catch (t: Throwable) {
-                _error.value = t.message ?: "Failed to save."
+                _error.value = t.message ?: context.getString(R.string.transaction_error_save_failed)
             } finally {
                 _saving.value = false
             }

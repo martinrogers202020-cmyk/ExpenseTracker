@@ -2,6 +2,7 @@ package com.example.expensetracker.util
 
 import android.content.Context
 import android.net.Uri
+import com.example.expensetracker.R
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.time.LocalDate
@@ -26,13 +27,13 @@ data class BankCsvParseResult(
 
 object BankCsvParser {
 
-    fun parse(text: String): BankCsvParseResult {
+    fun parse(context: Context, text: String): BankCsvParseResult {
         val lines = text
             .replace("\r\n", "\n")
             .replace("\r", "\n")
             .split("\n")
 
-        return parseLines(lines)
+        return parseLines(context, lines)
     }
 
     fun parseFromUri(context: Context, uri: Uri): BankCsvParseResult {
@@ -40,15 +41,20 @@ object BankCsvParser {
             context.contentResolver.openInputStream(uri)?.use { input ->
                 val br = BufferedReader(InputStreamReader(input))
                 val lines = br.readLines()
-                parseLines(lines)
-            } ?: BankCsvParseResult(emptyList(), listOf("Unable to open file."))
+                parseLines(context, lines)
+            } ?: BankCsvParseResult(emptyList(), listOf(context.getString(R.string.csv_import_unable_open)))
         } catch (t: Throwable) {
-            BankCsvParseResult(emptyList(), listOf("Unable to open file: ${t.message}"))
+            BankCsvParseResult(
+                emptyList(),
+                listOf(context.getString(R.string.csv_import_unable_open_with_message, t.message ?: ""))
+            )
         }
     }
 
-    fun parseLines(lines: List<String>): BankCsvParseResult {
-        if (lines.isEmpty()) return BankCsvParseResult(emptyList(), listOf("File is empty."))
+    fun parseLines(context: Context, lines: List<String>): BankCsvParseResult {
+        if (lines.isEmpty()) {
+            return BankCsvParseResult(emptyList(), listOf(context.getString(R.string.csv_import_file_empty)))
+        }
 
         val warnings = mutableListOf<String>()
 
@@ -98,12 +104,16 @@ object BankCsvParser {
             )
         } else {
             // Fallback: Date, Description, Amount
-            warnings += "Header not detected reliably. Assuming columns: Date, Description, Amount."
+            warnings += context.getString(R.string.csv_import_header_not_detected)
             ColumnIndex(date = 0, desc = 1, type = null, amount = 2, debit = null, credit = null, category = null)
         }
 
-        if (idx.date == null) return BankCsvParseResult(emptyList(), listOf("Couldn't find a Date column."))
-        if (idx.desc == null && idx.category == null) warnings += "Couldn't find a Description/Category column. Using blank descriptions where missing."
+        if (idx.date == null) {
+            return BankCsvParseResult(emptyList(), listOf(context.getString(R.string.csv_import_missing_date_column)))
+        }
+        if (idx.desc == null && idx.category == null) {
+            warnings += context.getString(R.string.csv_import_missing_description_column)
+        }
 
         val startRow = if (hasHeader) headerIndex + 1 else 0
         val out = ArrayList<BankCsvRow>(maxOf(0, normalizedLines.size - startRow))
@@ -117,11 +127,13 @@ object BankCsvParser {
 
             val descText = idx.desc?.let { cols.getOrNull(it)?.trim().orEmpty() }.orEmpty()
             val catText = idx.category?.let { cols.getOrNull(it)?.trim().orEmpty() }.orEmpty()
-            val description = (descText.ifBlank { catText }).ifBlank { "Bank transaction" }.trim()
+            val description = (descText.ifBlank { catText })
+                .ifBlank { context.getString(R.string.csv_import_bank_transaction) }
+                .trim()
 
             val signedCents = parseSignedCents(cols, idx)
             if (signedCents == null || signedCents == 0L) {
-                warnings += "Skipped row ${lineIndex + 1}: amount not found/invalid."
+                warnings += context.getString(R.string.csv_import_row_skipped_invalid_amount, lineIndex + 1)
                 continue
             }
 

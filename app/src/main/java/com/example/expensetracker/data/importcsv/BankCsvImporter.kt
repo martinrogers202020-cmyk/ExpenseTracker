@@ -1,5 +1,7 @@
 package com.example.expensetracker.data.importcsv
 
+import android.content.Context
+import com.example.expensetracker.R
 import com.example.expensetracker.data.model.TransactionEntity
 import com.example.expensetracker.data.model.TransactionType
 import com.example.expensetracker.data.rules.MerchantRuleEngine
@@ -37,11 +39,13 @@ object BankCsvImporter {
         DateTimeFormatter.ofPattern("MM-dd-yyyy")
     )
 
-    fun parse(reader: BufferedReader): BankCsvParseResult {
+    fun parse(context: Context, reader: BufferedReader): BankCsvParseResult {
         val warnings = mutableListOf<String>()
         val lines = reader.readLines().filter { it.isNotBlank() }
 
-        if (lines.isEmpty()) return BankCsvParseResult(emptyList(), listOf("CSV is empty."))
+        if (lines.isEmpty()) {
+            return BankCsvParseResult(emptyList(), listOf(context.getString(R.string.csv_import_file_empty)))
+        }
 
         val delimiter = guessDelimiter(lines.take(10))
 
@@ -52,9 +56,15 @@ object BankCsvImporter {
         val amountIdx = indexOfAny(headerLower, AMOUNT_HEADERS)
         val descIdx = indexOfAny(headerLower, DESC_HEADERS)
 
-        if (dateIdx == -1) warnings += "Could not find a date column. Expected one of: ${DATE_HEADERS.joinToString()}."
-        if (amountIdx == -1) warnings += "Could not find an amount column. Expected one of: ${AMOUNT_HEADERS.joinToString()}."
-        if (descIdx == -1) warnings += "Could not find a description column. Expected one of: ${DESC_HEADERS.joinToString()}."
+        if (dateIdx == -1) {
+            warnings += context.getString(R.string.csv_import_expected_date_column, DATE_HEADERS.joinToString())
+        }
+        if (amountIdx == -1) {
+            warnings += context.getString(R.string.csv_import_expected_amount_column, AMOUNT_HEADERS.joinToString())
+        }
+        if (descIdx == -1) {
+            warnings += context.getString(R.string.csv_import_expected_description_column, DESC_HEADERS.joinToString())
+        }
 
         if (dateIdx == -1 || amountIdx == -1 || descIdx == -1) {
             return BankCsvParseResult(emptyList(), warnings)
@@ -67,7 +77,7 @@ object BankCsvImporter {
             val rowNo = lineIndex + 1
 
             if (dateIdx >= cols.size || amountIdx >= cols.size || descIdx >= cols.size) {
-                warnings += "Row $rowNo: missing required columns — skipped."
+                warnings += context.getString(R.string.csv_import_row_missing_columns, rowNo)
                 continue
             }
 
@@ -77,20 +87,20 @@ object BankCsvImporter {
 
             val date = parseDate(rawDate)
             if (date == null) {
-                warnings += "Row $rowNo: could not parse date '$rawDate' — skipped."
+                warnings += context.getString(R.string.csv_import_row_invalid_date, rowNo, rawDate)
                 continue
             }
 
             val amountCents = parseAmountToCents(rawAmount)
             if (amountCents == null) {
-                warnings += "Row $rowNo: could not parse amount '$rawAmount' — skipped."
+                warnings += context.getString(R.string.csv_import_row_invalid_amount, rowNo, rawAmount)
                 continue
             }
 
             out += BankCsvRow(
                 date = date,
                 amountCents = amountCents,
-                description = rawDesc.ifBlank { "Bank import" }
+                description = rawDesc.ifBlank { context.getString(R.string.csv_import_bank_import) }
             )
         }
 

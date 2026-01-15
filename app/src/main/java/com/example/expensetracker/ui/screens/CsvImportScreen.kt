@@ -43,10 +43,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.expensetracker.R
 import com.example.expensetracker.data.db.DatabaseProvider
 import com.example.expensetracker.ui.viewmodel.CsvImportViewModel
 import com.example.expensetracker.ui.viewmodel.CsvImportViewModelFactory
@@ -87,7 +89,7 @@ fun CsvImportScreen(
                     ) {
                         Icon(Icons.Outlined.UploadFile, contentDescription = null, tint = cs.primary)
                         Text(
-                            "Import bank CSV",
+                            stringResource(R.string.settings_import_csv_title),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             fontWeight = FontWeight.SemiBold
@@ -96,7 +98,7 @@ fun CsvImportScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Outlined.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.Outlined.ArrowBack, contentDescription = stringResource(R.string.action_back))
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = cs.surface)
@@ -121,7 +123,7 @@ fun CsvImportScreen(
                 shape = RoundedCornerShape(22.dp)
             ) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text("1) Pick CSV file", fontWeight = FontWeight.SemiBold)
+                    Text(stringResource(R.string.csv_import_step_pick_file), fontWeight = FontWeight.SemiBold)
 
                     Button(
                         onClick = {
@@ -137,11 +139,14 @@ fun CsvImportScreen(
                     ) {
                         Icon(Icons.Outlined.FileOpen, contentDescription = null)
                         Spacer(Modifier.width(8.dp))
-                        Text("Choose CSV")
+                        Text(stringResource(R.string.csv_import_choose_csv))
                     }
 
                     if (s.pickedName != null) {
-                        Text("Selected: ${s.pickedName}", color = cs.onSurfaceVariant)
+                        Text(
+                            stringResource(R.string.csv_import_selected_file, s.pickedName),
+                            color = cs.onSurfaceVariant
+                        )
                     }
                 }
             }
@@ -151,7 +156,7 @@ fun CsvImportScreen(
                 shape = RoundedCornerShape(22.dp)
             ) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text("2) Category for imported transactions", fontWeight = FontWeight.SemiBold)
+                    Text(stringResource(R.string.csv_import_step_category), fontWeight = FontWeight.SemiBold)
 
                     var expanded by rememberSaveable { mutableStateOf(false) }
                     val selected = s.categories.firstOrNull { it.id == s.selectedCategoryId }
@@ -168,13 +173,14 @@ fun CsvImportScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = selected?.let { "${it.emoji}  ${it.name}" } ?: "Select category",
+                                text = selected?.let { "${it.emoji}  ${it.name}" }
+                                    ?: stringResource(R.string.csv_import_select_category),
                                 modifier = Modifier.weight(1f),
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
                                 fontWeight = FontWeight.SemiBold
                             )
-                            Text("Change", color = cs.primary, fontWeight = FontWeight.SemiBold)
+                            Text(stringResource(R.string.action_change), color = cs.primary, fontWeight = FontWeight.SemiBold)
                         }
                     }
 
@@ -191,7 +197,7 @@ fun CsvImportScreen(
                     }
 
                     Text(
-                        "Tip: you can later add rules to auto-map merchants to categories.",
+                        stringResource(R.string.csv_import_tip),
                         color = cs.onSurfaceVariant,
                         style = MaterialTheme.typography.bodySmall
                     )
@@ -203,32 +209,49 @@ fun CsvImportScreen(
                 shape = RoundedCornerShape(22.dp)
             ) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Text("3) Preview", fontWeight = FontWeight.SemiBold)
+                    Text(stringResource(R.string.csv_import_step_preview), fontWeight = FontWeight.SemiBold)
 
                     if (s.rows.isEmpty()) {
-                        Text("No rows parsed yet.", color = cs.onSurfaceVariant)
+                        Text(stringResource(R.string.csv_import_no_rows), color = cs.onSurfaceVariant)
                     } else {
                         val fmt = DateTimeFormatter.ISO_LOCAL_DATE
                         Text(
-                            "Range: ${s.start?.format(fmt)}  →  ${s.end?.format(fmt)}",
+                            stringResource(
+                                R.string.csv_import_range,
+                                s.start?.format(fmt) ?: "",
+                                s.end?.format(fmt) ?: ""
+                            ),
                             color = cs.onSurfaceVariant
                         )
-                        Text("Rows: ${s.rows.size}")
-                        Text("Will import: ${s.willImportCount}")
+                        Text(stringResource(R.string.csv_import_rows, s.rows.size))
+                        Text(stringResource(R.string.csv_import_will_import, s.willImportCount))
                         if (s.duplicatesDetected > 0) {
-                            Text("Duplicates skipped: ${s.duplicatesDetected}", color = cs.primary)
+                            Text(
+                                stringResource(R.string.csv_import_duplicates_skipped, s.duplicatesDetected),
+                                color = cs.primary
+                            )
                         }
 
                         Divider(color = border)
 
                         Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
-                            StatPill("Income", Formatters.money(s.previewIncomeCents), border, Modifier.weight(1f))
-                            StatPill("Expense", Formatters.money(s.previewExpenseCents), border, Modifier.weight(1f))
+                            StatPill(
+                                stringResource(R.string.label_income),
+                                Formatters.money(s.previewIncomeCents),
+                                border,
+                                Modifier.weight(1f)
+                            )
+                            StatPill(
+                                stringResource(R.string.label_expense),
+                                Formatters.money(s.previewExpenseCents),
+                                border,
+                                Modifier.weight(1f)
+                            )
                         }
 
                         Divider(color = border)
 
-                        Text("Sample rows", fontWeight = FontWeight.SemiBold)
+                        Text(stringResource(R.string.csv_import_sample_rows), fontWeight = FontWeight.SemiBold)
 
                         LazyColumn(
                             modifier = Modifier
@@ -268,20 +291,32 @@ fun CsvImportScreen(
 
                     if (s.warnings.isNotEmpty()) {
                         Divider(color = border)
-                        Text("Warnings", fontWeight = FontWeight.SemiBold)
+                        Text(stringResource(R.string.csv_import_warnings_title), fontWeight = FontWeight.SemiBold)
                         s.warnings.forEach { w ->
-                            Text("• $w", color = cs.onSurfaceVariant, style = MaterialTheme.typography.bodySmall)
+                            Text(
+                                stringResource(R.string.csv_import_warning_item, w),
+                                color = cs.onSurfaceVariant,
+                                style = MaterialTheme.typography.bodySmall
+                            )
                         }
                     }
 
                     if (s.error != null) {
                         Divider(color = border)
-                        Text("Error: ${s.error}", color = cs.error, fontWeight = FontWeight.SemiBold)
+                        Text(
+                            stringResource(R.string.csv_import_error, s.error),
+                            color = cs.error,
+                            fontWeight = FontWeight.SemiBold
+                        )
                     }
 
                     if (s.importedCount != null) {
                         Divider(color = border)
-                        Text("Imported: ${s.importedCount}", color = cs.primary, fontWeight = FontWeight.SemiBold)
+                        Text(
+                            stringResource(R.string.csv_import_imported, s.importedCount),
+                            color = cs.primary,
+                            fontWeight = FontWeight.SemiBold
+                        )
                     }
 
                     Spacer(Modifier.height(4.dp))
@@ -290,7 +325,7 @@ fun CsvImportScreen(
                         onClick = { vm.importNow() },
                         enabled = !s.loading && s.rows.isNotEmpty() && (s.selectedCategoryId != null) && s.willImportCount > 0
                     ) {
-                        Text("Import now")
+                        Text(stringResource(R.string.action_import_now))
                     }
                 }
             }

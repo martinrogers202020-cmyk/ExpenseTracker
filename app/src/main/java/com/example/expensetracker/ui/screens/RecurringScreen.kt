@@ -15,10 +15,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.expensetracker.R
+import com.example.expensetracker.data.model.RecurringFrequency
 import com.example.expensetracker.ui.viewmodel.RecurringViewModel
 import com.example.expensetracker.ui.viewmodel.RecurringViewModelFactory
 
@@ -36,7 +39,7 @@ fun RecurringScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Recurring payments") },
+                title = { Text(stringResource(R.string.recurring_payments_title)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.Outlined.ArrowBack, null)
@@ -73,7 +76,7 @@ fun RecurringScreen(
                                     .clickable { onEditRecurring(item.id) }
                             ) {
                                 Text(
-                                    text = item.title.ifBlank { "Recurring" },
+                                    text = item.title.ifBlank { stringResource(R.string.recurring_default_title) },
                                     fontWeight = FontWeight.SemiBold
                                 )
                                 Spacer(Modifier.height(2.dp))
@@ -92,8 +95,13 @@ fun RecurringScreen(
 
                         Spacer(Modifier.height(8.dp))
 
-                        Text("Next: ${item.nextRunLabel}")
-                        Text("Frequency: ${item.frequency.name.lowercase()}")
+                        Text(stringResource(R.string.recurring_next_label, item.nextRunLabel))
+                        Text(
+                            stringResource(
+                                R.string.recurring_frequency_label,
+                                frequencyLabel(item.frequency)
+                            )
+                        )
 
                         Spacer(Modifier.height(10.dp))
 
@@ -107,7 +115,7 @@ fun RecurringScreen(
                             ) {
                                 Icon(Icons.Outlined.CheckCircle, null)
                                 Spacer(Modifier.width(6.dp))
-                                Text("Add to expenses")
+                                Text(stringResource(R.string.recurring_add_to_expenses))
                             }
                         }
                     }
@@ -116,3 +124,11 @@ fun RecurringScreen(
         }
     }
 }
+
+@Composable
+private fun frequencyLabel(frequency: RecurringFrequency): String =
+    when (frequency) {
+        RecurringFrequency.DAILY -> stringResource(R.string.recurring_frequency_daily)
+        RecurringFrequency.MONTHLY -> stringResource(R.string.recurring_frequency_monthly)
+        RecurringFrequency.YEARLY -> stringResource(R.string.recurring_frequency_yearly)
+    }

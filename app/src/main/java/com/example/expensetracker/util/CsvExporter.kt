@@ -1,5 +1,8 @@
 package com.example.expensetracker.util
 
+import android.content.Context
+import com.example.expensetracker.R
+
 data class ExportRow(
     val date: String,
     val type: String,
@@ -15,8 +18,8 @@ object CsvExporter {
         return "\"$v\""
     }
 
-    fun toCsv(rows: List<ExportRow>): String {
-        val header = "date,type,category,note,amount"
+    fun toCsv(context: Context, rows: List<ExportRow>): String {
+        val header = context.getString(R.string.export_csv_header_simple_lowercase)
         val body = rows.joinToString("\n") { r ->
             listOf(r.date, r.type, r.category, r.note, r.amount)
                 .joinToString(",") { esc(it) }

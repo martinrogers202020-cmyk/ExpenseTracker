@@ -38,15 +38,12 @@ class CategoryRepository(
     }
 
     // ✅ inside the class (so repo.seedDefaultCategoriesIfEmpty() exists)
-    suspend fun seedDefaultCategoriesIfEmpty() {
+    suspend fun seedDefaultCategoriesIfEmpty(defaults: List<Pair<String, String>>) {
         val current = dao.getAllOnce()
         if (current.isNotEmpty()) return
 
-        addCategory("Bills", "🧾", true)
-        addCategory("Coffee", "☕", true)
-        addCategory("Eating Out", "🍔", true)
-        addCategory("Groceries", "🛒", true)
-        addCategory("Health", "💙", true)
-        addCategory("Rent", "🏠", true)
+        defaults.forEach { (name, emoji) ->
+            addCategory(name, emoji, true)
+        }
     }
 }

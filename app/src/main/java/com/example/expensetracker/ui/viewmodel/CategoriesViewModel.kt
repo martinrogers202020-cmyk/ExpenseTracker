@@ -1,7 +1,9 @@
 package com.example.expensetracker.ui.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.expensetracker.R
 import com.example.expensetracker.data.repo.CategoryRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,6 +24,7 @@ data class CategoriesUiState(
 )
 
 class CategoriesViewModel(
+    private val context: Context,
     private val repo: CategoryRepository
 ) : ViewModel() {
 
@@ -31,9 +34,11 @@ class CategoriesViewModel(
     init {
         // 1) seed defaults
         viewModelScope.launch {
-            runCatching { repo.seedDefaultCategoriesIfEmpty() }
+            runCatching { repo.seedDefaultCategoriesIfEmpty(defaultCategories()) }
                 .onFailure { e ->
-                    _uiState.update { it.copy(error = e.message ?: "Failed to seed default categories") }
+                    _uiState.update {
+                        it.copy(error = e.message ?: context.getString(R.string.categories_error_seed_defaults))
+                    }
                 }
         }
 
@@ -64,7 +69,7 @@ class CategoriesViewModel(
         viewModelScope.launch {
             runCatching { repo.addCategory(name = name, emoji = emoji, isDefault = false) }
                 .onFailure { e ->
-                    _uiState.update { it.copy(error = e.message ?: "Failed to add category") }
+                    _uiState.update { it.copy(error = e.message ?: context.getString(R.string.categories_error_add)) }
                 }
         }
     }
@@ -76,7 +81,7 @@ class CategoriesViewModel(
 
             runCatching { repo.updateCategory(id = id, name = name, emoji = emoji, isDefault = keepDefault) }
                 .onFailure { e ->
-                    _uiState.update { it.copy(error = e.message ?: "Failed to update category") }
+                    _uiState.update { it.copy(error = e.message ?: context.getString(R.string.categories_error_update)) }
                 }
         }
     }
@@ -85,8 +90,17 @@ class CategoriesViewModel(
         viewModelScope.launch {
             runCatching { repo.deleteCategory(id) }
                 .onFailure { e ->
-                    _uiState.update { it.copy(error = e.message ?: "Failed to delete category") }
+                    _uiState.update { it.copy(error = e.message ?: context.getString(R.string.categories_error_delete)) }
                 }
         }
     }
+
+    private fun defaultCategories(): List<Pair<String, String>> = listOf(
+        context.getString(R.string.category_default_bills) to "🧾",
+        context.getString(R.string.category_default_coffee) to "☕",
+        context.getString(R.string.category_default_eating_out) to "🍔",
+        context.getString(R.string.category_default_groceries) to "🛒",
+        context.getString(R.string.category_default_health) to "💙",
+        context.getString(R.string.category_default_rent) to "🏠"
+    )
 }

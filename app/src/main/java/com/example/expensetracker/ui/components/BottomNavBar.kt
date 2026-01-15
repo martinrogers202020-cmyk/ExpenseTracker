@@ -16,6 +16,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.compose.ui.res.stringResource
+import com.example.expensetracker.R
 import com.example.expensetracker.ui.navigation.Routes
 
 private data class BottomNavItem(
@@ -30,23 +32,23 @@ fun BottomNavBar(navController: NavController) {
     val items = listOf(
         BottomNavItem(
             route = Routes.HOME,
-            label = "Home",
-            icon = { Icon(Icons.Filled.Home, contentDescription = "Home") }
+            label = stringResource(R.string.nav_home),
+            icon = { Icon(Icons.Filled.Home, contentDescription = stringResource(R.string.nav_home)) }
         ),
         BottomNavItem(
             route = Routes.REPORTS,
-            label = "Reports",
-            icon = { Icon(Icons.Filled.BarChart, contentDescription = "Reports") }
+            label = stringResource(R.string.nav_reports),
+            icon = { Icon(Icons.Filled.BarChart, contentDescription = stringResource(R.string.nav_reports)) }
         ),
         BottomNavItem(
             route = Routes.CATEGORIES,
-            label = "Categories",
-            icon = { Icon(Icons.Filled.Category, contentDescription = "Categories") }
+            label = stringResource(R.string.nav_categories),
+            icon = { Icon(Icons.Filled.Category, contentDescription = stringResource(R.string.nav_categories)) }
         ),
         BottomNavItem(
             route = Routes.SETTINGS,
-            label = "Settings",
-            icon = { Icon(Icons.Filled.Settings, contentDescription = "Settings") }
+            label = stringResource(R.string.nav_settings),
+            icon = { Icon(Icons.Filled.Settings, contentDescription = stringResource(R.string.nav_settings)) }
         )
     )
 

@@ -15,12 +15,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.expensetracker.R
 import com.example.expensetracker.data.db.DatabaseProvider
 import com.example.expensetracker.data.model.TransactionType
 import com.example.expensetracker.data.recurring.RecurringEngine
@@ -240,23 +242,35 @@ fun NavGraph() {
                 val plans = listOf(
                     PaywallPlanUi(
                         id = "monthly",
-                        title = "Monthly",
-                        price = "$2.99",
-                        benefits = listOf("Advanced reports", "Budget alerts", "CSV export")
+                        title = stringResource(R.string.paywall_plan_monthly),
+                        price = stringResource(R.string.paywall_price_monthly),
+                        benefits = listOf(
+                            stringResource(R.string.paywall_benefit_advanced_reports),
+                            stringResource(R.string.paywall_benefit_budget_alerts),
+                            stringResource(R.string.paywall_benefit_csv_export)
+                        )
                     ),
                     PaywallPlanUi(
                         id = "yearly",
-                        title = "Yearly",
-                        price = "$19.99",
-                        badge = "Best value",
-                        benefits = listOf("Everything in Monthly", "Priority features", "45% cheaper than monthly")
+                        title = stringResource(R.string.paywall_plan_yearly),
+                        price = stringResource(R.string.paywall_price_yearly),
+                        badge = stringResource(R.string.paywall_badge_best_value),
+                        benefits = listOf(
+                            stringResource(R.string.paywall_benefit_everything_monthly),
+                            stringResource(R.string.paywall_benefit_priority_features),
+                            stringResource(R.string.paywall_benefit_yearly_savings)
+                        )
                     ),
                     PaywallPlanUi(
                         id = "lifetime",
-                        title = "Lifetime",
-                        price = "$49.99",
-                        badge = "One-time",
-                        benefits = listOf("All Pro features", "Pay once, keep forever", "Future features included")
+                        title = stringResource(R.string.paywall_plan_lifetime),
+                        price = stringResource(R.string.paywall_price_lifetime),
+                        badge = stringResource(R.string.paywall_badge_one_time),
+                        benefits = listOf(
+                            stringResource(R.string.paywall_benefit_all_pro),
+                            stringResource(R.string.paywall_benefit_pay_once),
+                            stringResource(R.string.paywall_benefit_future_features)
+                        )
                     )
                 )
 

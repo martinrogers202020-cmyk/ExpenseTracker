@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 
 val Context.settingsDataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
@@ -17,4 +18,5 @@ object SettingsKeys {
     val FONT_SCALE = floatPreferencesKey("font_scale")
     val COMPACT_SPACING = booleanPreferencesKey("compact_spacing")
     val PRO_ENABLED = booleanPreferencesKey("pro_enabled")
+    val LANGUAGE_TAG = stringPreferencesKey("language_tag")
 }

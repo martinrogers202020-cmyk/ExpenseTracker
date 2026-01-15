@@ -11,7 +11,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.expensetracker.R
 
 data class PaywallPlanUi(
     val id: String,
@@ -35,10 +37,10 @@ fun PaywallScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Upgrade to Pro") },
+                title = { Text(stringResource(R.string.paywall_title)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Outlined.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.Outlined.ArrowBack, contentDescription = stringResource(R.string.action_back))
                     }
                 }
             )
@@ -61,11 +63,15 @@ fun PaywallScreen(
             ) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
-                        text = if (proEnabled) "Pro is active ✅" else "Unlock Pro features",
+                        text = if (proEnabled) {
+                            stringResource(R.string.paywall_pro_active)
+                        } else {
+                            stringResource(R.string.paywall_unlock_title)
+                        },
                         style = MaterialTheme.typography.titleLarge
                     )
                     Text(
-                        text = "Advanced reports, export, budgets, and premium charts.",
+                        text = stringResource(R.string.paywall_description),
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -109,7 +115,10 @@ fun PaywallScreen(
                         if (plan.benefits.isNotEmpty()) {
                             Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                                 plan.benefits.forEach { b ->
-                                    Text("• $b", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                    Text(
+                                        stringResource(R.string.paywall_benefit_item, b),
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
                                 }
                             }
                         }
@@ -124,14 +133,14 @@ fun PaywallScreen(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(18.dp)
             ) {
-                Text("Continue")
+                Text(stringResource(R.string.action_continue))
             }
 
             TextButton(
                 onClick = onRestore,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             ) {
-                Text("Restore purchases")
+                Text(stringResource(R.string.paywall_restore_purchases))
             }
         }
     }

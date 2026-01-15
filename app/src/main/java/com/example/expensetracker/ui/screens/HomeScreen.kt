@@ -54,9 +54,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.expensetracker.R
 import com.example.expensetracker.ui.components.SectionTitle
 import com.example.expensetracker.ui.state.HomeCategoryUi
 import com.example.expensetracker.ui.state.HomeUiState
@@ -122,7 +124,7 @@ fun HomeScreen(
                 containerColor = accent,
                 contentColor = MaterialTheme.colorScheme.surface
             ) {
-                Text("+", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.home_add_symbol), fontSize = 20.sp, fontWeight = FontWeight.Bold)
             }
         }
     ) { padding ->
@@ -190,8 +192,8 @@ fun HomeScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        SectionTitle("Recent Transactions")
-                        TextButton(onClick = onOpenExpenses) { Text("View all") }
+                        SectionTitle(stringResource(R.string.home_recent_transactions))
+                        TextButton(onClick = onOpenExpenses) { Text(stringResource(R.string.action_view_all)) }
                     }
                 }
 
@@ -233,19 +235,19 @@ private fun MonthHeader(
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(onClick = onPrev) {
-            Icon(Icons.Outlined.ChevronLeft, contentDescription = "Previous", tint = textPrimary)
+            Icon(Icons.Outlined.ChevronLeft, contentDescription = stringResource(R.string.action_prev), tint = textPrimary)
         }
 
         Column(
             modifier = Modifier.weight(1f),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Home", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+            Text(stringResource(R.string.nav_home), fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
             Text(monthLabel, color = textSecondary)
         }
 
         IconButton(onClick = onNext) {
-            Icon(Icons.Outlined.ChevronRight, contentDescription = "Next", tint = textPrimary)
+            Icon(Icons.Outlined.ChevronRight, contentDescription = stringResource(R.string.action_next), tint = textPrimary)
         }
     }
 }
@@ -267,7 +269,7 @@ private fun SummaryCard(
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 Column {
-                    Text("Income", color = textSecondary)
+                    Text(stringResource(R.string.label_income), color = textSecondary)
                     Text(
                         income,
                         style = MaterialTheme.typography.headlineSmall,
@@ -276,7 +278,7 @@ private fun SummaryCard(
                     )
                 }
                 Column(horizontalAlignment = Alignment.End) {
-                    Text("Expenses", color = textSecondary)
+                    Text(stringResource(R.string.label_expenses), color = textSecondary)
                     Text(
                         expense,
                         style = MaterialTheme.typography.headlineSmall,
@@ -289,7 +291,7 @@ private fun SummaryCard(
             Divider(color = border)
 
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                Text("Balance", color = textSecondary)
+                Text(stringResource(R.string.label_balance), color = textSecondary)
                 Text(
                     balance,
                     fontWeight = FontWeight.Bold,
@@ -303,14 +305,14 @@ private fun SummaryCard(
             ) {
                 SoftActionButton(
                     modifier = Modifier.weight(1f),
-                    label = "Add Income",
+                    label = stringResource(R.string.home_add_income),
                     container = Color(0xFFEDE9FF),
                     textColor = textPrimary,
                     onClick = onAddIncome
                 )
                 SoftActionButton(
                     modifier = Modifier.weight(1f),
-                    label = "Add Expense",
+                    label = stringResource(R.string.home_add_expense),
                     container = Color(0xFFF3D6D6),
                     textColor = textPrimary,
                     onClick = onAddExpense
@@ -343,7 +345,7 @@ private fun FiltersCard(
             OutlinedTextField(
                 value = searchQuery,
                 onValueChange = onSearchChange,
-                placeholder = { Text("Search", color = textSecondary) },
+                placeholder = { Text(stringResource(R.string.action_search), color = textSecondary) },
                 leadingIcon = { Icon(Icons.Outlined.Search, contentDescription = null, tint = textSecondary) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
@@ -358,18 +360,18 @@ private fun FiltersCard(
             )
 
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                PillChip("All", typeFilter == TxTypeFilter.ALL, accent, accentSoft, border) {
+                PillChip(stringResource(R.string.home_filter_all), typeFilter == TxTypeFilter.ALL, accent, accentSoft, border) {
                     onTypeFilterChange(TxTypeFilter.ALL)
                 }
-                PillChip("Expenses", typeFilter == TxTypeFilter.EXPENSE, accent, accentSoft, border) {
+                PillChip(stringResource(R.string.label_expenses), typeFilter == TxTypeFilter.EXPENSE, accent, accentSoft, border) {
                     onTypeFilterChange(TxTypeFilter.EXPENSE)
                 }
-                PillChip("Income", typeFilter == TxTypeFilter.INCOME, accent, accentSoft, border) {
+                PillChip(stringResource(R.string.label_income), typeFilter == TxTypeFilter.INCOME, accent, accentSoft, border) {
                     onTypeFilterChange(TxTypeFilter.INCOME)
                 }
             }
 
-            Text("Category", color = textSecondary)
+            Text(stringResource(R.string.label_category), color = textSecondary)
             CategoryDropdown(
                 categories = categories,
                 selectedId = selectedCategoryId,
@@ -382,8 +384,8 @@ private fun FiltersCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                TextButton(onClick = onClearFilters) { Text("Clear Filters", color = accent) }
-                Text("$itemsCount items", color = textSecondary)
+                TextButton(onClick = onClearFilters) { Text(stringResource(R.string.action_clear_filters), color = accent) }
+                Text(stringResource(R.string.home_items_count, itemsCount), color = textSecondary)
             }
         }
     }
@@ -460,7 +462,8 @@ private fun CategoryDropdown(
 
     val selectedLabel by remember(categories, selectedId) {
         derivedStateOf {
-            categories.firstOrNull { it.id == selectedId }?.label ?: "All categories"
+            categories.firstOrNull { it.id == selectedId }?.label
+                ?: stringResource(R.string.home_all_categories)
         }
     }
 
@@ -472,7 +475,7 @@ private fun CategoryDropdown(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { expanded = true },
-            trailingIcon = { Text("▼", color = MaterialTheme.colorScheme.onSurface) },
+            trailingIcon = { Text(stringResource(R.string.home_dropdown_indicator), color = MaterialTheme.colorScheme.onSurface) },
             shape = RoundedCornerShape(22.dp),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedContainerColor = MaterialTheme.colorScheme.surface,
@@ -488,7 +491,7 @@ private fun CategoryDropdown(
             modifier = Modifier.fillMaxWidth()
         ) {
             DropdownMenuItem(
-                text = { Text("All categories") },
+                text = { Text(stringResource(R.string.home_all_categories)) },
                 onClick = {
                     onSelected(null)
                     expanded = false

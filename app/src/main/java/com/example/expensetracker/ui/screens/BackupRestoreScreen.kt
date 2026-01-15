@@ -37,8 +37,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.expensetracker.R
 import com.example.expensetracker.data.backup.BackupRepository
 import com.example.expensetracker.data.db.DatabaseProvider
 import kotlinx.coroutines.launch
@@ -64,9 +66,13 @@ fun BackupRestoreScreen(
                 context.contentResolver.openOutputStream(uri)?.use { out ->
                     out.write(json.toByteArray())
                 }
-                Toast.makeText(context, "Backup saved.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getString(R.string.backup_saved), Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
-                Toast.makeText(context, "Export failed: ${e.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.backup_export_failed, e.message ?: ""),
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     )
@@ -83,11 +89,21 @@ fun BackupRestoreScreen(
                     val result = repo.importFromJsonString(text)
                     Toast.makeText(
                         context,
-                        "Restored: ${result.categories} categories, ${result.transactions} transactions, ${result.budgets} budgets, ${result.recurring} recurring",
+                        context.getString(
+                            R.string.backup_restore_success,
+                            result.categories,
+                            result.transactions,
+                            result.budgets,
+                            result.recurring
+                        ),
                         Toast.LENGTH_LONG
                     ).show()
                 } catch (e: Exception) {
-                    Toast.makeText(context, "Import failed: ${e.message}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.backup_import_failed, e.message ?: ""),
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
         }
@@ -97,10 +113,10 @@ fun BackupRestoreScreen(
         containerColor = Color.Transparent,
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Backup & restore", fontWeight = FontWeight.SemiBold) },
+                title = { Text(stringResource(R.string.settings_backup_restore_title), fontWeight = FontWeight.SemiBold) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Outlined.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.Outlined.ArrowBack, contentDescription = stringResource(R.string.action_back))
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.Transparent)
@@ -120,7 +136,7 @@ fun BackupRestoreScreen(
             item {
                 CardBlock {
                     Text(
-                        "Export a backup file or restore from one. Works with Google Drive via the system file picker.",
+                        stringResource(R.string.backup_description),
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -138,11 +154,20 @@ fun BackupRestoreScreen(
                                     pendingExportJson.value = json
 
                                     val date = LocalDate.now()
-                                    val fileName =
-                                        "ExpenseTracker_Backup_${date.year}_${date.monthValue.toString().padStart(2, '0')}_${date.dayOfMonth.toString().padStart(2, '0')}.json"
+                                    val fileName = context.getString(
+                                        R.string.backup_file_name,
+                                        context.getString(R.string.app_name),
+                                        date.year,
+                                        date.monthValue.toString().padStart(2, '0'),
+                                        date.dayOfMonth.toString().padStart(2, '0')
+                                    )
                                     exportLauncher.launch(fileName)
                                 } catch (e: Exception) {
-                                    Toast.makeText(context, "Export failed: ${e.message}", Toast.LENGTH_LONG).show()
+                                    Toast.makeText(
+                                        context,
+                                        context.getString(R.string.backup_export_failed, e.message ?: ""),
+                                        Toast.LENGTH_LONG
+                                    ).show()
                                 }
                             }
                         },
@@ -151,7 +176,7 @@ fun BackupRestoreScreen(
                     ) {
                         Icon(Icons.Outlined.CloudUpload, contentDescription = null)
                         Spacer(Modifier.height(0.dp))
-                        Text("Export backup", modifier = Modifier.weight(1f))
+                        Text(stringResource(R.string.backup_export_button), modifier = Modifier.weight(1f))
                     }
 
                     Spacer(Modifier.height(10.dp))
@@ -163,7 +188,7 @@ fun BackupRestoreScreen(
                     ) {
                         Icon(Icons.Outlined.CloudDownload, contentDescription = null)
                         Spacer(Modifier.height(0.dp))
-                        Text("Restore backup", modifier = Modifier.weight(1f))
+                        Text(stringResource(R.string.backup_restore_button), modifier = Modifier.weight(1f))
                     }
                 }
             }

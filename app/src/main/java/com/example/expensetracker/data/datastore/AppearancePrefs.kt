@@ -8,5 +8,6 @@ data class AppearancePrefs(
     val accentChoice: AccentChoice = AccentChoice.PURPLE,
     val fontScale: Float = 1.0f,
     val compactSpacing: Boolean = false,
-    val proEnabled: Boolean = false
+    val proEnabled: Boolean = false,
+    val languageTag: String = "en"
 )

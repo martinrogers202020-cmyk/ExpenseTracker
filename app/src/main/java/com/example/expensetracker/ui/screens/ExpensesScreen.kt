@@ -13,10 +13,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.expensetracker.R
 import com.example.expensetracker.ui.viewmodel.ExpenseListViewModel
 import com.example.expensetracker.ui.viewmodel.ExpenseListViewModelFactory
 import com.example.expensetracker.util.Formatters
@@ -49,12 +51,12 @@ fun ExpensesScreen(
         containerColor = Color.Transparent,
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Expenses", color = MaterialTheme.colorScheme.onSurface) },
+                title = { Text(stringResource(R.string.nav_expenses), color = MaterialTheme.colorScheme.onSurface) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(
                             imageVector = Icons.Outlined.ArrowBack,
-                            contentDescription = "Back",
+                            contentDescription = stringResource(R.string.action_back),
                             tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
@@ -88,7 +90,7 @@ fun ExpensesScreen(
                 if (state.groups.isEmpty()) {
                     item {
                         SoftCard {
-                            Text("No expenses yet.", color = textSecondary)
+                            Text(stringResource(R.string.expenses_empty_state), color = textSecondary)
                         }
                     }
                 } else {
@@ -135,7 +137,11 @@ fun ExpensesScreen(
                                                 ) {
                                                     Column(Modifier.weight(1f)) {
                                                         Text(
-                                                            text = if (item.note.isBlank()) "No note" else item.note,
+                                                            text = if (item.note.isBlank()) {
+                                                                stringResource(R.string.expenses_no_note)
+                                                            } else {
+                                                                item.note
+                                                            },
                                                             color = MaterialTheme.colorScheme.onSurface,
                                                             maxLines = 1,
                                                             style = MaterialTheme.typography.bodyMedium,
