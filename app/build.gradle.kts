@@ -84,6 +84,7 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.1.1")
 
     implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation("androidx.metrics:metrics-performance:1.0.0")
 
     // Material Components (fine to keep if you use it)
     implementation("com.google.android.material:material:1.12.0")

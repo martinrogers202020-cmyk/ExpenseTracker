@@ -133,7 +133,7 @@ fun BackupRestoreScreen(
             ),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            item {
+            item(key = "backup_description") {
                 CardBlock {
                     Text(
                         stringResource(R.string.backup_description),
@@ -142,7 +142,7 @@ fun BackupRestoreScreen(
                 }
             }
 
-            item {
+            item(key = "backup_actions") {
                 CardBlock {
                     FilledTonalButton(
                         onClick = {

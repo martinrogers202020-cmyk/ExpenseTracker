@@ -1,9 +1,9 @@
 package com.example.expensetracker.ui.state
 
+import androidx.compose.runtime.Immutable
 import java.time.YearMonth
-import com.example.expensetracker.ui.state.TransactionItemUi
 
-
+@Immutable
 data class CategorySpendUi(
     val categoryId: Long,
     val label: String,        // "🛒 Groceries"
@@ -11,6 +11,7 @@ data class CategorySpendUi(
     val fraction: Float       // 0.0..1.0 of total expenses
 )
 
+@Immutable
 data class ReportsUiState(
     val month: YearMonth = YearMonth.now(),
     val incomeCents: Long = 0,
@@ -18,6 +19,5 @@ data class ReportsUiState(
     val balanceCents: Long = 0,
     val topExpenseCategories: List<CategorySpendUi> = emptyList(),
     val isLoading: Boolean = true,
-    val transactions: List<TransactionItemUi> = emptyList(),
-
-    )
+    val transactions: List<TransactionItemUi> = emptyList()
+)

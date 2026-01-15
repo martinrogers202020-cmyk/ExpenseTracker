@@ -44,6 +44,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -87,7 +88,10 @@ private enum class RangeTab { TODAY, WEEK, MONTH, CUSTOM }
 private enum class ExportFormat { CSV, PDF }
 private enum class ExportScope { MONTH, YEAR, CUSTOM }
 
+@Immutable
 private data class CategorySlice(val label: String, val valueCents: Long)
+
+@Immutable
 private data class DailyPoint(val date: LocalDate, val netCents: Long)
 
 @OptIn(ExperimentalMaterial3Api::class)

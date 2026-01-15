@@ -1,5 +1,8 @@
 package com.example.expensetracker.ui.state
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class BudgetItemUi(
     val budgetId: Long,
     val categoryId: Long,

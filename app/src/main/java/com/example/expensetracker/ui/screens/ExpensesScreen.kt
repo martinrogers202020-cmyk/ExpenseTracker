@@ -4,11 +4,14 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -35,17 +38,20 @@ fun ExpensesScreen(
     val vm: ExpenseListViewModel = viewModel(factory = ExpenseListViewModelFactory(context))
     val state = vm.uiState.collectAsStateWithLifecycle().value
 
-    val bg = Brush.verticalGradient(
-        listOf(
-            MaterialTheme.colorScheme.background,
-            MaterialTheme.colorScheme.background,
-            MaterialTheme.colorScheme.surface
+    val cs = MaterialTheme.colorScheme
+    val bg = remember(cs.background, cs.surface) {
+        Brush.verticalGradient(
+            listOf(
+                cs.background,
+                cs.background,
+                cs.surface
+            )
         )
-    )
+    }
 
-    val expenseColor = MaterialTheme.colorScheme.error
-    val textSecondary = MaterialTheme.colorScheme.onSurfaceVariant
-    val outline = MaterialTheme.colorScheme.outlineVariant
+    val expenseColor = cs.error
+    val textSecondary = cs.onSurfaceVariant
+    val outline = cs.outlineVariant
 
     Scaffold(
         containerColor = Color.Transparent,
@@ -88,39 +94,46 @@ fun ExpensesScreen(
                 contentPadding = PaddingValues(bottom = 100.dp)
             ) {
                 if (state.groups.isEmpty()) {
-                    item {
+                    item(key = "empty_state") {
                         SoftCard {
                             Text(stringResource(R.string.expenses_empty_state), color = textSecondary)
                         }
                     }
                 } else {
-                    state.groups.forEach { group ->
-                        item {
-                            SoftCard {
-                                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                                    Row(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        horizontalArrangement = Arrangement.SpaceBetween,
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Text(
-                                            text = group.categoryLabel,
-                                            color = MaterialTheme.colorScheme.onSurface,
-                                            style = MaterialTheme.typography.titleMedium,
-                                            fontWeight = FontWeight.SemiBold
-                                        )
-                                        Text(
-                                            text = Formatters.money(group.totalCents),
-                                            color = expenseColor,
-                                            style = MaterialTheme.typography.titleMedium,
-                                            fontWeight = FontWeight.SemiBold
-                                        )
-                                    }
+                    items(state.groups, key = { it.categoryLabel }) { group ->
+                        SoftCard {
+                            val groupTotal = remember(group.totalCents) { Formatters.money(group.totalCents) }
+                            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = group.categoryLabel,
+                                        color = MaterialTheme.colorScheme.onSurface,
+                                        style = MaterialTheme.typography.titleMedium,
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                    Text(
+                                        text = groupTotal,
+                                        color = expenseColor,
+                                        style = MaterialTheme.typography.titleMedium,
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                }
 
-                                    Divider(color = outline)
+                                Divider(color = outline)
 
-                                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                                        group.items.forEach { item ->
+                                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    group.items.forEach { item ->
+                                        key(item.id) {
+                                            val dateLabel = remember(item.epochDay) {
+                                                Formatters.dateFromEpochDay(item.epochDay)
+                                            }
+                                            val amountLabel = remember(item.amountCents) {
+                                                Formatters.money(item.amountCents)
+                                            }
                                             Surface(
                                                 onClick = { onEditExpense(item.id) },
                                                 color = MaterialTheme.colorScheme.surface,
@@ -148,7 +161,7 @@ fun ExpensesScreen(
                                                             fontWeight = FontWeight.SemiBold
                                                         )
                                                         Text(
-                                                            text = Formatters.dateFromEpochDay(item.epochDay),
+                                                            text = dateLabel,
                                                             color = textSecondary,
                                                             style = MaterialTheme.typography.bodySmall
                                                         )
@@ -157,7 +170,7 @@ fun ExpensesScreen(
                                                     Spacer(Modifier.width(10.dp))
 
                                                     Text(
-                                                        text = Formatters.money(item.amountCents),
+                                                        text = amountLabel,
                                                         color = expenseColor,
                                                         fontWeight = FontWeight.Bold
                                                     )

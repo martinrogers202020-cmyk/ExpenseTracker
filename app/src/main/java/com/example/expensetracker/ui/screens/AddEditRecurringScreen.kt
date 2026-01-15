@@ -43,6 +43,8 @@ fun AddEditRecurringScreen(
         if (recurringId != null) vm.load(recurringId)
     }
 
+    val frequencyOptions = remember { RecurringFrequency.values().toList() }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -114,7 +116,10 @@ fun AddEditRecurringScreen(
 
             item { Text(stringResource(R.string.recurring_frequency_title), style = MaterialTheme.typography.labelMedium) }
 
-            items(RecurringFrequency.values().toList()) { f ->
+            items(
+                items = frequencyOptions,
+                key = { it.name }
+            ) { f ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()

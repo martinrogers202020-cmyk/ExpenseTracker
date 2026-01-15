@@ -1,6 +1,7 @@
 // FILE: app/src/main/java/com/example/expensetracker/ui/viewmodel/AdvancedReportsViewModel.kt
 package com.example.expensetracker.ui.viewmodel
 
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.expensetracker.data.db.AppDatabase
@@ -12,6 +13,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
+@Immutable
 data class TrendPoint(
     val epochDay: Long,
     val incomeCents: Long,
@@ -19,6 +21,7 @@ data class TrendPoint(
     val netCents: Long
 )
 
+@Immutable
 data class AdvancedReportsState(
     val startEpochDay: Long = LocalDate.now().minusDays(30).toEpochDay(),
     val endEpochDay: Long = LocalDate.now().toEpochDay(),

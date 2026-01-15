@@ -42,21 +42,26 @@ fun CategoriesScreen(onBack: () -> Unit) {
     var showAddDialog by remember { mutableStateOf(false) }
     var editId by remember { mutableStateOf<Long?>(null) }
 
-    val filtered = remember(state.categories, query) {
-        val q = query.trim().lowercase()
-        if (q.isEmpty()) state.categories
-        else state.categories.filter {
-            it.name.lowercase().contains(q) || it.emoji.contains(q)
+    val filtered by remember(state.categories, query) {
+        derivedStateOf {
+            val q = query.trim().lowercase()
+            if (q.isEmpty()) state.categories
+            else state.categories.filter {
+                it.name.lowercase().contains(q) || it.emoji.contains(q)
+            }
         }
     }
 
-    val bg = Brush.verticalGradient(
-        listOf(
-            MaterialTheme.colorScheme.background,
-            Color(0xFFF7F4FF),
-            Color(0xFFF2EEFF)
+    val cs = MaterialTheme.colorScheme
+    val bg = remember(cs.background) {
+        Brush.verticalGradient(
+            listOf(
+                cs.background,
+                Color(0xFFF7F4FF),
+                Color(0xFFF2EEFF)
+            )
         )
-    )
+    }
 
     Scaffold(
         containerColor = Color.Transparent,

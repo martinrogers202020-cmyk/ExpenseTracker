@@ -1,10 +1,12 @@
 package com.example.expensetracker.ui.state
 
+import androidx.compose.runtime.Immutable
 import com.example.expensetracker.data.model.TransactionType
 import java.time.YearMonth
 
 enum class TxTypeFilter { ALL, EXPENSE, INCOME }
 
+@Immutable
 data class HomeUiState(
     val month: YearMonth = YearMonth.now(),
     val summary: MoneySummary = MoneySummary(),
@@ -18,6 +20,7 @@ data class HomeUiState(
     val categories: List<HomeCategoryUi> = emptyList()
 )
 
+@Immutable
 data class HomeCategoryUi(
     val id: Long,
     val label: String
