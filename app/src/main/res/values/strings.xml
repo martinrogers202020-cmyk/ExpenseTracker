@@ -103,6 +103,7 @@
     <string name="theme_dark">Dark</string>
     <string name="theme_system_default">System default</string>
     <string name="settings_dynamic_label">Dynamic</string>
+    <string name="settings_dynamic_separator"> • </string>
     <string name="settings_dynamic_colors_title">Dynamic colors</string>
     <string name="settings_dynamic_colors_subtitle">Uses system colors (Android 12+)</string>
     <string name="settings_language_title">Language</string>

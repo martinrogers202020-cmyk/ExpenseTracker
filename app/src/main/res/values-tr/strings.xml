@@ -103,6 +103,7 @@
     <string name="theme_dark">Koyu</string>
     <string name="theme_system_default">Sistem varsayılanı</string>
     <string name="settings_dynamic_label">Dinamik</string>
+    <string name="settings_dynamic_separator"> • </string>
     <string name="settings_dynamic_colors_title">Dinamik renkler</string>
     <string name="settings_dynamic_colors_subtitle">Sistem renklerini kullanır (Android 12+)</string>
     <string name="settings_language_title">Dil</string>
