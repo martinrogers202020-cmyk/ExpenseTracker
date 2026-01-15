@@ -225,6 +225,8 @@
     <string name="category_default_groceries">Market</string>
     <string name="category_default_health">Sağlık</string>
     <string name="category_default_rent">Kira</string>
+    <string name="category_default_uncategorized">Kategorisiz</string>
+    <string name="category_default_income">Gelir</string>
 
     <!-- Budgets -->
     <string name="budgets_empty_state">Henüz bütçe yok. + ile ekleyin.</string>

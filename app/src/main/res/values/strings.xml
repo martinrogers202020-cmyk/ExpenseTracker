@@ -224,6 +224,8 @@
     <string name="category_default_groceries">Groceries</string>
     <string name="category_default_health">Health</string>
     <string name="category_default_rent">Rent</string>
+    <string name="category_default_uncategorized">Uncategorized</string>
+    <string name="category_default_income">Income</string>
 
     <!-- Budgets -->
     <string name="budgets_empty_state">No budgets yet. Tap + to add one.</string>
