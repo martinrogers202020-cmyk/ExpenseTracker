@@ -1,6 +1,11 @@
 package com.example.expensetracker
 
+import android.app.Activity
+import android.app.LocaleManager
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
+import android.os.LocaleList
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatDelegate
@@ -34,9 +39,11 @@ class MainActivity : ComponentActivity() {
             )
 
             LaunchedEffect(prefs.languageTag) {
-                AppCompatDelegate.setApplicationLocales(
-                    LocaleListCompat.forLanguageTags(prefs.languageTag)
-                )
+                val normalizedTag = prefs.languageTag.ifBlank { "en" }
+                val didChange = applyAppLanguage(context, normalizedTag)
+                if (didChange) {
+                    (context as? Activity)?.recreate()
+                }
             }
 
             ExpenseTrackerAppTheme(prefs = prefs) {
@@ -44,6 +51,29 @@ class MainActivity : ComponentActivity() {
                     NavGraph()
                 }
             }
+        }
+    }
+}
+
+private fun applyAppLanguage(context: Context, languageTag: String): Boolean {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        val localeManager = context.getSystemService(LocaleManager::class.java)
+        val newLocales = LocaleList.forLanguageTags(languageTag)
+        val currentLocales = localeManager.applicationLocales
+        if (currentLocales.toLanguageTags() != newLocales.toLanguageTags()) {
+            localeManager.applicationLocales = newLocales
+            true
+        } else {
+            false
+        }
+    } else {
+        val newLocales = LocaleListCompat.forLanguageTags(languageTag)
+        val currentLocales = AppCompatDelegate.getApplicationLocales()
+        if (currentLocales.toLanguageTags() != newLocales.toLanguageTags()) {
+            AppCompatDelegate.setApplicationLocales(newLocales)
+            true
+        } else {
+            false
         }
     }
 }
