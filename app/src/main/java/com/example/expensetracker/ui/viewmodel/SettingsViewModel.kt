@@ -1,5 +1,6 @@
 package com.example.expensetracker.ui.viewmodel
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.ViewModel
@@ -8,6 +9,7 @@ import com.example.expensetracker.data.datastore.AccentChoice
 import com.example.expensetracker.data.datastore.AppearancePrefs
 import com.example.expensetracker.data.datastore.LanguageTags
 import com.example.expensetracker.data.datastore.ThemeMode
+import com.example.expensetracker.data.repo.CategoryRepository
 import com.example.expensetracker.data.repo.SettingsRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -18,7 +20,9 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(
-    private val repo: SettingsRepository
+    private val repo: SettingsRepository,
+    private val categoryRepository: CategoryRepository,
+    private val appContext: Context
 ) : ViewModel() {
 
     init {
@@ -61,7 +65,13 @@ class SettingsViewModel(
     fun setProEnabled(value: Boolean) = viewModelScope.launch { repo.setProEnabled(value) }
     fun setLanguageTag(value: String) = viewModelScope.launch { repo.setLanguageTag(value) }
 
-    suspend fun updateLanguage(tag: String): Boolean = repo.updateLanguageIfNeeded(tag)
+    suspend fun updateLanguage(tag: String): Boolean {
+        val updated = repo.updateLanguageIfNeeded(tag)
+        if (updated) {
+            categoryRepository.syncLocalizedDefaultCategoryNames(appContext)
+        }
+        return updated
+    }
 
     private fun applyAppLocale(tag: String) {
         val newLocales = if (tag == LanguageTags.SYSTEM) {

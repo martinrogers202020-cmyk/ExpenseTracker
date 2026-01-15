@@ -3,6 +3,8 @@ package com.example.expensetracker.ui.viewmodel
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.expensetracker.data.db.DatabaseProvider
+import com.example.expensetracker.data.repo.CategoryRepository
 import com.example.expensetracker.data.repo.SettingsRepository
 
 class SettingsViewModelFactory(
@@ -11,7 +13,10 @@ class SettingsViewModelFactory(
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        val repo = SettingsRepository(context.applicationContext)
-        return SettingsViewModel(repo) as T
+        val appContext = context.applicationContext
+        val repo = SettingsRepository(appContext)
+        val db = DatabaseProvider.get(appContext)
+        val categoryRepository = CategoryRepository(db.categoryDao())
+        return SettingsViewModel(repo, categoryRepository, appContext) as T
     }
 }
