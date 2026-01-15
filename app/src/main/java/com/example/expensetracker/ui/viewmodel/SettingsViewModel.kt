@@ -37,4 +37,9 @@ class SettingsViewModel(
     fun setCompactSpacing(value: Boolean) = viewModelScope.launch { repo.setCompactSpacing(value) }
     fun setProEnabled(value: Boolean) = viewModelScope.launch { repo.setProEnabled(value) }
     fun setLanguageTag(value: String) = viewModelScope.launch { repo.setLanguageTag(value) }
+
+    fun applyLanguageChange(value: String) = viewModelScope.launch {
+        repo.applyLanguageIfNeeded(value)
+        repo.setLanguageTag(value)
+    }
 }
