@@ -235,16 +235,18 @@ private fun AddBudgetDialog(
             }
         },
         confirmButton = {
+            val selectCategoryError = stringResource(R.string.budgets_select_category_error)
+            val validAmountError = stringResource(R.string.budgets_valid_amount_error)
             TextButton(onClick = {
                 val catId = selectedCategoryId
                 if (catId == null) {
-                    categoryError = stringResource(R.string.budgets_select_category_error)
+                    categoryError = selectCategoryError
                     return@TextButton
                 }
 
                 val value = amountText.replace(",", ".").toDoubleOrNull()
                 if (value == null || value <= 0) {
-                    amountError = stringResource(R.string.budgets_valid_amount_error)
+                    amountError = validAmountError
                     return@TextButton
                 }
 

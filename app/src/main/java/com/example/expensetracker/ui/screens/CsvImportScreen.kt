@@ -142,9 +142,10 @@ fun CsvImportScreen(
                         Text(stringResource(R.string.csv_import_choose_csv))
                     }
 
-                    if (s.pickedName != null) {
+                    val pickedName = s.pickedName
+                    if (pickedName != null) {
                         Text(
-                            stringResource(R.string.csv_import_selected_file, s.pickedName),
+                            stringResource(R.string.csv_import_selected_file, pickedName),
                             color = cs.onSurfaceVariant
                         )
                     }
@@ -301,19 +302,21 @@ fun CsvImportScreen(
                         }
                     }
 
-                    if (s.error != null) {
+                    val error = s.error
+                    if (error != null) {
                         Divider(color = border)
                         Text(
-                            stringResource(R.string.csv_import_error, s.error),
+                            stringResource(R.string.csv_import_error, error),
                             color = cs.error,
                             fontWeight = FontWeight.SemiBold
                         )
                     }
 
-                    if (s.importedCount != null) {
+                    val importedCount = s.importedCount
+                    if (importedCount != null) {
                         Divider(color = border)
                         Text(
-                            stringResource(R.string.csv_import_imported, s.importedCount),
+                            stringResource(R.string.csv_import_imported, importedCount),
                             color = cs.primary,
                             fontWeight = FontWeight.SemiBold
                         )
