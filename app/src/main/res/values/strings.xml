@@ -262,16 +262,16 @@
     <string name="csv_import_unable_open_with_message">Unable to open file: %1$s</string>
     <string name="csv_import_file_empty">File is empty.</string>
     <string name="csv_import_header_not_detected">Header not detected reliably. Assuming columns: Date, Description, Amount.</string>
-    <string name="csv_import_missing_date_column">Couldn&#39;t find a Date column.</string>
-    <string name="csv_import_missing_description_column">Couldn&#39;t find a Description/Category column. Using blank descriptions where missing.</string>
+    <string name="csv_import_missing_date_column">Could not find a Date column.</string>
+    <string name="csv_import_missing_description_column">Could not find a Description/Category column. Using blank descriptions where missing.</string>
     <string name="csv_import_bank_transaction">Bank transaction</string>
     <string name="csv_import_row_skipped_invalid_amount">Skipped row %1$d: amount not found/invalid.</string>
     <string name="csv_import_expected_date_column">Could not find a date column. Expected one of: %1$s.</string>
     <string name="csv_import_expected_amount_column">Could not find an amount column. Expected one of: %1$s.</string>
     <string name="csv_import_expected_description_column">Could not find a description column. Expected one of: %1$s.</string>
     <string name="csv_import_row_missing_columns">Row %1$d: missing required columns — skipped.</string>
-    <string name="csv_import_row_invalid_date">Row %1$d: could not parse date '%2$s' — skipped.</string>
-    <string name="csv_import_row_invalid_amount">Row %1$d: could not parse amount '%2$s' — skipped.</string>
+    <string name="csv_import_row_invalid_date">Row %1$d: could not parse date (%2$s) — skipped.</string>
+    <string name="csv_import_row_invalid_amount">Row %1$d: could not parse amount (%2$s) — skipped.</string>
     <string name="csv_import_bank_import">Bank import</string>
 
     <!-- Notifications -->

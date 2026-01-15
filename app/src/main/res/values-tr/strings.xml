@@ -270,8 +270,8 @@
     <string name="csv_import_expected_amount_column">Tutar sütunu bulunamadı. Beklenenlerden biri: %1$s.</string>
     <string name="csv_import_expected_description_column">Açıklama sütunu bulunamadı. Beklenenlerden biri: %1$s.</string>
     <string name="csv_import_row_missing_columns">%1$d. satır: gerekli sütunlar eksik — atlandı.</string>
-    <string name="csv_import_row_invalid_date">%1$d. satır: tarih çözümlenemedi '%2$s' — atlandı.</string>
-    <string name="csv_import_row_invalid_amount">%1$d. satır: tutar çözümlenemedi '%2$s' — atlandı.</string>
+    <string name="csv_import_row_invalid_date">%1$d. satır: tarih çözümlenemedi (%2$s) — atlandı.</string>
+    <string name="csv_import_row_invalid_amount">%1$d. satır: tutar çözümlenemedi (%2$s) — atlandı.</string>
     <string name="csv_import_bank_import">Banka içe aktarma</string>
 
     <!-- Notifications -->
@@ -298,12 +298,12 @@
     <string name="backup_restore_button">Yedeği geri yükle</string>
 
     <!-- Pro -->
-    <string name="pro_screen_description">Pro&#39;yu etkinleştirerek premium özellikleri açın.</string>
+    <string name="pro_screen_description">Proyu etkinleştirerek premium özellikleri açın.</string>
     <string name="pro_screen_enabled">Pro etkin</string>
     <string name="pro_screen_disabled">Pro devre dışı</string>
 
     <!-- Paywall -->
-    <string name="paywall_title">Pro&#39;ya yükselt</string>
+    <string name="paywall_title">Proya yükselt</string>
     <string name="paywall_pro_active">Pro etkin ✅</string>
     <string name="paywall_unlock_title">Pro özelliklerini aç</string>
     <string name="paywall_description">Gelişmiş raporlar, dışa aktarma, bütçeler ve premium grafikler.</string>
