@@ -19,6 +19,7 @@ class AddEditViewModelFactory(
         ).build()
 
         return AddEditViewModel(
+            context = context.applicationContext,
             categoryDao = db.categoryDao(),
             transactionDao = db.transactionDao()
         ) as T

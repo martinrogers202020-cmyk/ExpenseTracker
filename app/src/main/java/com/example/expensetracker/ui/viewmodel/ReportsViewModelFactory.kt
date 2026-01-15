@@ -18,6 +18,6 @@ class ReportsViewModelFactory(
         val txRepo = TransactionRepository(db.transactionDao())
         val catRepo = CategoryRepository(db.categoryDao())
 
-        return ReportsViewModel(txRepo, catRepo) as T
+        return ReportsViewModel(context.applicationContext, txRepo, catRepo) as T
     }
 }

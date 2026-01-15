@@ -33,7 +33,8 @@ class SettingsRepository(private val context: Context) {
                 accentChoice = accentChoice,
                 fontScale = prefs[SettingsKeys.FONT_SCALE] ?: 1.0f,
                 compactSpacing = prefs[SettingsKeys.COMPACT_SPACING] ?: false,
-                proEnabled = prefs[SettingsKeys.PRO_ENABLED] ?: false
+                proEnabled = prefs[SettingsKeys.PRO_ENABLED] ?: false,
+                languageTag = prefs[SettingsKeys.LANGUAGE_TAG] ?: "en"
             )
         }
 
@@ -62,4 +63,8 @@ class SettingsRepository(private val context: Context) {
     }
     suspend fun enablePro() = setProEnabled(true)
     suspend fun disablePro() = setProEnabled(false)
+
+    suspend fun setLanguageTag(value: String) {
+        context.settingsDataStore.edit { it[SettingsKeys.LANGUAGE_TAG] = value }
+    }
 }

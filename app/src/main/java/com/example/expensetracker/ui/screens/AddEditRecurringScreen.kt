@@ -14,11 +14,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.expensetracker.R
 import com.example.expensetracker.data.model.RecurringFrequency
 import com.example.expensetracker.data.model.TransactionType
 import com.example.expensetracker.ui.viewmodel.AddEditRecurringViewModel
@@ -44,7 +46,15 @@ fun AddEditRecurringScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(if (recurringId == null) "Add recurring" else "Edit recurring") },
+                title = {
+                    Text(
+                        if (recurringId == null) {
+                            stringResource(R.string.recurring_add_title)
+                        } else {
+                            stringResource(R.string.recurring_edit_title)
+                        }
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = onBack) { Icon(Icons.Outlined.ArrowBack, null) }
                 },
@@ -71,7 +81,7 @@ fun AddEditRecurringScreen(
                 OutlinedTextField(
                     value = state.note,
                     onValueChange = vm::updateNote,
-                    label = { Text("Title") },
+                    label = { Text(stringResource(R.string.label_title)) },
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -80,13 +90,13 @@ fun AddEditRecurringScreen(
                 OutlinedTextField(
                     value = state.amount,
                     onValueChange = vm::updateAmount,
-                    label = { Text("Amount") },
+                    label = { Text(stringResource(R.string.label_amount)) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     modifier = Modifier.fillMaxWidth()
                 )
             }
 
-            item { Text("Category", style = MaterialTheme.typography.labelMedium) }
+            item { Text(stringResource(R.string.label_category), style = MaterialTheme.typography.labelMedium) }
 
             items(categories, key = { it.id }) { c ->
                 Row(
@@ -102,7 +112,7 @@ fun AddEditRecurringScreen(
                 }
             }
 
-            item { Text("Frequency", style = MaterialTheme.typography.labelMedium) }
+            item { Text(stringResource(R.string.recurring_frequency_title), style = MaterialTheme.typography.labelMedium) }
 
             items(RecurringFrequency.values().toList()) { f ->
                 Row(
@@ -112,7 +122,7 @@ fun AddEditRecurringScreen(
                         .padding(vertical = 10.dp, horizontal = 8.dp)
                 ) {
                     Text(
-                        text = f.name.lowercase(),
+                        text = frequencyLabel(f),
                         fontWeight = if (state.frequency == f) FontWeight.SemiBold else FontWeight.Normal
                     )
                 }
@@ -122,7 +132,7 @@ fun AddEditRecurringScreen(
                 OutlinedTextField(
                     value = state.interval.toString(),
                     onValueChange = { vm.updateInterval(it.toIntOrNull() ?: 1) },
-                    label = { Text("Repeat every") },
+                    label = { Text(stringResource(R.string.recurring_repeat_every)) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -133,9 +143,23 @@ fun AddEditRecurringScreen(
                     onClick = { vm.save(type, onBack) },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(if (recurringId == null) "Create" else "Save")
+                    Text(
+                        if (recurringId == null) {
+                            stringResource(R.string.action_create)
+                        } else {
+                            stringResource(R.string.action_save)
+                        }
+                    )
                 }
             }
         }
     }
 }
+
+@Composable
+private fun frequencyLabel(frequency: RecurringFrequency): String =
+    when (frequency) {
+        RecurringFrequency.DAILY -> stringResource(R.string.recurring_frequency_daily)
+        RecurringFrequency.MONTHLY -> stringResource(R.string.recurring_frequency_monthly)
+        RecurringFrequency.YEARLY -> stringResource(R.string.recurring_frequency_yearly)
+    }

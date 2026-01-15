@@ -14,6 +14,6 @@ class CategoriesViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val db = DatabaseProvider.get(context)
         val repo = CategoryRepository(db.categoryDao())
-        return CategoriesViewModel(repo) as T
+        return CategoriesViewModel(context.applicationContext, repo) as T
     }
 }

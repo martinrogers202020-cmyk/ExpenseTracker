@@ -3,6 +3,7 @@ package com.example.expensetracker.util
 import android.content.Context
 import android.content.Intent
 import androidx.core.content.FileProvider
+import com.example.expensetracker.R
 import java.io.File
 
 object ShareUtils {
@@ -20,6 +21,6 @@ object ShareUtils {
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
 
-        context.startActivity(Intent.createChooser(intent, "Share CSV"))
+        context.startActivity(Intent.createChooser(intent, context.getString(R.string.share_csv_title)))
     }
 }

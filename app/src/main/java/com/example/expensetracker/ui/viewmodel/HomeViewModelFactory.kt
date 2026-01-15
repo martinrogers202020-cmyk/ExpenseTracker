@@ -16,6 +16,6 @@ class HomeViewModelFactory(
         val db = DatabaseProvider.get(context.applicationContext)
         val txRepo = TransactionRepository(db.transactionDao())
         val catRepo = CategoryRepository(db.categoryDao())
-        return HomeViewModel(txRepo, catRepo) as T
+        return HomeViewModel(context.applicationContext, txRepo, catRepo) as T
     }
 }

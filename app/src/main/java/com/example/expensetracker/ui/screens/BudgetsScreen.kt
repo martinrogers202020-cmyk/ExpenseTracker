@@ -20,11 +20,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.expensetracker.R
 import com.example.expensetracker.ui.state.BudgetItemUi
 import com.example.expensetracker.ui.state.CategoryOptionUi
 import com.example.expensetracker.ui.viewmodel.BudgetsViewModel
@@ -42,7 +44,7 @@ fun BudgetsScreen(onBack: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Budgets") },
+                title = { Text(stringResource(R.string.nav_budgets)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.Outlined.ArrowBack, null)
@@ -81,7 +83,7 @@ fun BudgetsScreen(onBack: () -> Unit) {
 
             if (state.items.isEmpty()) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("No budgets yet. Tap + to add one.")
+                    Text(stringResource(R.string.budgets_empty_state))
                 }
             } else {
                 LazyColumn(
@@ -132,7 +134,11 @@ private fun BudgetCard(
             Spacer(Modifier.height(8.dp))
 
             Text(
-                "Spent ${Formatters.money(item.spentCents)} of ${Formatters.money(item.limitCents)}"
+                stringResource(
+                    R.string.budgets_spent_of,
+                    Formatters.money(item.spentCents),
+                    Formatters.money(item.limitCents)
+                )
             )
 
             Spacer(Modifier.height(8.dp))
@@ -163,12 +169,12 @@ private fun AddBudgetDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Add budget") },
+        title = { Text(stringResource(R.string.budgets_add_title)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
 
                 // ✅ CATEGORY DROPDOWN
-                Text("Category", style = MaterialTheme.typography.labelMedium)
+                Text(stringResource(R.string.label_category), style = MaterialTheme.typography.labelMedium)
 
                 ExposedDropdownMenuBox(
                     expanded = expanded,
@@ -182,7 +188,7 @@ private fun AddBudgetDialog(
                         modifier = Modifier
                             .menuAnchor()
                             .fillMaxWidth(),
-                        placeholder = { Text("Select category") },
+                        placeholder = { Text(stringResource(R.string.budgets_select_category)) },
                         isError = categoryError != null,
                         trailingIcon = {
                             Icon(
@@ -220,7 +226,7 @@ private fun AddBudgetDialog(
                         amountText = it
                         amountError = null
                     },
-                    label = { Text("Monthly limit (e.g. 250)") },
+                    label = { Text(stringResource(R.string.budgets_monthly_limit_label)) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     isError = amountError != null,
                     supportingText = { amountError?.let { Text(it) } },
@@ -232,24 +238,24 @@ private fun AddBudgetDialog(
             TextButton(onClick = {
                 val catId = selectedCategoryId
                 if (catId == null) {
-                    categoryError = "Select a category"
+                    categoryError = stringResource(R.string.budgets_select_category_error)
                     return@TextButton
                 }
 
                 val value = amountText.replace(",", ".").toDoubleOrNull()
                 if (value == null || value <= 0) {
-                    amountError = "Enter a valid amount"
+                    amountError = stringResource(R.string.budgets_valid_amount_error)
                     return@TextButton
                 }
 
                 onSave(catId, (value * 100).toLong())
             }) {
-                Text("Save")
+                Text(stringResource(R.string.action_save))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancel")
+                Text(stringResource(R.string.action_cancel))
             }
         }
     )

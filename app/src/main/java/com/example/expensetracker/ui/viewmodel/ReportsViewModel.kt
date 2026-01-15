@@ -1,7 +1,9 @@
 package com.example.expensetracker.ui.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.expensetracker.R
 import com.example.expensetracker.data.model.TransactionEntity
 import com.example.expensetracker.data.model.TransactionType
 import com.example.expensetracker.data.repo.CategoryRepository
@@ -20,6 +22,7 @@ import java.time.YearMonth
 import kotlin.math.abs
 
 class ReportsViewModel(
+    private val context: Context,
     private val txRepo: TransactionRepository,
     private val catRepo: CategoryRepository
 ) : ViewModel() {
@@ -47,9 +50,9 @@ class ReportsViewModel(
                         .map { tx ->
                             val cat = catMap[tx.categoryId]
                             val plainName = when {
-                                cat == null -> "Unknown"
+                                cat == null -> context.getString(R.string.categories_unknown_label)
                                 cat.name.isNotBlank() -> cat.name
-                                else -> "Category"
+                                else -> context.getString(R.string.categories_default_label)
                             }
 
                             TransactionItemUi(
@@ -85,7 +88,11 @@ class ReportsViewModel(
                             .take(8)
                             .map { entry ->
                                 val cat = catMap[entry.key]
-                                val label = if (cat != null) "${cat.emoji} ${cat.name}" else "❓ Unknown"
+                                val label = if (cat != null) {
+                                    "${cat.emoji} ${cat.name}"
+                                } else {
+                                    context.getString(R.string.categories_unknown_with_icon)
+                                }
                                 val fraction = if (expense == 0L) 0f else entry.value.toFloat() / expense.toFloat()
 
                                 CategorySpendUi(

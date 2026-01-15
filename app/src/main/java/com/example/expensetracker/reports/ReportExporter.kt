@@ -5,6 +5,7 @@ import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.pdf.PdfDocument
 import android.os.Environment
+import com.example.expensetracker.R
 import com.example.expensetracker.data.model.TransactionEntity
 import com.example.expensetracker.data.model.TransactionType
 import java.io.File
@@ -29,6 +30,7 @@ object ReportExporter {
      * Date | Year | Category | Type | Description | Amount ($)
      */
     fun buildRows(
+        context: Context,
         txs: List<TransactionEntity>,
         categoryNameById: Map<Long, String>
     ): List<ReportRow> {
@@ -36,9 +38,13 @@ object ReportExporter {
             .sortedWith(compareBy<TransactionEntity> { it.epochDay }.thenBy { it.id })
             .map { tx ->
                 val date = LocalDate.ofEpochDay(tx.epochDay)
-                val catName = categoryNameById[tx.categoryId] ?: "Unknown"
+                val catName = categoryNameById[tx.categoryId] ?: context.getString(R.string.categories_unknown_label)
 
-                val typeLabel = if (tx.type == TransactionType.INCOME) "Income" else "Expense"
+                val typeLabel = if (tx.type == TransactionType.INCOME) {
+                    context.getString(R.string.label_income)
+                } else {
+                    context.getString(R.string.label_expense)
+                }
 
                 // Keep description clean (don’t leak attachment line into the main description)
                 val desc = tx.note
@@ -71,9 +77,10 @@ object ReportExporter {
      *  300.00
      * -45.75
      */
-    fun toCsv(rows: List<ReportRow>): String {
+    fun toCsv(context: Context, rows: List<ReportRow>): String {
         val sb = StringBuilder()
-        sb.append("Date,Year,Category,Type,Description,Amount ($)\n")
+        sb.append(context.getString(R.string.reports_csv_header))
+        sb.append("\n")
 
         for (r in rows) {
             sb.append(esc(r.date.toString())).append(',')
@@ -153,7 +160,7 @@ object ReportExporter {
 
         fun drawHeader(canvas: android.graphics.Canvas, subtitle: String?) {
             // Title
-            canvas.drawText("ExpenseTracker Report", margin, y + 16f, titlePaint)
+            canvas.drawText(context.getString(R.string.reports_export_title), margin, y + 16f, titlePaint)
             y += 26f
 
             subtitle?.let {
@@ -165,13 +172,13 @@ object ReportExporter {
             canvas.drawLine(margin, y + 6f, pageWidth - margin, y + 6f, linePaint)
             y += 16f
 
-            canvas.drawText("Date", xDate, y, headerPaint)
-            canvas.drawText("Year", xYear, y, headerPaint)
-            canvas.drawText("Category", xCategory, y, headerPaint)
-            canvas.drawText("Type", xType, y, headerPaint)
-            canvas.drawText("Description", xDesc, y, headerPaint)
+            canvas.drawText(context.getString(R.string.label_date), xDate, y, headerPaint)
+            canvas.drawText(context.getString(R.string.label_year), xYear, y, headerPaint)
+            canvas.drawText(context.getString(R.string.label_category), xCategory, y, headerPaint)
+            canvas.drawText(context.getString(R.string.label_type), xType, y, headerPaint)
+            canvas.drawText(context.getString(R.string.label_description), xDesc, y, headerPaint)
 
-            val amountHeader = "Amount (\$)"
+            val amountHeader = context.getString(R.string.label_amount_dollars)
             val amountHeaderX = xAmountRight - headerPaint.measureText(amountHeader)
             canvas.drawText(amountHeader, amountHeaderX, y, headerPaint)
 
@@ -198,9 +205,9 @@ object ReportExporter {
         val subtitle = if (rows.isNotEmpty()) {
             val start = rows.first().date
             val end = rows.last().date
-            "Period: $start to $end"
+            context.getString(R.string.reports_period_range, start, end)
         } else {
-            "Period: -"
+            context.getString(R.string.reports_period_empty)
         }
 
         var page = startPage()

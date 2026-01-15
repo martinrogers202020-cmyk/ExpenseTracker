@@ -14,6 +14,6 @@ class AddTransactionViewModelFactory(private val context: Context) : ViewModelPr
         val db = DatabaseProvider.get(appContext)
         val categoryRepo = CategoryRepository(db.categoryDao())
         val txRepo = TransactionRepository(db.transactionDao())
-        return AddTransactionViewModel(categoryRepo, txRepo) as T
+        return AddTransactionViewModel(appContext, categoryRepo, txRepo) as T
     }
 }

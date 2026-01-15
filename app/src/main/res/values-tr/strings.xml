@@ -1,0 +1,394 @@
+<resources>
+    <string name="app_name">ExpenseTracker</string>
+    <string name="server_client_id">YOUR_WEB_CLIENT_ID_HERE</string>
+
+    <!-- Actions -->
+    <string name="action_back">Geri</string>
+    <string name="action_save">Kaydet</string>
+    <string name="action_cancel">İptal</string>
+    <string name="action_delete">Sil</string>
+    <string name="action_edit">Düzenle</string>
+    <string name="action_add">Ekle</string>
+    <string name="action_ok">Tamam</string>
+    <string name="action_next">İleri</string>
+    <string name="action_prev">Önceki</string>
+    <string name="action_view">Görüntüle</string>
+    <string name="action_view_all">Tümünü gör</string>
+    <string name="action_change">Değiştir</string>
+    <string name="action_export">Dışa aktar</string>
+    <string name="action_import_now">Şimdi içe aktar</string>
+    <string name="action_continue">Devam et</string>
+    <string name="action_clear_filters">Filtreleri temizle</string>
+    <string name="action_select">Seç</string>
+    <string name="action_open_categories">Kategorileri aç</string>
+    <string name="action_search">Ara</string>
+    <string name="action_refresh">Yenile</string>
+    <string name="action_upgrade">Yükselt</string>
+    <string name="action_create">Oluştur</string>
+    <string name="action_restore">Geri yükle</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Ana sayfa</string>
+    <string name="nav_reports">Raporlar</string>
+    <string name="nav_categories">Kategoriler</string>
+    <string name="nav_settings">Ayarlar</string>
+    <string name="nav_budgets">Bütçeler</string>
+    <string name="nav_recurring">Tekrarlayan</string>
+    <string name="nav_notifications">Bildirimler</string>
+    <string name="nav_expenses">Harcamalar</string>
+
+    <!-- Labels -->
+    <string name="label_income">Gelir</string>
+    <string name="label_expense">Gider</string>
+    <string name="label_expenses">Giderler</string>
+    <string name="label_balance">Bakiye</string>
+    <string name="label_amount">Tutar</string>
+    <string name="label_category">Kategori</string>
+    <string name="label_title">Başlık</string>
+    <string name="label_note_optional">Not (isteğe bağlı)</string>
+    <string name="label_notes">Notlar</string>
+    <string name="label_emoji">Emoji</string>
+    <string name="label_name">Ad</string>
+    <string name="label_date">Tarih</string>
+    <string name="label_year">Yıl</string>
+    <string name="label_type">Tür</string>
+    <string name="label_description">Açıklama</string>
+    <string name="label_amount_dollars">Tutar ($)</string>
+    <string name="label_month">Ay</string>
+    <string name="label_summary">Özet</string>
+
+    <!-- Home -->
+    <string name="home_add_symbol">+</string>
+    <string name="home_recent_transactions">Son İşlemler</string>
+    <string name="home_add_income">Gelir ekle</string>
+    <string name="home_add_expense">Gider ekle</string>
+    <string name="home_filter_all">Tümü</string>
+    <string name="home_items_count">%1$d öğe</string>
+    <string name="home_dropdown_indicator">▼</string>
+    <string name="home_all_categories">Tüm kategoriler</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Ayarlar</string>
+    <string name="settings_section_pro_mode">Pro Modu</string>
+    <string name="settings_section_preferences">Tercihler</string>
+    <string name="settings_section_security">Güvenlik</string>
+    <string name="settings_section_about">Hakkında</string>
+    <string name="settings_notifications_subtitle">Günlük hatırlatma ve bütçe uyarıları</string>
+    <string name="settings_backup_restore_title">Yedekleme ve geri yükleme</string>
+    <string name="settings_backup_restore_subtitle">Drive veya dosyalarla dışa/ içe aktar</string>
+    <string name="settings_advanced_reports_title">Gelişmiş raporlar</string>
+    <string name="settings_advanced_reports_subtitle">Özel aralıklar + trendler</string>
+    <string name="settings_import_csv_title">Banka CSV içe aktar</string>
+    <string name="settings_import_csv_subtitle">CSV dosyasından para çıkışları ve girişleri ekle</string>
+    <string name="settings_security_good">İyi</string>
+    <string name="settings_security_status_title">Güvenlik durumu</string>
+    <string name="settings_security_status_subtitle">Verileriniz cihazda kalır. Aşağıdan koruma özellikleri ekleyin.</string>
+    <string name="settings_security_local_title">Yalnızca yerel veri</string>
+    <string name="settings_security_local_subtitle">İşlemler bu cihazda saklanır.</string>
+    <string name="settings_security_on">Açık</string>
+    <string name="settings_security_app_lock_title">Uygulama kilidi</string>
+    <string name="settings_security_app_lock_subtitle">Uygulamayı açmak için kimlik doğrulama gerektir.</string>
+    <string name="settings_security_lock_method_title">Kilit yöntemi</string>
+    <string name="settings_security_biometric">Biyometrik</string>
+    <string name="settings_security_pin">PIN</string>
+    <string name="settings_security_lock_method_hint">Daha sonra BiometricPrompt / PIN ekranı ile bağlayın.</string>
+    <string name="settings_security_privacy_title">Gizlilik ve izinler</string>
+    <string name="settings_security_privacy_subtitle">Uygulamanın erişebileceği şeyleri gözden geçirin.</string>
+    <string name="settings_version_title">Sürüm</string>
+    <string name="settings_version_value">1.0.0</string>
+    <string name="settings_appearance_title">Görünüm</string>
+    <string name="settings_theme_title">Tema</string>
+    <string name="theme_system">Sistem</string>
+    <string name="theme_light">Açık</string>
+    <string name="theme_dark">Koyu</string>
+    <string name="theme_system_default">Sistem varsayılanı</string>
+    <string name="settings_dynamic_label">Dinamik</string>
+    <string name="settings_dynamic_colors_title">Dinamik renkler</string>
+    <string name="settings_dynamic_colors_subtitle">Sistem renklerini kullanır (Android 12+)</string>
+    <string name="settings_language_title">Dil</string>
+    <string name="language_english">İngilizce</string>
+    <string name="language_turkish">Türkçe</string>
+    <string name="settings_language_picker_title">Uygulama dili</string>
+    <string name="settings_language_picker_hint">Yalnızca uygulama içinde geçerlidir.</string>
+    <string name="settings_pro_title">Pro</string>
+    <string name="settings_pro_active">Etkin</string>
+    <string name="settings_pro_not_active">Etkin değil</string>
+    <string name="settings_pro_feature_reports">Gelişmiş raporlar (özel aralıklar, trendler)</string>
+    <string name="settings_pro_feature_budgets">Bütçeler + uyarılar (kategori limitleri)</string>
+    <string name="settings_pro_feature_export">CSV / PDF dökümleri dışa aktar</string>
+    <string name="settings_pro_feature_recurring">Tekrarlayan işlemler</string>
+    <string name="settings_pro_feature_backup">Yedekleme ve geri yükleme (Drive / bulut)</string>
+    <string name="settings_pro_active_cta">Pro etkin</string>
+    <string name="settings_pro_footer">Bu anahtarı daha sonra Google Play Billing ile değiştirin.</string>
+    <string name="settings_pro_checkmark">✓</string>
+
+    <!-- Reports -->
+    <string name="reports_csv_saved">CSV kaydedildi.</string>
+    <string name="reports_csv_failed">CSV dışa aktarma başarısız: %1$s</string>
+    <string name="reports_pdf_saved">PDF kaydedildi.</string>
+    <string name="reports_pdf_failed">PDF dışa aktarma başarısız: %1$s</string>
+    <string name="reports_custom_range_label">Özel: %1$s → %2$s</string>
+    <string name="reports_file_custom_csv">%1$s_Custom_%2$d_to_%3$d.csv</string>
+    <string name="reports_file_custom_pdf">%1$s_Custom_%2$d_to_%3$d.pdf</string>
+    <string name="reports_file_month_csv">%1$s_%2$d_%3$s.csv</string>
+    <string name="reports_file_month_pdf">%1$s_Report_%2$d_%3$s.pdf</string>
+    <string name="reports_file_year_csv">%1$s_%2$d.csv</string>
+    <string name="reports_file_year_pdf">%1$s_%2$d.pdf</string>
+    <string name="reports_export_title">ExpenseTracker Raporu</string>
+    <string name="reports_year_label">Yıl %1$d</string>
+    <string name="reports_monthly_overview">Aylık özet</string>
+    <string name="reports_spending_by_category">Kategoriye göre harcama</string>
+    <string name="reports_no_categories_this_month">Bu ay için gider kategorisi yok.</string>
+    <string name="reports_weekly_title">Haftalık</string>
+    <string name="reports_no_data_chart">Grafik için veri yok.</string>
+    <string name="reports_daily_net_trend">Günlük net trend</string>
+    <string name="reports_line_graph_title">Çizgi grafik</string>
+    <string name="reports_no_daily_data">Bu ay için günlük veri yok.</string>
+    <string name="reports_csv_header">Tarih,Yıl,Kategori,Tür,Açıklama,Tutar ($)</string>
+    <string name="reports_income_value">Gelir: %1$s</string>
+    <string name="reports_expenses_value">Giderler: %1$s</string>
+    <string name="reports_balance_value">Bakiye: %1$s</string>
+    <string name="reports_title_with_period">%1$s — %2$s</string>
+    <string name="reports_monthly_report">Aylık rapor</string>
+    <string name="reports_range_today">Bugün</string>
+    <string name="reports_range_week">Hafta</string>
+    <string name="reports_range_month">Ay</string>
+    <string name="reports_range_year">Yıl</string>
+    <string name="reports_range_custom">Özel</string>
+    <string name="reports_select_range_title">Aralık seç</string>
+    <string name="reports_export_subtitle">Kapsam seçip dosyayı kaydedin</string>
+    <string name="reports_export_locked_subtitle">Kilitli — dışa aktarmak için yükseltin</string>
+    <string name="reports_export_csv_title">CSV</string>
+    <string name="reports_export_csv_subtitle">E-tabloya uygun</string>
+    <string name="reports_export_csv_badge">CSV</string>
+    <string name="reports_export_pdf_title">PDF</string>
+    <string name="reports_export_pdf_subtitle">Paylaşılabilir rapor</string>
+    <string name="reports_export_pdf_badge">PDF</string>
+    <string name="reports_pro_label">PRO</string>
+    <string name="reports_locked_label">Kilitli</string>
+    <string name="reports_period_range">Dönem: %1$s - %2$s</string>
+    <string name="reports_period_empty">Dönem: -</string>
+    <string name="reports_generated_by">%1$s tarafından oluşturuldu • %2$s</string>
+    <string name="reports_page_label">Sayfa %1$d</string>
+    <string name="reports_no_category_data">Bu dönem için kategori verisi yok.</string>
+    <string name="reports_spending_by_category_continued">Kategoriye göre harcama (devam)</string>
+
+    <!-- Recurring -->
+    <string name="recurring_payments_title">Tekrarlayan ödemeler</string>
+    <string name="recurring_default_title">Tekrarlayan</string>
+    <string name="recurring_next_label">Sonraki: %1$s</string>
+    <string name="recurring_frequency_label">Sıklık: %1$s</string>
+    <string name="recurring_add_to_expenses">Giderlere ekle</string>
+    <string name="recurring_frequency_daily">günlük</string>
+    <string name="recurring_frequency_monthly">aylık</string>
+    <string name="recurring_frequency_yearly">yıllık</string>
+    <string name="recurring_add_title">Tekrarlayan ekle</string>
+    <string name="recurring_edit_title">Tekrarlayanı düzenle</string>
+    <string name="recurring_frequency_title">Sıklık</string>
+    <string name="recurring_repeat_every">Her</string>
+
+    <!-- Transactions -->
+    <string name="transaction_edit_title">İşlemi düzenle</string>
+    <string name="transaction_add_title">İşlem ekle</string>
+    <string name="transaction_saving">Kaydediliyor...</string>
+    <string name="transaction_item_title">%1$s %2$s</string>
+    <string name="transaction_not_found">İşlem bulunamadı</string>
+    <string name="transaction_error_invalid_amount">Geçerli bir tutar girin (ör: 100 veya 100.50).</string>
+    <string name="transaction_error_invalid_date">Geçerli bir tarih seçin.</string>
+    <string name="transaction_error_pick_category">Bir kategori seçin.</string>
+    <string name="transaction_error_choose_category">Bir kategori seçin.</string>
+    <string name="transaction_attachment_prefix">Ek: %1$s</string>
+    <string name="transaction_error_save_failed">Kaydetme başarısız.</string>
+    <string name="transaction_error_delete_failed">Silme başarısız</string>
+
+    <!-- Categories -->
+    <string name="categories_search_placeholder">Kategorileri ara</string>
+    <string name="categories_empty_title">Henüz kategori yok</string>
+    <string name="categories_empty_subtitle">+ ile kategori ekleyin.</string>
+    <string name="categories_add_title">Kategori ekle</string>
+    <string name="categories_edit_title">Kategoriyi düzenle</string>
+    <string name="categories_default_badge">Varsayılan</string>
+    <string name="categories_default_label">Kategori</string>
+    <string name="categories_unknown_label">Bilinmiyor</string>
+    <string name="categories_unknown_with_icon">❓ Bilinmiyor</string>
+    <string name="categories_unknown_emoji">❓</string>
+    <string name="categories_error_seed_defaults">Varsayılan kategoriler eklenemedi</string>
+    <string name="categories_error_add">Kategori eklenemedi</string>
+    <string name="categories_error_update">Kategori güncellenemedi</string>
+    <string name="categories_error_delete">Kategori silinemedi</string>
+    <string name="category_default_bills">Faturalar</string>
+    <string name="category_default_coffee">Kahve</string>
+    <string name="category_default_eating_out">Dışarıda yeme</string>
+    <string name="category_default_groceries">Market</string>
+    <string name="category_default_health">Sağlık</string>
+    <string name="category_default_rent">Kira</string>
+
+    <!-- Budgets -->
+    <string name="budgets_empty_state">Henüz bütçe yok. + ile ekleyin.</string>
+    <string name="budgets_spent_of">%1$s / %2$s harcandı</string>
+    <string name="budgets_add_title">Bütçe ekle</string>
+    <string name="budgets_select_category">Kategori seç</string>
+    <string name="budgets_monthly_limit_label">Aylık limit (örn. 250)</string>
+    <string name="budgets_select_category_error">Bir kategori seçin</string>
+    <string name="budgets_valid_amount_error">Geçerli bir tutar girin</string>
+
+    <!-- Expenses -->
+    <string name="expenses_empty_state">Henüz gider yok.</string>
+    <string name="expenses_no_note">Not yok</string>
+
+    <!-- CSV Import -->
+    <string name="csv_import_step_pick_file">1) CSV dosyası seç</string>
+    <string name="csv_import_choose_csv">CSV seç</string>
+    <string name="csv_import_selected_file">Seçildi: %1$s</string>
+    <string name="csv_import_step_category">2) İçe aktarılacak işlemler için kategori</string>
+    <string name="csv_import_select_category">Kategori seç</string>
+    <string name="csv_import_tip">İpucu: daha sonra satıcıları kategorilere otomatik eşlemek için kurallar ekleyebilirsiniz.</string>
+    <string name="csv_import_step_preview">3) Önizleme</string>
+    <string name="csv_import_no_rows">Henüz satır ayrıştırılmadı.</string>
+    <string name="csv_import_range">Aralık: %1$s  →  %2$s</string>
+    <string name="csv_import_rows">Satırlar: %1$d</string>
+    <string name="csv_import_will_import">İçe aktarılacak: %1$d</string>
+    <string name="csv_import_duplicates_skipped">Atlanan kopyalar: %1$d</string>
+    <string name="csv_import_sample_rows">Örnek satırlar</string>
+    <string name="csv_import_warnings_title">Uyarılar</string>
+    <string name="csv_import_warning_item">• %1$s</string>
+    <string name="csv_import_error">Hata: %1$s</string>
+    <string name="csv_import_imported">İçe aktarılan: %1$d</string>
+    <string name="csv_import_failed_parse">CSV ayrıştırılamadı: %1$s</string>
+    <string name="csv_import_pick_category_error">Önce bir kategori seçin.</string>
+    <string name="csv_import_no_rows_error">Satır bulunamadı.</string>
+    <string name="csv_import_failed_import">İçe aktarma başarısız: %1$s</string>
+    <string name="csv_import_unable_open">Dosya açılamadı.</string>
+    <string name="csv_import_unable_open_with_message">Dosya açılamadı: %1$s</string>
+    <string name="csv_import_file_empty">Dosya boş.</string>
+    <string name="csv_import_header_not_detected">Başlık güvenilir şekilde algılanamadı. Sütunlar şu şekilde varsayıldı: Tarih, Açıklama, Tutar.</string>
+    <string name="csv_import_missing_date_column">Tarih sütunu bulunamadı.</string>
+    <string name="csv_import_missing_description_column">Açıklama/Kategori sütunu bulunamadı. Eksik açıklamalar boş bırakılacak.</string>
+    <string name="csv_import_bank_transaction">Banka işlemi</string>
+    <string name="csv_import_row_skipped_invalid_amount">%1$d. satır atlandı: tutar bulunamadı/geçersiz.</string>
+    <string name="csv_import_expected_date_column">Tarih sütunu bulunamadı. Beklenenlerden biri: %1$s.</string>
+    <string name="csv_import_expected_amount_column">Tutar sütunu bulunamadı. Beklenenlerden biri: %1$s.</string>
+    <string name="csv_import_expected_description_column">Açıklama sütunu bulunamadı. Beklenenlerden biri: %1$s.</string>
+    <string name="csv_import_row_missing_columns">%1$d. satır: gerekli sütunlar eksik — atlandı.</string>
+    <string name="csv_import_row_invalid_date">%1$d. satır: tarih çözümlenemedi '%2$s' — atlandı.</string>
+    <string name="csv_import_row_invalid_amount">%1$d. satır: tutar çözümlenemedi '%2$s' — atlandı.</string>
+    <string name="csv_import_bank_import">Banka içe aktarma</string>
+
+    <!-- Notifications -->
+    <string name="notifications_enable_title">Bildirimleri etkinleştir</string>
+    <string name="notifications_enable_subtitle">Tüm bildirim türlerini kontrol eder.</string>
+    <string name="notifications_reminder_time_title">Hatırlatma zamanı</string>
+    <string name="notifications_reminder_time_subtitle">Ne zaman hatırlatalım.</string>
+    <string name="notifications_types_title">Türler</string>
+    <string name="notifications_daily_title">Günlük hatırlatma</string>
+    <string name="notifications_daily_subtitle">İşlemleri kaydetmek için hızlı bir hatırlatma.</string>
+    <string name="notifications_budget_title">Bütçe uyarıları</string>
+    <string name="notifications_budget_subtitle">Aşırı harcamada uyarır (eşikler sonra ayarlanır).</string>
+    <string name="notifications_hour_label">Saat</string>
+    <string name="notifications_min_label">Dak</string>
+
+    <!-- Backup & Restore -->
+    <string name="backup_saved">Yedek kaydedildi.</string>
+    <string name="backup_export_failed">Dışa aktarma başarısız: %1$s</string>
+    <string name="backup_restore_success">Geri yüklendi: %1$d kategori, %2$d işlem, %3$d bütçe, %4$d tekrarlayan</string>
+    <string name="backup_import_failed">İçe aktarma başarısız: %1$s</string>
+    <string name="backup_description">Bir yedek dosyası dışa aktarın veya geri yükleyin. Sistem dosya seçicisi üzerinden Google Drive ile çalışır.</string>
+    <string name="backup_file_name">%1$s_Backup_%2$d_%3$s_%4$s.json</string>
+    <string name="backup_export_button">Yedeği dışa aktar</string>
+    <string name="backup_restore_button">Yedeği geri yükle</string>
+
+    <!-- Pro -->
+    <string name="pro_screen_description">Pro&#39;yu etkinleştirerek premium özellikleri açın.</string>
+    <string name="pro_screen_enabled">Pro etkin</string>
+    <string name="pro_screen_disabled">Pro devre dışı</string>
+
+    <!-- Paywall -->
+    <string name="paywall_title">Pro&#39;ya yükselt</string>
+    <string name="paywall_pro_active">Pro etkin ✅</string>
+    <string name="paywall_unlock_title">Pro özelliklerini aç</string>
+    <string name="paywall_description">Gelişmiş raporlar, dışa aktarma, bütçeler ve premium grafikler.</string>
+    <string name="paywall_benefit_item">• %1$s</string>
+    <string name="paywall_restore_purchases">Satın alımları geri yükle</string>
+    <string name="paywall_plan_monthly">Aylık</string>
+    <string name="paywall_price_monthly">$2.99</string>
+    <string name="paywall_plan_yearly">Yıllık</string>
+    <string name="paywall_price_yearly">$19.99</string>
+    <string name="paywall_badge_best_value">En iyi değer</string>
+    <string name="paywall_benefit_advanced_reports">Gelişmiş raporlar</string>
+    <string name="paywall_benefit_budget_alerts">Bütçe uyarıları</string>
+    <string name="paywall_benefit_csv_export">CSV dışa aktarma</string>
+    <string name="paywall_benefit_everything_monthly">Aylık plandaki her şey</string>
+    <string name="paywall_benefit_priority_features">Öncelikli özellikler</string>
+    <string name="paywall_benefit_yearly_savings">Aylığa göre %45 daha ucuz</string>
+    <string name="paywall_plan_lifetime">Ömür boyu</string>
+    <string name="paywall_price_lifetime">$49.99</string>
+    <string name="paywall_badge_one_time">Tek seferlik</string>
+    <string name="paywall_benefit_all_pro">Tüm Pro özellikleri</string>
+    <string name="paywall_benefit_pay_once">Bir kez öde, ömür boyu kullan</string>
+    <string name="paywall_benefit_future_features">Gelecek özellikler dahil</string>
+
+    <!-- Merchant Rules -->
+    <string name="merchant_rules_title">Satıcı Kuralları</string>
+    <string name="merchant_rules_tip_title">İpucu</string>
+    <string name="merchant_rules_tip_body">CSV içe aktarma sırasında kullanılmak üzere satıcıları kategorilere otomatik eşleştiren kurallar oluşturabilirsiniz.</string>
+    <string name="merchant_rules_unknown_category">Bilinmiyor</string>
+    <string name="merchant_rules_summary">%1$s • %2$s • öncelik %3$d</string>
+    <string name="merchant_rules_match_contains">İçerir</string>
+    <string name="merchant_rules_match_starts_with">İle başlar</string>
+    <string name="merchant_rules_match_regex">Regex</string>
+    <string name="merchant_rules_add_title">Kural ekle</string>
+    <string name="merchant_rules_edit_title">Kuralı düzenle</string>
+    <string name="merchant_rules_pattern_label">Desen (örn. amazon)</string>
+    <string name="merchant_rules_match_type_label">Eşleşme türü</string>
+    <string name="merchant_rules_priority_label">Öncelik (yüksek olan kazanır)</string>
+    <string name="merchant_rules_enabled_label">Etkin</string>
+
+    <!-- Advanced reports -->
+    <string name="advanced_reports_trend_title">Trend</string>
+    <string name="advanced_reports_trend_subtitle">Günlük gelir vs gider</string>
+    <string name="advanced_reports_range_title">Aralık</string>
+    <string name="advanced_reports_range_value">%1$s  →  %2$s</string>
+    <string name="advanced_reports_range_last_7">Son 7 gün</string>
+    <string name="advanced_reports_range_last_30">Son 30 gün</string>
+    <string name="advanced_reports_range_tip">İpucu: her aralık için daha sonra özel tarih seçici ekleyin.</string>
+    <string name="advanced_reports_totals_title">Toplamlar</string>
+    <string name="advanced_reports_net_positive">Net +</string>
+    <string name="advanced_reports_net_negative">Net -</string>
+    <string name="advanced_reports_chip_daily">Günlük</string>
+    <string name="advanced_reports_chip_income_vs_expense">Gelir vs Gider</string>
+    <string name="advanced_reports_income_expense_row">Gelir %1$d • Gider %2$d</string>
+    <string name="advanced_reports_net_value">Net %1$s</string>
+
+    <!-- Add Income/Expense -->
+    <string name="income_add_title">Gelir ekle</string>
+    <string name="expense_add_title">Gider ekle</string>
+    <string name="add_transaction_categories_loaded">Kategoriler yüklendi: %1$d</string>
+    <string name="add_transaction_attachment_label">Ek ekle</string>
+    <string name="add_transaction_attachment_hint">Dosya seçmek için dokunun</string>
+
+    <!-- Expense list -->
+    <string name="expenses_empty_state">Henüz gider yok.</string>
+    <string name="expenses_no_note">Not yok</string>
+
+    <!-- Placeholders -->
+    <string name="placeholder_home">Ana sayfa (TODO)</string>
+    <string name="placeholder_categories">Kategoriler (TODO)</string>
+    <string name="placeholder_reports">Raporlar (TODO)</string>
+    <string name="placeholder_import_csv">Banka CSV içe aktar (TODO)</string>
+    <string name="placeholder_backup_restore">Yedekleme ve geri yükleme (TODO)</string>
+    <string name="placeholder_notifications">Bildirimler (TODO)</string>
+    <string name="placeholder_paywall">Ödeme ekranı (TODO)</string>
+
+    <!-- Sharing -->
+    <string name="share_csv_title">CSV paylaş</string>
+
+    <!-- Export utilities -->
+    <string name="export_generated_csv">Oluşturuldu,%1$s</string>
+    <string name="export_csv_header_simple">Tarih,Tür,Tutar,Not</string>
+    <string name="export_generated_label">Oluşturulma: %1$s</string>
+    <string name="export_csv_header_simple_lowercase">tarih,tür,kategori,not,tutar</string>
+
+    <!-- Notification channels -->
+    <string name="notification_channel_recurring_title">Tekrarlayan hatırlatmalar</string>
+    <string name="notification_channel_recurring_description">Ödenmemiş tekrarlayan faturalar için günlük hatırlatmalar</string>
+</resources>

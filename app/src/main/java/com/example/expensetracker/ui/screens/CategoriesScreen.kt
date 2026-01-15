@@ -21,9 +21,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.expensetracker.R
 import com.example.expensetracker.ui.viewmodel.CategoriesViewModel
 import com.example.expensetracker.ui.viewmodel.CategoriesViewModelFactory
 import androidx.compose.ui.platform.LocalContext
@@ -59,10 +61,10 @@ fun CategoriesScreen(onBack: () -> Unit) {
         containerColor = Color.Transparent,
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Categories", fontWeight = FontWeight.SemiBold) },
+                title = { Text(stringResource(R.string.nav_categories), fontWeight = FontWeight.SemiBold) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Outlined.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.Outlined.ArrowBack, contentDescription = stringResource(R.string.action_back))
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
@@ -76,7 +78,7 @@ fun CategoriesScreen(onBack: () -> Unit) {
                 containerColor = Color(0xFF7B5CFF),
                 contentColor = MaterialTheme.colorScheme.surface
             ) {
-                Icon(Icons.Outlined.Add, contentDescription = "Add")
+                Icon(Icons.Outlined.Add, contentDescription = stringResource(R.string.action_add))
             }
         }
     ) { padding ->
@@ -91,7 +93,7 @@ fun CategoriesScreen(onBack: () -> Unit) {
             SearchPill(
                 value = query,
                 onValueChange = { query = it },
-                placeholder = "Search categories"
+                placeholder = stringResource(R.string.categories_search_placeholder)
             )
 
             Spacer(Modifier.height(14.dp))
@@ -109,7 +111,7 @@ fun CategoriesScreen(onBack: () -> Unit) {
                             color = MaterialTheme.colorScheme.error,
                             fontWeight = FontWeight.SemiBold
                         )
-                        TextButton(onClick = vm::clearError) { Text("OK") }
+                        TextButton(onClick = vm::clearError) { Text(stringResource(R.string.action_ok)) }
                     }
                 }
                 Spacer(Modifier.height(12.dp))
@@ -118,10 +120,10 @@ fun CategoriesScreen(onBack: () -> Unit) {
             if (filtered.isEmpty()) {
                 SoftCard {
                     Column(modifier = Modifier.fillMaxWidth()) {
-                        Text("No categories yet", fontWeight = FontWeight.SemiBold)
+                        Text(stringResource(R.string.categories_empty_title), fontWeight = FontWeight.SemiBold)
                         Spacer(Modifier.height(6.dp))
                         Text(
-                            "Tap + to add a category.",
+                            stringResource(R.string.categories_empty_subtitle),
                             color = Color(0xFF6F6A86)
                         )
                     }
@@ -149,7 +151,7 @@ fun CategoriesScreen(onBack: () -> Unit) {
     // ADD
     if (showAddDialog) {
         CategoryDialog(
-            title = "Add Category",
+            title = stringResource(R.string.categories_add_title),
             initialName = "",
             initialEmoji = "🏷️",
             onDismiss = { showAddDialog = false },
@@ -164,7 +166,7 @@ fun CategoriesScreen(onBack: () -> Unit) {
     val editCat = state.categories.firstOrNull { it.id == editId }
     if (editCat != null) {
         CategoryDialog(
-            title = "Edit Category",
+            title = stringResource(R.string.categories_edit_title),
             initialName = editCat.name,
             initialEmoji = editCat.emoji,
             onDismiss = { editId = null },
@@ -256,7 +258,7 @@ private fun CategoryGlassRow(
                 Text(text = name, fontWeight = FontWeight.SemiBold, color = Color(0xFF2C2746))
                 Spacer(Modifier.height(2.dp))
                 if (isDefault) {
-                    Text(text = "Default", color = Color(0xFF8B84A8))
+                    Text(text = stringResource(R.string.categories_default_badge), color = Color(0xFF8B84A8))
                 }
             }
 
@@ -292,7 +294,7 @@ private fun ActionPill(
             onClick = onLeft,
             modifier = Modifier.weight(1f)
         ) {
-            Icon(leftIcon, contentDescription = "Edit", tint = Color(0xFF6A4DFF))
+            Icon(leftIcon, contentDescription = stringResource(R.string.action_edit), tint = Color(0xFF6A4DFF))
         }
 
         Box(
@@ -306,7 +308,7 @@ private fun ActionPill(
             onClick = onRight,
             modifier = Modifier.weight(1f)
         ) {
-            Icon(rightIcon, contentDescription = "Delete", tint = Color(0xFF6A4DFF))
+            Icon(rightIcon, contentDescription = stringResource(R.string.action_delete), tint = Color(0xFF6A4DFF))
         }
     }
 }
@@ -330,13 +332,13 @@ private fun CategoryDialog(
                 OutlinedTextField(
                     value = emoji,
                     onValueChange = { emoji = it.take(2) },
-                    label = { Text("Emoji") },
+                    label = { Text(stringResource(R.string.label_emoji)) },
                     singleLine = true
                 )
                 OutlinedTextField(
                     value = name,
                     onValueChange = { name = it },
-                    label = { Text("Name") },
+                    label = { Text(stringResource(R.string.label_name)) },
                     singleLine = true
                 )
             }
@@ -344,8 +346,8 @@ private fun CategoryDialog(
         confirmButton = {
             TextButton(
                 onClick = { if (name.isNotBlank()) onSave(name, emoji) }
-            ) { Text("Save") }
+            ) { Text(stringResource(R.string.action_save)) }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } }
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } }
     )
 }

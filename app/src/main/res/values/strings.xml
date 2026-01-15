@@ -1,4 +1,394 @@
 <resources>
     <string name="app_name">ExpenseTracker</string>
     <string name="server_client_id">YOUR_WEB_CLIENT_ID_HERE</string>
+
+    <!-- Actions -->
+    <string name="action_back">Back</string>
+    <string name="action_save">Save</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_add">Add</string>
+    <string name="action_ok">OK</string>
+    <string name="action_next">Next</string>
+    <string name="action_prev">Prev</string>
+    <string name="action_view">View</string>
+    <string name="action_view_all">View all</string>
+    <string name="action_change">Change</string>
+    <string name="action_export">Export</string>
+    <string name="action_import_now">Import now</string>
+    <string name="action_continue">Continue</string>
+    <string name="action_clear_filters">Clear Filters</string>
+    <string name="action_select">Select</string>
+    <string name="action_open_categories">Open categories</string>
+    <string name="action_search">Search</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="action_upgrade">Upgrade</string>
+    <string name="action_create">Create</string>
+    <string name="action_restore">Restore</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_reports">Reports</string>
+    <string name="nav_categories">Categories</string>
+    <string name="nav_settings">Settings</string>
+    <string name="nav_budgets">Budgets</string>
+    <string name="nav_recurring">Recurring</string>
+    <string name="nav_notifications">Notifications</string>
+    <string name="nav_expenses">Expenses</string>
+
+    <!-- Labels -->
+    <string name="label_income">Income</string>
+    <string name="label_expense">Expense</string>
+    <string name="label_expenses">Expenses</string>
+    <string name="label_balance">Balance</string>
+    <string name="label_amount">Amount</string>
+    <string name="label_category">Category</string>
+    <string name="label_title">Title</string>
+    <string name="label_note_optional">Note (optional)</string>
+    <string name="label_notes">Notes</string>
+    <string name="label_emoji">Emoji</string>
+    <string name="label_name">Name</string>
+    <string name="label_date">Date</string>
+    <string name="label_year">Year</string>
+    <string name="label_type">Type</string>
+    <string name="label_description">Description</string>
+    <string name="label_amount_dollars">Amount ($)</string>
+    <string name="label_month">Month</string>
+    <string name="label_summary">Summary</string>
+
+    <!-- Home -->
+    <string name="home_add_symbol">+</string>
+    <string name="home_recent_transactions">Recent Transactions</string>
+    <string name="home_add_income">Add Income</string>
+    <string name="home_add_expense">Add Expense</string>
+    <string name="home_filter_all">All</string>
+    <string name="home_items_count">%1$d items</string>
+    <string name="home_dropdown_indicator">▼</string>
+    <string name="home_all_categories">All categories</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_section_pro_mode">Pro Mode</string>
+    <string name="settings_section_preferences">Preferences</string>
+    <string name="settings_section_security">Security</string>
+    <string name="settings_section_about">About</string>
+    <string name="settings_notifications_subtitle">Daily reminder &amp; budget alerts</string>
+    <string name="settings_backup_restore_title">Backup &amp; restore</string>
+    <string name="settings_backup_restore_subtitle">Export / import using Drive or files</string>
+    <string name="settings_advanced_reports_title">Advanced reports</string>
+    <string name="settings_advanced_reports_subtitle">Custom ranges + trends</string>
+    <string name="settings_import_csv_title">Import bank CSV</string>
+    <string name="settings_import_csv_subtitle">Add withdrawals &amp; deposits from a CSV file</string>
+    <string name="settings_security_good">Good</string>
+    <string name="settings_security_status_title">Security status</string>
+    <string name="settings_security_status_subtitle">Your data stays on device. Add protection features below.</string>
+    <string name="settings_security_local_title">Local data only</string>
+    <string name="settings_security_local_subtitle">Transactions are stored on this device.</string>
+    <string name="settings_security_on">On</string>
+    <string name="settings_security_app_lock_title">App lock</string>
+    <string name="settings_security_app_lock_subtitle">Require authentication to open the app.</string>
+    <string name="settings_security_lock_method_title">Lock method</string>
+    <string name="settings_security_biometric">Biometric</string>
+    <string name="settings_security_pin">PIN</string>
+    <string name="settings_security_lock_method_hint">Wire later using BiometricPrompt / PIN screen.</string>
+    <string name="settings_security_privacy_title">Privacy &amp; permissions</string>
+    <string name="settings_security_privacy_subtitle">Review what the app can access.</string>
+    <string name="settings_version_title">Version</string>
+    <string name="settings_version_value">1.0.0</string>
+    <string name="settings_appearance_title">Appearance</string>
+    <string name="settings_theme_title">Theme</string>
+    <string name="theme_system">System</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_system_default">System default</string>
+    <string name="settings_dynamic_label">Dynamic</string>
+    <string name="settings_dynamic_colors_title">Dynamic colors</string>
+    <string name="settings_dynamic_colors_subtitle">Uses system colors (Android 12+)</string>
+    <string name="settings_language_title">Language</string>
+    <string name="language_english">English</string>
+    <string name="language_turkish">Türkçe</string>
+    <string name="settings_language_picker_title">App language</string>
+    <string name="settings_language_picker_hint">Applies only inside the app.</string>
+    <string name="settings_pro_title">Pro</string>
+    <string name="settings_pro_active">Active</string>
+    <string name="settings_pro_not_active">Not active</string>
+    <string name="settings_pro_feature_reports">Advanced Reports (custom ranges, trends)</string>
+    <string name="settings_pro_feature_budgets">Budgets + alerts (category limits)</string>
+    <string name="settings_pro_feature_export">Export CSV / PDF statements</string>
+    <string name="settings_pro_feature_recurring">Recurring transactions</string>
+    <string name="settings_pro_feature_backup">Backup &amp; restore (Drive / cloud)</string>
+    <string name="settings_pro_active_cta">Pro active</string>
+    <string name="settings_pro_footer">Replace the toggle with Google Play Billing later.</string>
+    <string name="settings_pro_checkmark">✓</string>
+
+    <!-- Reports -->
+    <string name="reports_csv_saved">CSV saved.</string>
+    <string name="reports_csv_failed">CSV export failed: %1$s</string>
+    <string name="reports_pdf_saved">PDF saved.</string>
+    <string name="reports_pdf_failed">PDF export failed: %1$s</string>
+    <string name="reports_custom_range_label">Custom: %1$s → %2$s</string>
+    <string name="reports_file_custom_csv">%1$s_Custom_%2$d_to_%3$d.csv</string>
+    <string name="reports_file_custom_pdf">%1$s_Custom_%2$d_to_%3$d.pdf</string>
+    <string name="reports_file_month_csv">%1$s_%2$d_%3$s.csv</string>
+    <string name="reports_file_month_pdf">%1$s_Report_%2$d_%3$s.pdf</string>
+    <string name="reports_file_year_csv">%1$s_%2$d.csv</string>
+    <string name="reports_file_year_pdf">%1$s_%2$d.pdf</string>
+    <string name="reports_export_title">ExpenseTracker Report</string>
+    <string name="reports_year_label">Year %1$d</string>
+    <string name="reports_monthly_overview">Monthly overview</string>
+    <string name="reports_spending_by_category">Spending by category</string>
+    <string name="reports_no_categories_this_month">No expense categories for this month.</string>
+    <string name="reports_weekly_title">Weekly</string>
+    <string name="reports_no_data_chart">No data to chart.</string>
+    <string name="reports_daily_net_trend">Daily net trend</string>
+    <string name="reports_line_graph_title">Line graph</string>
+    <string name="reports_no_daily_data">No daily data for this month.</string>
+    <string name="reports_csv_header">Date,Year,Category,Type,Description,Amount ($)</string>
+    <string name="reports_income_value">Income: %1$s</string>
+    <string name="reports_expenses_value">Expenses: %1$s</string>
+    <string name="reports_balance_value">Balance: %1$s</string>
+    <string name="reports_title_with_period">%1$s — %2$s</string>
+    <string name="reports_monthly_report">Monthly report</string>
+    <string name="reports_range_today">Today</string>
+    <string name="reports_range_week">Week</string>
+    <string name="reports_range_month">Month</string>
+    <string name="reports_range_year">Year</string>
+    <string name="reports_range_custom">Custom</string>
+    <string name="reports_select_range_title">Select range</string>
+    <string name="reports_export_subtitle">Choose a scope and save the file</string>
+    <string name="reports_export_locked_subtitle">Locked — upgrade to export</string>
+    <string name="reports_export_csv_title">CSV</string>
+    <string name="reports_export_csv_subtitle">Spreadsheet-friendly</string>
+    <string name="reports_export_csv_badge">CSV</string>
+    <string name="reports_export_pdf_title">PDF</string>
+    <string name="reports_export_pdf_subtitle">Shareable report</string>
+    <string name="reports_export_pdf_badge">PDF</string>
+    <string name="reports_pro_label">PRO</string>
+    <string name="reports_locked_label">Locked</string>
+    <string name="reports_period_range">Period: %1$s to %2$s</string>
+    <string name="reports_period_empty">Period: -</string>
+    <string name="reports_generated_by">Generated by %1$s • %2$s</string>
+    <string name="reports_page_label">Page %1$d</string>
+    <string name="reports_no_category_data">No category data for this period.</string>
+    <string name="reports_spending_by_category_continued">Spending by category (continued)</string>
+
+    <!-- Recurring -->
+    <string name="recurring_payments_title">Recurring payments</string>
+    <string name="recurring_default_title">Recurring</string>
+    <string name="recurring_next_label">Next: %1$s</string>
+    <string name="recurring_frequency_label">Frequency: %1$s</string>
+    <string name="recurring_add_to_expenses">Add to expenses</string>
+    <string name="recurring_frequency_daily">daily</string>
+    <string name="recurring_frequency_monthly">monthly</string>
+    <string name="recurring_frequency_yearly">yearly</string>
+    <string name="recurring_add_title">Add recurring</string>
+    <string name="recurring_edit_title">Edit recurring</string>
+    <string name="recurring_frequency_title">Frequency</string>
+    <string name="recurring_repeat_every">Repeat every</string>
+
+    <!-- Transactions -->
+    <string name="transaction_edit_title">Edit Transaction</string>
+    <string name="transaction_add_title">Add Transaction</string>
+    <string name="transaction_saving">Saving...</string>
+    <string name="transaction_item_title">%1$s %2$s</string>
+    <string name="transaction_not_found">Transaction not found</string>
+    <string name="transaction_error_invalid_amount">Enter a valid amount (example: 100 or 100.50).</string>
+    <string name="transaction_error_invalid_date">Pick a valid date.</string>
+    <string name="transaction_error_pick_category">Pick a category.</string>
+    <string name="transaction_error_choose_category">Choose a category.</string>
+    <string name="transaction_attachment_prefix">Attachment: %1$s</string>
+    <string name="transaction_error_save_failed">Failed to save.</string>
+    <string name="transaction_error_delete_failed">Delete failed</string>
+
+    <!-- Categories -->
+    <string name="categories_search_placeholder">Search categories</string>
+    <string name="categories_empty_title">No categories yet</string>
+    <string name="categories_empty_subtitle">Tap + to add a category.</string>
+    <string name="categories_add_title">Add Category</string>
+    <string name="categories_edit_title">Edit Category</string>
+    <string name="categories_default_badge">Default</string>
+    <string name="categories_default_label">Category</string>
+    <string name="categories_unknown_label">Unknown</string>
+    <string name="categories_unknown_with_icon">❓ Unknown</string>
+    <string name="categories_unknown_emoji">❓</string>
+    <string name="categories_error_seed_defaults">Failed to seed default categories</string>
+    <string name="categories_error_add">Failed to add category</string>
+    <string name="categories_error_update">Failed to update category</string>
+    <string name="categories_error_delete">Failed to delete category</string>
+    <string name="category_default_bills">Bills</string>
+    <string name="category_default_coffee">Coffee</string>
+    <string name="category_default_eating_out">Eating Out</string>
+    <string name="category_default_groceries">Groceries</string>
+    <string name="category_default_health">Health</string>
+    <string name="category_default_rent">Rent</string>
+
+    <!-- Budgets -->
+    <string name="budgets_empty_state">No budgets yet. Tap + to add one.</string>
+    <string name="budgets_spent_of">Spent %1$s of %2$s</string>
+    <string name="budgets_add_title">Add budget</string>
+    <string name="budgets_select_category">Select category</string>
+    <string name="budgets_monthly_limit_label">Monthly limit (e.g. 250)</string>
+    <string name="budgets_select_category_error">Select a category</string>
+    <string name="budgets_valid_amount_error">Enter a valid amount</string>
+
+    <!-- Expenses -->
+    <string name="expenses_empty_state">No expenses yet.</string>
+    <string name="expenses_no_note">No note</string>
+
+    <!-- CSV Import -->
+    <string name="csv_import_step_pick_file">1) Pick CSV file</string>
+    <string name="csv_import_choose_csv">Choose CSV</string>
+    <string name="csv_import_selected_file">Selected: %1$s</string>
+    <string name="csv_import_step_category">2) Category for imported transactions</string>
+    <string name="csv_import_select_category">Select category</string>
+    <string name="csv_import_tip">Tip: you can later add rules to auto-map merchants to categories.</string>
+    <string name="csv_import_step_preview">3) Preview</string>
+    <string name="csv_import_no_rows">No rows parsed yet.</string>
+    <string name="csv_import_range">Range: %1$s  →  %2$s</string>
+    <string name="csv_import_rows">Rows: %1$d</string>
+    <string name="csv_import_will_import">Will import: %1$d</string>
+    <string name="csv_import_duplicates_skipped">Duplicates skipped: %1$d</string>
+    <string name="csv_import_sample_rows">Sample rows</string>
+    <string name="csv_import_warnings_title">Warnings</string>
+    <string name="csv_import_warning_item">• %1$s</string>
+    <string name="csv_import_error">Error: %1$s</string>
+    <string name="csv_import_imported">Imported: %1$d</string>
+    <string name="csv_import_failed_parse">Failed to parse CSV: %1$s</string>
+    <string name="csv_import_pick_category_error">Pick a category first.</string>
+    <string name="csv_import_no_rows_error">No rows parsed.</string>
+    <string name="csv_import_failed_import">Import failed: %1$s</string>
+    <string name="csv_import_unable_open">Unable to open file.</string>
+    <string name="csv_import_unable_open_with_message">Unable to open file: %1$s</string>
+    <string name="csv_import_file_empty">File is empty.</string>
+    <string name="csv_import_header_not_detected">Header not detected reliably. Assuming columns: Date, Description, Amount.</string>
+    <string name="csv_import_missing_date_column">Couldn&#39;t find a Date column.</string>
+    <string name="csv_import_missing_description_column">Couldn&#39;t find a Description/Category column. Using blank descriptions where missing.</string>
+    <string name="csv_import_bank_transaction">Bank transaction</string>
+    <string name="csv_import_row_skipped_invalid_amount">Skipped row %1$d: amount not found/invalid.</string>
+    <string name="csv_import_expected_date_column">Could not find a date column. Expected one of: %1$s.</string>
+    <string name="csv_import_expected_amount_column">Could not find an amount column. Expected one of: %1$s.</string>
+    <string name="csv_import_expected_description_column">Could not find a description column. Expected one of: %1$s.</string>
+    <string name="csv_import_row_missing_columns">Row %1$d: missing required columns — skipped.</string>
+    <string name="csv_import_row_invalid_date">Row %1$d: could not parse date '%2$s' — skipped.</string>
+    <string name="csv_import_row_invalid_amount">Row %1$d: could not parse amount '%2$s' — skipped.</string>
+    <string name="csv_import_bank_import">Bank import</string>
+
+    <!-- Notifications -->
+    <string name="notifications_enable_title">Enable notifications</string>
+    <string name="notifications_enable_subtitle">Controls all notification types.</string>
+    <string name="notifications_reminder_time_title">Reminder time</string>
+    <string name="notifications_reminder_time_subtitle">When we should remind you.</string>
+    <string name="notifications_types_title">Types</string>
+    <string name="notifications_daily_title">Daily reminder</string>
+    <string name="notifications_daily_subtitle">Quick nudge to log transactions.</string>
+    <string name="notifications_budget_title">Budget alerts</string>
+    <string name="notifications_budget_subtitle">Warn when you overspend (set thresholds later).</string>
+    <string name="notifications_hour_label">Hour</string>
+    <string name="notifications_min_label">Min</string>
+
+    <!-- Backup & Restore -->
+    <string name="backup_saved">Backup saved.</string>
+    <string name="backup_export_failed">Export failed: %1$s</string>
+    <string name="backup_restore_success">Restored: %1$d categories, %2$d transactions, %3$d budgets, %4$d recurring</string>
+    <string name="backup_import_failed">Import failed: %1$s</string>
+    <string name="backup_description">Export a backup file or restore from one. Works with Google Drive via the system file picker.</string>
+    <string name="backup_file_name">%1$s_Backup_%2$d_%3$s_%4$s.json</string>
+    <string name="backup_export_button">Export backup</string>
+    <string name="backup_restore_button">Restore backup</string>
+
+    <!-- Pro -->
+    <string name="pro_screen_description">Enable Pro to unlock premium features.</string>
+    <string name="pro_screen_enabled">Pro is enabled</string>
+    <string name="pro_screen_disabled">Pro is disabled</string>
+
+    <!-- Paywall -->
+    <string name="paywall_title">Upgrade to Pro</string>
+    <string name="paywall_pro_active">Pro is active ✅</string>
+    <string name="paywall_unlock_title">Unlock Pro features</string>
+    <string name="paywall_description">Advanced reports, export, budgets, and premium charts.</string>
+    <string name="paywall_benefit_item">• %1$s</string>
+    <string name="paywall_restore_purchases">Restore purchases</string>
+    <string name="paywall_plan_monthly">Monthly</string>
+    <string name="paywall_price_monthly">$2.99</string>
+    <string name="paywall_plan_yearly">Yearly</string>
+    <string name="paywall_price_yearly">$19.99</string>
+    <string name="paywall_badge_best_value">Best value</string>
+    <string name="paywall_benefit_advanced_reports">Advanced reports</string>
+    <string name="paywall_benefit_budget_alerts">Budget alerts</string>
+    <string name="paywall_benefit_csv_export">CSV export</string>
+    <string name="paywall_benefit_everything_monthly">Everything in Monthly</string>
+    <string name="paywall_benefit_priority_features">Priority features</string>
+    <string name="paywall_benefit_yearly_savings">45% cheaper than monthly</string>
+    <string name="paywall_plan_lifetime">Lifetime</string>
+    <string name="paywall_price_lifetime">$49.99</string>
+    <string name="paywall_badge_one_time">One-time</string>
+    <string name="paywall_benefit_all_pro">All Pro features</string>
+    <string name="paywall_benefit_pay_once">Pay once, keep forever</string>
+    <string name="paywall_benefit_future_features">Future features included</string>
+
+    <!-- Merchant Rules -->
+    <string name="merchant_rules_title">Merchant Rules</string>
+    <string name="merchant_rules_tip_title">Tip</string>
+    <string name="merchant_rules_tip_body">You can create rules to auto-map merchants to categories (used during CSV import).</string>
+    <string name="merchant_rules_unknown_category">Unknown</string>
+    <string name="merchant_rules_summary">%1$s • %2$s • priority %3$d</string>
+    <string name="merchant_rules_match_contains">Contains</string>
+    <string name="merchant_rules_match_starts_with">Starts with</string>
+    <string name="merchant_rules_match_regex">Regex</string>
+    <string name="merchant_rules_add_title">Add rule</string>
+    <string name="merchant_rules_edit_title">Edit rule</string>
+    <string name="merchant_rules_pattern_label">Pattern (e.g. amazon)</string>
+    <string name="merchant_rules_match_type_label">Match type</string>
+    <string name="merchant_rules_priority_label">Priority (higher wins)</string>
+    <string name="merchant_rules_enabled_label">Enabled</string>
+
+    <!-- Advanced reports -->
+    <string name="advanced_reports_trend_title">Trend</string>
+    <string name="advanced_reports_trend_subtitle">Daily income vs expense</string>
+    <string name="advanced_reports_range_title">Range</string>
+    <string name="advanced_reports_range_value">%1$s  →  %2$s</string>
+    <string name="advanced_reports_range_last_7">Last 7 days</string>
+    <string name="advanced_reports_range_last_30">Last 30 days</string>
+    <string name="advanced_reports_range_tip">Tip: add a custom date picker later for any range.</string>
+    <string name="advanced_reports_totals_title">Totals</string>
+    <string name="advanced_reports_net_positive">Net +</string>
+    <string name="advanced_reports_net_negative">Net -</string>
+    <string name="advanced_reports_chip_daily">Daily</string>
+    <string name="advanced_reports_chip_income_vs_expense">Income vs Expense</string>
+    <string name="advanced_reports_income_expense_row">Income %1$d • Expense %2$d</string>
+    <string name="advanced_reports_net_value">Net %1$s</string>
+
+    <!-- Add Income/Expense -->
+    <string name="income_add_title">Add Income</string>
+    <string name="expense_add_title">Add Expense</string>
+    <string name="add_transaction_categories_loaded">Categories loaded: %1$d</string>
+    <string name="add_transaction_attachment_label">Add attachment</string>
+    <string name="add_transaction_attachment_hint">Tap to choose a file</string>
+
+    <!-- Expense list -->
+    <string name="expenses_empty_state">No expenses yet.</string>
+    <string name="expenses_no_note">No note</string>
+
+    <!-- Placeholders -->
+    <string name="placeholder_home">Home (TODO)</string>
+    <string name="placeholder_categories">Categories (TODO)</string>
+    <string name="placeholder_reports">Reports (TODO)</string>
+    <string name="placeholder_import_csv">Import bank CSV (TODO)</string>
+    <string name="placeholder_backup_restore">Backup &amp; Restore (TODO)</string>
+    <string name="placeholder_notifications">Notifications (TODO)</string>
+    <string name="placeholder_paywall">Paywall (TODO)</string>
+
+    <!-- Sharing -->
+    <string name="share_csv_title">Share CSV</string>
+
+    <!-- Export utilities -->
+    <string name="export_generated_csv">Generated,%1$s</string>
+    <string name="export_csv_header_simple">Date,Type,Amount,Note</string>
+    <string name="export_generated_label">Generated: %1$s</string>
+    <string name="export_csv_header_simple_lowercase">date,type,category,note,amount</string>
+
+    <!-- Notification channels -->
+    <string name="notification_channel_recurring_title">Recurring reminders</string>
+    <string name="notification_channel_recurring_description">Daily reminders for unpaid recurring bills</string>
 </resources>

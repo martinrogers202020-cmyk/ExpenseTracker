@@ -5,6 +5,7 @@ import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.pdf.PdfDocument
 import android.net.Uri
+import com.example.expensetracker.R
 import java.io.OutputStreamWriter
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -12,16 +13,17 @@ import java.time.format.DateTimeFormatter
 object ExportUtils {
 
     fun buildReportsCsv(
+        context: Context,
         title: String,
         rows: List<List<String>>
     ): String {
         val sb = StringBuilder()
         sb.appendLine(title)
-        sb.appendLine("Generated,${nowStamp()}")
+        sb.appendLine(context.getString(R.string.export_generated_csv, nowStamp()))
         sb.appendLine()
 
         // header
-        sb.appendLine("Date,Type,Amount,Note")
+        sb.appendLine(context.getString(R.string.export_csv_header_simple))
 
         // data
         rows.forEach { cols ->
@@ -86,7 +88,12 @@ object ExportUtils {
             canvas.drawText(title, left, y, titlePaint)
             y += lineGap
 
-            canvas.drawText("Generated: ${nowStamp()}", left, y, smallPaint)
+            canvas.drawText(
+                context.getString(R.string.export_generated_label, nowStamp()),
+                left,
+                y,
+                smallPaint
+            )
             y += (lineGap + 6f)
 
             // header row
