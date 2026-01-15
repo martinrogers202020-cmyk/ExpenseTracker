@@ -40,7 +40,7 @@
             android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
             android:exported="false">
             <meta-data
-                android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
+                android:name="android.app.locale_config"
                 android:resource="@xml/locales_config" />
         </service>
     </application>

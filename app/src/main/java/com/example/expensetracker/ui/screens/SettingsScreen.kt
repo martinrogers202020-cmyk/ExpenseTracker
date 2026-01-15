@@ -51,6 +51,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -69,6 +70,7 @@ import com.example.expensetracker.data.datastore.ThemeMode
 import com.example.expensetracker.data.datastore.LanguageTags
 import com.example.expensetracker.ui.viewmodel.SettingsViewModel
 import com.example.expensetracker.ui.viewmodel.SettingsViewModelFactory
+import kotlinx.coroutines.launch
 
 @Composable
 fun SettingsScreen(
@@ -85,6 +87,7 @@ fun SettingsScreen(
     val vm: SettingsViewModel = viewModel(factory = SettingsViewModelFactory(context))
     val prefs by vm.appearance.collectAsStateWithLifecycle()
     val currentLanguageTag by vm.currentLanguageTag.collectAsStateWithLifecycle()
+    val scope = rememberCoroutineScope()
 
     val cs = MaterialTheme.colorScheme
     val accent = cs.primary
@@ -225,7 +228,9 @@ fun SettingsScreen(
                 LanguageItem(
                     languageTag = currentLanguageTag,
                     onLanguageChange = { newTag ->
-                        vm.updateLanguage(newTag)
+                        scope.launch {
+                            vm.updateLanguage(newTag)
+                        }
                     },
                     accent = accent,
                     borderColor = border,

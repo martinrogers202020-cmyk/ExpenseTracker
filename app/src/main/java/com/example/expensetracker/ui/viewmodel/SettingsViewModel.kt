@@ -61,23 +61,7 @@ class SettingsViewModel(
     fun setProEnabled(value: Boolean) = viewModelScope.launch { repo.setProEnabled(value) }
     fun setLanguageTag(value: String) = viewModelScope.launch { repo.setLanguageTag(value) }
 
-    fun updateLanguage(tag: String): Boolean {
-        val newLocales = if (tag == LanguageTags.SYSTEM) {
-            LocaleListCompat.getEmptyLocaleList()
-        } else {
-            LocaleListCompat.forLanguageTags(tag)
-        }
-        val currentTags = AppCompatDelegate.getApplicationLocales().toLanguageTags()
-        val newTags = newLocales.toLanguageTags()
-        val changed = currentTags != newTags
-
-        viewModelScope.launch { repo.setLanguageTag(tag) }
-
-        if (changed) {
-            AppCompatDelegate.setApplicationLocales(newLocales)
-        }
-        return changed
-    }
+    suspend fun updateLanguage(tag: String): Boolean = repo.updateLanguageIfNeeded(tag)
 
     private fun applyAppLocale(tag: String) {
         val newLocales = if (tag == LanguageTags.SYSTEM) {
