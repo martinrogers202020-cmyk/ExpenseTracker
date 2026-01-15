@@ -225,7 +225,7 @@ fun SettingsScreen(
                 LanguageItem(
                     languageTag = currentLanguageTag,
                     onLanguageChange = { newTag ->
-                        vm.setLanguageTag(newTag)
+                        vm.updateLanguage(newTag)
                     },
                     accent = accent,
                     borderColor = border,
