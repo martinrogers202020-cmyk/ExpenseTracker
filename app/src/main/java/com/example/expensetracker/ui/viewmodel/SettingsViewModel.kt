@@ -52,8 +52,10 @@ class SettingsViewModel(
 
     fun applyLanguageChange(value: String) = viewModelScope.launch {
         val normalized = value.ifBlank { "en" }
-        _currentLanguageTag.value = normalized
         repo.applyLanguageIfNeeded(normalized)
         repo.setLanguageTag(normalized)
+        if (_currentLanguageTag.value != normalized) {
+            _currentLanguageTag.value = normalized
+        }
     }
 }
