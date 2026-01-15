@@ -459,11 +459,11 @@ private fun CategoryDropdown(
     border: Color
 ) {
     var expanded by rememberSaveable { mutableStateOf(false) }
+    val allCategoriesLabel = stringResource(R.string.home_all_categories)
 
     val selectedLabel by remember(categories, selectedId) {
         derivedStateOf {
-            categories.firstOrNull { it.id == selectedId }?.label
-                ?: stringResource(R.string.home_all_categories)
+            categories.firstOrNull { it.id == selectedId }?.label ?: allCategoriesLabel
         }
     }
 
