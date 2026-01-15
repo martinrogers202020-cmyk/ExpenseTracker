@@ -109,7 +109,7 @@
     <string name="settings_language_title">Language</string>
     <string name="language_system_default">System default</string>
     <string name="language_english">English</string>
-    <string name="language_turkish">Türkçe</string>
+    <string name="language_turkish">Turkish</string>
     <string name="settings_language_picker_title">App language</string>
     <string name="settings_language_picker_hint">Applies only inside the app.</string>
     <string name="settings_pro_title">Pro</string>
