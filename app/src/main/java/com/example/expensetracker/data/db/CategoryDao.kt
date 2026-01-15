@@ -36,14 +36,11 @@ interface CategoryDao {
         """
         UPDATE categories
         SET name = :newName
-        WHERE
-          isDefault = 1
-          AND emoji = :emoji
+        WHERE isDefault = 1
           AND name IN (:knownNames)
         """
     )
-    suspend fun renameDefaultCategoryByEmoji(
-        emoji: String,
+    suspend fun renameDefaultCategoryIfMatches(
         knownNames: List<String>,
         newName: String
     ): Int
