@@ -32,8 +32,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.expensetracker.R
 import com.example.expensetracker.data.model.TransactionType
 import com.example.expensetracker.ui.viewmodel.AddEditViewModel
 import com.example.expensetracker.ui.viewmodel.AddEditViewModelFactory
@@ -64,8 +66,18 @@ fun AddEditTransactionScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(if (state.isEdit) "Edit Transaction" else "Add Transaction") },
-                navigationIcon = { TextButton(onClick = onBack) { Text("Back") } }
+                title = {
+                    Text(
+                        if (state.isEdit) {
+                            stringResource(R.string.transaction_edit_title)
+                        } else {
+                            stringResource(R.string.transaction_add_title)
+                        }
+                    )
+                },
+                navigationIcon = {
+                    TextButton(onClick = onBack) { Text(stringResource(R.string.action_back)) }
+                }
             )
         }
     ) { paddingValues ->
@@ -83,19 +95,19 @@ fun AddEditTransactionScreen(
                 FilterChip(
                     selected = state.type == TransactionType.EXPENSE,
                     onClick = { vm.setType(TransactionType.EXPENSE) },
-                    label = { Text("Expense") }
+                    label = { Text(stringResource(R.string.label_expense)) }
                 )
                 FilterChip(
                     selected = state.type == TransactionType.INCOME,
                     onClick = { vm.setType(TransactionType.INCOME) },
-                    label = { Text("Income") }
+                    label = { Text(stringResource(R.string.label_income)) }
                 )
             }
 
             OutlinedTextField(
                 value = state.amountText,
                 onValueChange = vm::setAmount,
-                label = { Text("Amount") },
+                label = { Text(stringResource(R.string.label_amount)) },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -103,10 +115,10 @@ fun AddEditTransactionScreen(
             // Category field (click anywhere to open menu)
             Box(modifier = Modifier.fillMaxWidth()) {
                 OutlinedTextField(
-                    value = selectedCategory?.label ?: "Select",
+                    value = selectedCategory?.label ?: stringResource(R.string.action_select),
                     onValueChange = {},
                     readOnly = true,
-                    label = { Text("Category") },
+                    label = { Text(stringResource(R.string.label_category)) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable { catMenu = true },
@@ -114,7 +126,7 @@ fun AddEditTransactionScreen(
                         IconButton(onClick = { catMenu = true }) {
                             Icon(
                                 imageVector = Icons.Outlined.KeyboardArrowDown,
-                                contentDescription = "Open categories"
+                                contentDescription = stringResource(R.string.action_open_categories)
                             )
                         }
                     }
@@ -139,7 +151,7 @@ fun AddEditTransactionScreen(
             OutlinedTextField(
                 value = state.note,
                 onValueChange = vm::setNote,
-                label = { Text("Note (optional)") },
+                label = { Text(stringResource(R.string.label_note_optional)) },
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -152,7 +164,13 @@ fun AddEditTransactionScreen(
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !state.isSaving
             ) {
-                Text(if (state.isSaving) "Saving..." else "Save")
+                Text(
+                    if (state.isSaving) {
+                        stringResource(R.string.transaction_saving)
+                    } else {
+                        stringResource(R.string.action_save)
+                    }
+                )
             }
 
             if (state.isEdit) {
@@ -161,7 +179,7 @@ fun AddEditTransactionScreen(
                     modifier = Modifier.fillMaxWidth(),
                     enabled = !state.isSaving
                 ) {
-                    Text("Delete")
+                    Text(stringResource(R.string.action_delete))
                 }
             }
         }

@@ -65,10 +65,12 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.expensetracker.R
 import com.example.expensetracker.data.model.TransactionType
 import com.example.expensetracker.ui.state.TransactionItemUi
 import com.example.expensetracker.ui.viewmodel.ReportsViewModel
@@ -142,9 +144,14 @@ fun ReportsScreen(
                 appContext.contentResolver.openOutputStream(uri)?.use { out ->
                     out.write(text.toByteArray())
                 }
-                Toast.makeText(appContext, "CSV saved.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(appContext, appContext.getString(R.string.reports_csv_saved), Toast.LENGTH_SHORT)
+                    .show()
             } catch (e: Exception) {
-                Toast.makeText(appContext, "CSV export failed: ${e.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    appContext,
+                    appContext.getString(R.string.reports_csv_failed, e.message ?: ""),
+                    Toast.LENGTH_LONG
+                ).show()
             } finally {
                 pendingCsvText.value = null
             }
@@ -166,9 +173,13 @@ fun ReportsScreen(
                 appContext.contentResolver.openOutputStream(uri)?.use { out ->
                     out.write(bytes)
                 }
-                Toast.makeText(appContext, "PDF saved.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(appContext, appContext.getString(R.string.reports_pdf_saved), Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
-                Toast.makeText(appContext, "PDF export failed: ${e.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    appContext,
+                    appContext.getString(R.string.reports_pdf_failed, e.message ?: ""),
+                    Toast.LENGTH_LONG
+                ).show()
             } finally {
                 pendingPdfBytes.value = null
             }
@@ -214,8 +225,11 @@ fun ReportsScreen(
                 val endEpoch = epochDayFromMillis(endMs)
                 val txs = rangeTxs(startEpoch, endEpoch)
 
-                val label =
-                    "Custom: ${Formatters.dateFromEpochDay(startEpoch)} → ${Formatters.dateFromEpochDay(endEpoch)}"
+                val label = appContext.getString(
+                    R.string.reports_custom_range_label,
+                    Formatters.dateFromEpochDay(startEpoch),
+                    Formatters.dateFromEpochDay(endEpoch)
+                )
 
                 if (!proEnabled) {
                     showRangeDialog = false
@@ -225,8 +239,13 @@ fun ReportsScreen(
 
                 when (pendingFormat) {
                     ExportFormat.CSV -> {
-                        val csv = buildCsvDetailed(txs)
-                        val fileName = "ExpenseTracker_Custom_${startEpoch}_to_${endEpoch}.csv"
+                        val csv = buildCsvDetailed(appContext, txs)
+                        val fileName = appContext.getString(
+                            R.string.reports_file_custom_csv,
+                            appContext.getString(R.string.app_name),
+                            startEpoch,
+                            endEpoch
+                        )
                         saveCsv(fileName, csv)
                     }
 
@@ -234,13 +253,19 @@ fun ReportsScreen(
                         val income = txs.sumOf { if (it.type == TransactionType.INCOME) it.amountCents else 0L }
                         val expense = txs.sumOf { if (it.type == TransactionType.EXPENSE) it.amountCents else 0L }
                         val bytes = buildReportPdfBytesDetailed(
-                            title = "ExpenseTracker Report",
+                            context = appContext,
+                            title = appContext.getString(R.string.reports_export_title),
                             periodLabel = label,
                             txs = txs,
                             incomeCents = income,
                             expenseCents = expense
                         )
-                        val fileName = "ExpenseTracker_Custom_${startEpoch}_to_${endEpoch}.pdf"
+                        val fileName = appContext.getString(
+                            R.string.reports_file_custom_pdf,
+                            appContext.getString(R.string.app_name),
+                            startEpoch,
+                            endEpoch
+                        )
                         savePdf(fileName, bytes)
                     }
                 }
@@ -261,22 +286,31 @@ fun ReportsScreen(
                 val txs = monthTxs
                 when (format) {
                     ExportFormat.CSV -> {
-                        val csv = buildCsvDetailed(txs)
-                        val fileName =
-                            "ExpenseTracker_${month.year}_${month.monthValue.toString().padStart(2, '0')}.csv"
+                        val csv = buildCsvDetailed(appContext, txs)
+                        val fileName = appContext.getString(
+                            R.string.reports_file_month_csv,
+                            appContext.getString(R.string.app_name),
+                            month.year,
+                            month.monthValue.toString().padStart(2, '0')
+                        )
                         saveCsv(fileName, csv)
                     }
 
                     ExportFormat.PDF -> {
                         val bytes = buildReportPdfBytesDetailed(
-                            title = "ExpenseTracker Report",
+                            context = appContext,
+                            title = appContext.getString(R.string.reports_export_title),
                             periodLabel = "${month.month} ${month.year}",
                             txs = txs,
                             incomeCents = state.incomeCents,
                             expenseCents = state.expenseCents
                         )
-                        val fileName =
-                            "ExpenseTracker_Report_${month.year}_${month.monthValue.toString().padStart(2, '0')}.pdf"
+                        val fileName = appContext.getString(
+                            R.string.reports_file_month_pdf,
+                            appContext.getString(R.string.app_name),
+                            month.year,
+                            month.monthValue.toString().padStart(2, '0')
+                        )
                         savePdf(fileName, bytes)
                     }
                 }
@@ -287,8 +321,12 @@ fun ReportsScreen(
                 val txs = yearTxs(year)
                 when (format) {
                     ExportFormat.CSV -> {
-                        val csv = buildCsvDetailed(txs)
-                        val fileName = "ExpenseTracker_${year}.csv"
+                        val csv = buildCsvDetailed(appContext, txs)
+                        val fileName = appContext.getString(
+                            R.string.reports_file_year_csv,
+                            appContext.getString(R.string.app_name),
+                            year
+                        )
                         saveCsv(fileName, csv)
                     }
 
@@ -296,13 +334,18 @@ fun ReportsScreen(
                         val income = txs.sumOf { if (it.type == TransactionType.INCOME) it.amountCents else 0L }
                         val expense = txs.sumOf { if (it.type == TransactionType.EXPENSE) it.amountCents else 0L }
                         val bytes = buildReportPdfBytesDetailed(
-                            title = "ExpenseTracker Report",
-                            periodLabel = "Year $year",
+                            context = appContext,
+                            title = appContext.getString(R.string.reports_export_title),
+                            periodLabel = appContext.getString(R.string.reports_year_label, year),
                             txs = txs,
                             incomeCents = income,
                             expenseCents = expense
                         )
-                        val fileName = "ExpenseTracker_${year}.pdf"
+                        val fileName = appContext.getString(
+                            R.string.reports_file_year_pdf,
+                            appContext.getString(R.string.app_name),
+                            year
+                        )
                         savePdf(fileName, bytes)
                     }
                 }
@@ -319,10 +362,10 @@ fun ReportsScreen(
         containerColor = Color.Transparent,
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Reports", fontWeight = FontWeight.SemiBold, color = textPrimary) },
+                title = { Text(stringResource(R.string.nav_reports), fontWeight = FontWeight.SemiBold, color = textPrimary) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Outlined.ArrowBack, contentDescription = "Back", tint = textPrimary)
+                        Icon(Icons.Outlined.ArrowBack, contentDescription = stringResource(R.string.action_back), tint = textPrimary)
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.Transparent)
@@ -368,7 +411,7 @@ fun ReportsScreen(
                     )
                 }
 
-                item { SectionHeader("Monthly overview") }
+                item { SectionHeader(stringResource(R.string.reports_monthly_overview)) }
 
                 item {
                     SoftCard(border = border) {
@@ -386,20 +429,20 @@ fun ReportsScreen(
 
                             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                                 OverviewRow(
-                                    label = "Income",
+                                    label = stringResource(R.string.label_income),
                                     value = incomeStr,
                                     valueColor = incomeColor,
                                     labelColor = textSecondary
                                 )
                                 OverviewRow(
-                                    label = "Expenses",
+                                    label = stringResource(R.string.label_expenses),
                                     value = expenseStr,
                                     valueColor = expenseColor,
                                     labelColor = textSecondary
                                 )
                                 Divider(color = border)
                                 OverviewRow(
-                                    label = "Balance",
+                                    label = stringResource(R.string.label_balance),
                                     value = balanceStr,
                                     valueColor = if (state.balanceCents < 0) expenseColor else textPrimary,
                                     labelColor = textSecondary
@@ -409,7 +452,7 @@ fun ReportsScreen(
                     }
                 }
 
-                item { SectionHeader("Spending by category") }
+                item { SectionHeader(stringResource(R.string.reports_spending_by_category)) }
 
                 item {
                     SoftCard(border = border) {
@@ -417,7 +460,7 @@ fun ReportsScreen(
                             RangeTabs(selected = tab, onSelected = { tab = it })
 
                             if (byCategory.isEmpty()) {
-                                Text("No expense categories for this month.", color = textSecondary)
+                                Text(stringResource(R.string.reports_no_categories_this_month), color = textSecondary)
                             } else {
                                 DonutChart(
                                     slices = byCategory,
@@ -439,10 +482,10 @@ fun ReportsScreen(
                 item {
                     SoftCard(border = border) {
                         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                            Text("Weekly", fontWeight = FontWeight.SemiBold, color = textPrimary)
+                            Text(stringResource(R.string.reports_weekly_title), fontWeight = FontWeight.SemiBold, color = textPrimary)
 
                             if (byCategory.isEmpty()) {
-                                Text("No data to chart.", color = textSecondary)
+                                Text(stringResource(R.string.reports_no_data_chart), color = textSecondary)
                             } else {
                                 RoundedBarChart(
                                     bars = byCategory,
@@ -458,15 +501,15 @@ fun ReportsScreen(
                     }
                 }
 
-                item { SectionHeader("Daily net trend") }
+                item { SectionHeader(stringResource(R.string.reports_daily_net_trend)) }
 
                 item {
                     SoftCard(border = border) {
                         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                            Text("Line graph", fontWeight = FontWeight.SemiBold, color = textPrimary)
+                            Text(stringResource(R.string.reports_line_graph_title), fontWeight = FontWeight.SemiBold, color = textPrimary)
 
                             if (dailyNet.isEmpty()) {
-                                Text("No daily data for this month.", color = textSecondary)
+                                Text(stringResource(R.string.reports_no_daily_data), color = textSecondary)
                             } else {
                                 LineChart(
                                     points = dailyNet,
@@ -488,14 +531,15 @@ fun ReportsScreen(
 
 /* ========================= EXPORT (CSV) ========================= */
 
-private fun buildCsvDetailed(transactions: List<TransactionItemUi>): String {
+private fun buildCsvDetailed(context: Context, transactions: List<TransactionItemUi>): String {
     fun esc(value: String): String {
         val v = value.replace("\"", "\"\"")
         return "\"$v\""
     }
 
     val sb = StringBuilder()
-    sb.append("Date,Year,Category,Type,Description,Amount ($)\n")
+    sb.append(context.getString(R.string.reports_csv_header))
+    sb.append("\n")
 
     transactions.forEach { tx ->
         val dateObj = LocalDate.ofEpochDay(tx.epochDay)
@@ -503,8 +547,8 @@ private fun buildCsvDetailed(transactions: List<TransactionItemUi>): String {
         val year = dateObj.year.toString()            // 2026
         val category = tx.categoryName
         val type = when (tx.type) {
-            TransactionType.INCOME -> "Income"
-            TransactionType.EXPENSE -> "Expense"
+            TransactionType.INCOME -> context.getString(R.string.label_income)
+            TransactionType.EXPENSE -> context.getString(R.string.label_expense)
         }
         val desc = tx.note
         val amount = amountDollarsSigned(tx.type, tx.amountCents) // ✅ income +, expense -
@@ -528,6 +572,7 @@ private fun buildCsvDetailed(transactions: List<TransactionItemUi>): String {
 /* ========================= EXPORT (PDF) ========================= */
 
 private fun buildReportPdfBytesDetailed(
+    context: Context,
     title: String,
     periodLabel: String,
     txs: List<TransactionItemUi>,
@@ -560,12 +605,12 @@ private fun buildReportPdfBytesDetailed(
     }
 
     fun drawHeaderRow(canvas: android.graphics.Canvas, y: Int) {
-        canvas.drawText("Date", (margin + 0).toFloat(), y.toFloat(), boldPaint)
-        canvas.drawText("Year", (margin + 80).toFloat(), y.toFloat(), boldPaint)
-        canvas.drawText("Category", (margin + 130).toFloat(), y.toFloat(), boldPaint)
-        canvas.drawText("Type", (margin + 260).toFloat(), y.toFloat(), boldPaint)
-        canvas.drawText("Description", (margin + 320).toFloat(), y.toFloat(), boldPaint)
-        canvas.drawText("Amount ($)", (margin + 520).toFloat(), y.toFloat(), boldPaint)
+        canvas.drawText(context.getString(R.string.label_date), (margin + 0).toFloat(), y.toFloat(), boldPaint)
+        canvas.drawText(context.getString(R.string.label_year), (margin + 80).toFloat(), y.toFloat(), boldPaint)
+        canvas.drawText(context.getString(R.string.label_category), (margin + 130).toFloat(), y.toFloat(), boldPaint)
+        canvas.drawText(context.getString(R.string.label_type), (margin + 260).toFloat(), y.toFloat(), boldPaint)
+        canvas.drawText(context.getString(R.string.label_description), (margin + 320).toFloat(), y.toFloat(), boldPaint)
+        canvas.drawText(context.getString(R.string.label_amount_dollars), (margin + 520).toFloat(), y.toFloat(), boldPaint)
     }
 
     val incomeText = Formatters.money(incomeCents)
@@ -592,14 +637,34 @@ private fun buildReportPdfBytesDetailed(
             canvas.drawText(periodLabel, margin.toFloat(), y.toFloat(), subPaint)
             y += 18
 
-            canvas.drawText("Income: $incomeText", margin.toFloat(), y.toFloat(), subPaint)
+            canvas.drawText(
+                context.getString(R.string.reports_income_value, incomeText),
+                margin.toFloat(),
+                y.toFloat(),
+                subPaint
+            )
             y += 16
-            canvas.drawText("Expenses: $expenseText", margin.toFloat(), y.toFloat(), subPaint)
+            canvas.drawText(
+                context.getString(R.string.reports_expenses_value, expenseText),
+                margin.toFloat(),
+                y.toFloat(),
+                subPaint
+            )
             y += 16
-            canvas.drawText("Balance: $balanceText", margin.toFloat(), y.toFloat(), boldPaint)
+            canvas.drawText(
+                context.getString(R.string.reports_balance_value, balanceText),
+                margin.toFloat(),
+                y.toFloat(),
+                boldPaint
+            )
             y += 22
         } else {
-            canvas.drawText("$title — $periodLabel", margin.toFloat(), y.toFloat(), subPaint)
+            canvas.drawText(
+                context.getString(R.string.reports_title_with_period, title, periodLabel),
+                margin.toFloat(),
+                y.toFloat(),
+                subPaint
+            )
             y += 22
         }
 
@@ -616,7 +681,11 @@ private fun buildReportPdfBytesDetailed(
             val dateIso = d.toString()
             val year = d.year.toString()
             val category = tx.categoryName.take(16)
-            val type = if (tx.type == TransactionType.INCOME) "Income" else "Expense"
+            val type = if (tx.type == TransactionType.INCOME) {
+                context.getString(R.string.label_income)
+            } else {
+                context.getString(R.string.label_expense)
+            }
             val desc = tx.note.replace("\n", " ").replace("\r", " ").take(28)
             val amount = amountDollarsSigned(tx.type, tx.amountCents)
 
@@ -735,17 +804,17 @@ private fun MonthSwitcherCard(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            TextButton(onClick = onPrev) { Text("Prev", color = accent) }
+            TextButton(onClick = onPrev) { Text(stringResource(R.string.action_prev), color = accent) }
 
             Column(
                 modifier = Modifier.weight(1f),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text("${month.month} ${month.year}", fontWeight = FontWeight.Bold, color = textPrimary)
-                Text("Monthly report", color = textSecondary, style = MaterialTheme.typography.bodySmall)
+                Text(stringResource(R.string.reports_monthly_report), color = textSecondary, style = MaterialTheme.typography.bodySmall)
             }
 
-            TextButton(onClick = onNext) { Text("Next", color = accent) }
+            TextButton(onClick = onNext) { Text(stringResource(R.string.action_next), color = accent) }
         }
     }
 }
@@ -801,10 +870,10 @@ private fun RangeTabs(
                 }
             }
 
-            Pill(RangeTab.TODAY, "Today")
-            Pill(RangeTab.WEEK, "Week")
-            Pill(RangeTab.MONTH, "Month")
-            Pill(RangeTab.CUSTOM, "Custom")
+            Pill(RangeTab.TODAY, stringResource(R.string.reports_range_today))
+            Pill(RangeTab.WEEK, stringResource(R.string.reports_range_week))
+            Pill(RangeTab.MONTH, stringResource(R.string.reports_range_month))
+            Pill(RangeTab.CUSTOM, stringResource(R.string.reports_range_custom))
         }
     }
 }
@@ -1114,9 +1183,9 @@ private fun RangePickerDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        confirmButton = { TextButton(onClick = onConfirm) { Text("Export") } },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } },
-        title = { Text("Select range") },
+        confirmButton = { TextButton(onClick = onConfirm) { Text(stringResource(R.string.action_export)) } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } },
+        title = { Text(stringResource(R.string.reports_select_range_title)) },
         text = { DateRangePicker(state = state) }
     )
 }
@@ -1147,14 +1216,18 @@ private fun ExportCardPretty(
             ) {
                 Column(Modifier.weight(1f)) {
                     Text(
-                        text = "Export",
+                        text = stringResource(R.string.action_export),
                         fontWeight = FontWeight.Bold,
                         color = textPrimary,
                         style = MaterialTheme.typography.titleMedium
                     )
                     Spacer(Modifier.height(2.dp))
                     Text(
-                        text = if (proEnabled) "Choose a scope and save the file" else "Locked — upgrade to export",
+                        text = if (proEnabled) {
+                            stringResource(R.string.reports_export_subtitle)
+                        } else {
+                            stringResource(R.string.reports_export_locked_subtitle)
+                        },
                         color = textSecondary,
                         style = MaterialTheme.typography.bodySmall
                     )
@@ -1167,9 +1240,9 @@ private fun ExportCardPretty(
             }
 
             ExportRow(
-                title = "CSV",
-                subtitle = "Spreadsheet-friendly",
-                iconText = "CSV",
+                title = stringResource(R.string.reports_export_csv_title),
+                subtitle = stringResource(R.string.reports_export_csv_subtitle),
+                iconText = stringResource(R.string.reports_export_csv_badge),
                 proEnabled = proEnabled,
                 onLockedClick = onLockedClick,
                 onMonth = onCsvMonth,
@@ -1178,9 +1251,9 @@ private fun ExportCardPretty(
             )
 
             ExportRow(
-                title = "PDF",
-                subtitle = "Shareable report",
-                iconText = "PDF",
+                title = stringResource(R.string.reports_export_pdf_title),
+                subtitle = stringResource(R.string.reports_export_pdf_subtitle),
+                iconText = stringResource(R.string.reports_export_pdf_badge),
                 proEnabled = proEnabled,
                 onLockedClick = onLockedClick,
                 onMonth = onPdfMonth,
@@ -1237,9 +1310,24 @@ private fun ExportRow(
             }
 
             FlowRowNice {
-                ExportChip(label = "Month", enabled = proEnabled, onLockedClick = onLockedClick, onClick = onMonth)
-                ExportChip(label = "Year", enabled = proEnabled, onLockedClick = onLockedClick, onClick = onYear)
-                ExportChip(label = "Custom", enabled = proEnabled, onLockedClick = onLockedClick, onClick = onCustom)
+                ExportChip(
+                    label = stringResource(R.string.reports_range_month),
+                    enabled = proEnabled,
+                    onLockedClick = onLockedClick,
+                    onClick = onMonth
+                )
+                ExportChip(
+                    label = stringResource(R.string.reports_range_year),
+                    enabled = proEnabled,
+                    onLockedClick = onLockedClick,
+                    onClick = onYear
+                )
+                ExportChip(
+                    label = stringResource(R.string.reports_range_custom),
+                    enabled = proEnabled,
+                    onLockedClick = onLockedClick,
+                    onClick = onCustom
+                )
             }
         }
     }
@@ -1279,7 +1367,7 @@ private fun ProPill(
         onClick = onClick
     ) {
         Text(
-            text = "PRO",
+            text = stringResource(R.string.reports_pro_label),
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
             color = fg,
             fontWeight = FontWeight.SemiBold,
@@ -1298,7 +1386,7 @@ private fun LockedPill(onClick: () -> Unit) {
         onClick = onClick
     ) {
         Text(
-            text = "Locked",
+            text = stringResource(R.string.reports_locked_label),
             modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
             color = cs.error,
             fontWeight = FontWeight.SemiBold,

@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.expensetracker.R
 import com.example.expensetracker.data.db.AppDatabase
 import com.example.expensetracker.data.model.CategoryEntity
 import com.example.expensetracker.data.model.MerchantRuleEntity
@@ -82,7 +83,10 @@ class CsvImportViewModel(
             val result = try {
                 withContext(Dispatchers.IO) { BankCsvParser.parseFromUri(context, uri) }
             } catch (t: Throwable) {
-                _state.value = _state.value.copy(loading = false, error = "Failed to parse CSV: ${t.message}")
+                _state.value = _state.value.copy(
+                    loading = false,
+                    error = context.getString(R.string.csv_import_failed_parse, t.message ?: "")
+                )
                 return@launch
             }
 
@@ -120,11 +124,11 @@ class CsvImportViewModel(
             val s = _state.value
             val fallbackCategoryId = s.selectedCategoryId
             if (fallbackCategoryId == null) {
-                _state.value = s.copy(error = "Pick a category first.")
+                _state.value = s.copy(error = context.getString(R.string.csv_import_pick_category_error))
                 return@launch
             }
             if (lastParsed.isEmpty()) {
-                _state.value = s.copy(error = "No rows parsed.")
+                _state.value = s.copy(error = context.getString(R.string.csv_import_no_rows_error))
                 return@launch
             }
 
@@ -178,7 +182,10 @@ class CsvImportViewModel(
                     }
                 }
             } catch (t: Throwable) {
-                _state.value = _state.value.copy(loading = false, error = "Import failed: ${t.message}")
+                _state.value = _state.value.copy(
+                    loading = false,
+                    error = context.getString(R.string.csv_import_failed_import, t.message ?: "")
+                )
                 return@launch
             }
 

@@ -1,7 +1,9 @@
 package com.example.expensetracker.ui.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.expensetracker.R
 import com.example.expensetracker.data.db.CategoryDao
 import com.example.expensetracker.data.db.TransactionDao
 import com.example.expensetracker.data.model.CategoryEntity
@@ -33,6 +35,7 @@ data class AddEditUiState(
 )
 
 class AddEditViewModel(
+    private val context: Context,
     private val categoryDao: CategoryDao,
     private val transactionDao: TransactionDao
 ) : ViewModel() {
@@ -52,8 +55,12 @@ class AddEditViewModel(
                 .collect { cats: List<CategoryEntity> ->
                     val mapped = cats.map { c ->
                         val emoji = c.emoji.takeIf { it.isNotBlank() }
-                        val name = c.name.ifBlank { "Category" }
-                        val label = if (emoji != null) "$emoji $name" else name
+                        val name = c.name.ifBlank { context.getString(R.string.categories_default_label) }
+                        val label = if (emoji != null) {
+                            context.getString(R.string.transaction_item_title, emoji, name)
+                        } else {
+                            name
+                        }
                         CategoryOptionUi(id = c.id, label = label)
                     }
 
@@ -75,7 +82,7 @@ class AddEditViewModel(
         viewModelScope.launch {
             val tx = transactionDao.getById(id)
             if (tx == null) {
-                _uiState.value = _uiState.value.copy(error = "Transaction not found")
+                _uiState.value = _uiState.value.copy(error = context.getString(R.string.transaction_not_found))
                 return@launch
             }
 
@@ -116,13 +123,13 @@ class AddEditViewModel(
 
         val cents = dollarsTextToCents(state.amountText)
         if (cents == null || cents <= 0L) {
-            _uiState.value = _uiState.value.copy(error = "Enter a valid amount (example: 100 or 100.50).")
+            _uiState.value = _uiState.value.copy(error = context.getString(R.string.transaction_error_invalid_amount))
             return
         }
 
         val catId = state.categoryId
         if (catId == null) {
-            _uiState.value = _uiState.value.copy(error = "Choose a category.")
+            _uiState.value = _uiState.value.copy(error = context.getString(R.string.transaction_error_choose_category))
             return
         }
 
@@ -146,7 +153,7 @@ class AddEditViewModel(
             } catch (t: Throwable) {
                 _uiState.value = _uiState.value.copy(
                     isSaving = false,
-                    error = t.message ?: "Save failed"
+                    error = t.message ?: context.getString(R.string.transaction_error_save_failed)
                 )
             }
         }
@@ -164,7 +171,7 @@ class AddEditViewModel(
             } catch (t: Throwable) {
                 _uiState.value = _uiState.value.copy(
                     isSaving = false,
-                    error = t.message ?: "Delete failed"
+                    error = t.message ?: context.getString(R.string.transaction_error_delete_failed)
                 )
             }
         }

@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import com.example.expensetracker.R
 import com.example.expensetracker.ui.design.Dimens
 import com.example.expensetracker.ui.design.AppShapes
 
@@ -28,7 +30,7 @@ fun TransactionItem(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column {
-                Text("$emoji $title", fontWeight = FontWeight.SemiBold)
+                Text(stringResource(R.string.transaction_item_title, emoji, title), fontWeight = FontWeight.SemiBold)
                 if (note.isNotBlank()) {
                     Text(note, style = MaterialTheme.typography.bodyMedium)
                 }

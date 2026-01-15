@@ -43,10 +43,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.expensetracker.R
 import com.example.expensetracker.data.db.DatabaseProvider
 import com.example.expensetracker.ui.viewmodel.AdvancedReportsViewModel
 import com.example.expensetracker.ui.viewmodel.AdvancedReportsViewModelFactory
@@ -84,7 +86,7 @@ fun AdvancedReportsScreen(
                     ) {
                         Icon(Icons.Outlined.Insights, contentDescription = null, tint = cs.primary)
                         Text(
-                            text = "Advanced Reports",
+                            text = stringResource(R.string.settings_advanced_reports_title),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             fontWeight = FontWeight.SemiBold
@@ -93,12 +95,12 @@ fun AdvancedReportsScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Outlined.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.Outlined.ArrowBack, contentDescription = stringResource(R.string.action_back))
                     }
                 },
                 actions = {
                     IconButton(onClick = { vm.refresh() }) {
-                        Icon(Icons.Outlined.Refresh, contentDescription = "Refresh")
+                        Icon(Icons.Outlined.Refresh, contentDescription = stringResource(R.string.action_refresh))
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
@@ -143,8 +145,8 @@ fun AdvancedReportsScreen(
 
             item {
                 SectionHeader(
-                    title = "Trend",
-                    subtitle = "Daily income vs expense",
+                    title = stringResource(R.string.advanced_reports_trend_title),
+                    subtitle = stringResource(R.string.advanced_reports_trend_subtitle),
                     border = border
                 )
             }
@@ -202,9 +204,9 @@ private fun RangeCard(
 
                 // NO Modifier.weight() here to avoid RowScope import issues across versions.
                 Column(Modifier.fillMaxWidth()) {
-                    Text("Range", fontWeight = FontWeight.SemiBold)
+                    Text(stringResource(R.string.advanced_reports_range_title), fontWeight = FontWeight.SemiBold)
                     Text(
-                        "${start}  →  ${end}",
+                        stringResource(R.string.advanced_reports_range_value, start, end),
                         style = MaterialTheme.typography.bodySmall,
                         color = cs.onSurfaceVariant
                     )
@@ -217,17 +219,17 @@ private fun RangeCard(
                 ElevatedFilterChip(
                     selected = false,
                     onClick = onRange7d,
-                    label = { Text("Last 7 days") }
+                    label = { Text(stringResource(R.string.advanced_reports_range_last_7)) }
                 )
                 ElevatedFilterChip(
                     selected = false,
                     onClick = onRange30d,
-                    label = { Text("Last 30 days") }
+                    label = { Text(stringResource(R.string.advanced_reports_range_last_30)) }
                 )
             }
 
             Text(
-                "Tip: add a custom date picker later for any range.",
+                stringResource(R.string.advanced_reports_range_tip),
                 style = MaterialTheme.typography.bodySmall,
                 color = cs.onSurfaceVariant
             )
@@ -252,19 +254,23 @@ private fun TotalsCard(
             Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Text("Totals", fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.advanced_reports_totals_title), fontWeight = FontWeight.SemiBold)
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                HalfWidthMetricPill(title = "Income", value = incomeCents.toString(), border = border)
-                HalfWidthMetricPill(title = "Expense", value = expenseCents.toString(), border = border)
+                HalfWidthMetricPill(title = stringResource(R.string.label_income), value = incomeCents.toString(), border = border)
+                HalfWidthMetricPill(title = stringResource(R.string.label_expense), value = expenseCents.toString(), border = border)
             }
 
             Divider(color = border)
 
-            val netLabel = if (netCents >= 0) "Net +" else "Net -"
+            val netLabel = if (netCents >= 0) {
+                stringResource(R.string.advanced_reports_net_positive)
+            } else {
+                stringResource(R.string.advanced_reports_net_negative)
+            }
             MetricPill(
                 title = netLabel,
                 value = abs(netCents).toString(),
@@ -342,8 +348,8 @@ private fun SectionHeader(
             Divider(color = border)
 
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                AssistChip(onClick = {}, label = { Text("Daily") })
-                AssistChip(onClick = {}, label = { Text("Income vs Expense") })
+                AssistChip(onClick = {}, label = { Text(stringResource(R.string.advanced_reports_chip_daily)) })
+                AssistChip(onClick = {}, label = { Text(stringResource(R.string.advanced_reports_chip_income_vs_expense)) })
             }
         }
     }
@@ -381,7 +387,7 @@ private fun TrendRow(
             ) {
                 Text(date, fontWeight = FontWeight.SemiBold)
                 Text(
-                    "Income $incomeCents • Expense $expenseCents",
+                    stringResource(R.string.advanced_reports_income_expense_row, incomeCents, expenseCents),
                     style = MaterialTheme.typography.bodySmall,
                     color = cs.onSurfaceVariant
                 )
@@ -396,7 +402,7 @@ private fun TrendRow(
                 modifier = Modifier.wrapContentWidth()
             ) {
                 Text(
-                    text = "Net $netText",
+                    text = stringResource(R.string.advanced_reports_net_value, netText),
                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
                     color = cs.primary,
                     style = MaterialTheme.typography.labelLarge,

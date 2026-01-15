@@ -15,10 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.expensetracker.R
 import com.example.expensetracker.ui.viewmodel.NotificationsViewModel
 import com.example.expensetracker.ui.viewmodel.NotificationsViewModelFactory
 
@@ -39,10 +41,16 @@ fun NotificationsScreen(onBack: () -> Unit) {
         containerColor = Color.Transparent,
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Notifications", fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface) },
+                title = {
+                    Text(
+                        stringResource(R.string.nav_notifications),
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Outlined.ArrowBack, contentDescription = "Back", tint = textPrimary)
+                        Icon(Icons.Outlined.ArrowBack, contentDescription = stringResource(R.string.action_back), tint = textPrimary)
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.Transparent)
@@ -63,8 +71,16 @@ fun NotificationsScreen(onBack: () -> Unit) {
                     Icon(Icons.Outlined.Notifications, contentDescription = null, tint = accent)
                     Spacer(Modifier.width(12.dp))
                     Column(Modifier.weight(1f)) {
-                        Text("Enable notifications", fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface)
-                        Text("Controls all notification types.", color = textSecondary, style = MaterialTheme.typography.bodySmall)
+                        Text(
+                            stringResource(R.string.notifications_enable_title),
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Text(
+                            stringResource(R.string.notifications_enable_subtitle),
+                            color = textSecondary,
+                            style = MaterialTheme.typography.bodySmall
+                        )
                     }
                     Switch(
                         checked = prefs.enabled,
@@ -79,8 +95,16 @@ fun NotificationsScreen(onBack: () -> Unit) {
 
             SoftCard(border = border) {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Text("Reminder time", fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface)
-                    Text("When we should remind you.", color = textSecondary, style = MaterialTheme.typography.bodySmall)
+                    Text(
+                        stringResource(R.string.notifications_reminder_time_title),
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        stringResource(R.string.notifications_reminder_time_subtitle),
+                        color = textSecondary,
+                        style = MaterialTheme.typography.bodySmall
+                    )
 
                     TimePickRow(
                         enabled = prefs.enabled,
@@ -96,11 +120,11 @@ fun NotificationsScreen(onBack: () -> Unit) {
 
             SoftCard(border = border) {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Text("Types", fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface)
+                    Text(stringResource(R.string.notifications_types_title), fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface)
 
                     ToggleRow(
-                        title = "Daily reminder",
-                        subtitle = "Quick nudge to log transactions.",
+                        title = stringResource(R.string.notifications_daily_title),
+                        subtitle = stringResource(R.string.notifications_daily_subtitle),
                         checked = prefs.dailyReminder,
                         enabled = prefs.enabled,
                         onCheckedChange = vm::setDailyReminder,
@@ -112,8 +136,8 @@ fun NotificationsScreen(onBack: () -> Unit) {
                     Divider(color = border)
 
                     ToggleRow(
-                        title = "Budget alerts",
-                        subtitle = "Warn when you overspend (set thresholds later).",
+                        title = stringResource(R.string.notifications_budget_title),
+                        subtitle = stringResource(R.string.notifications_budget_subtitle),
                         checked = prefs.budgetAlerts,
                         enabled = prefs.enabled,
                         onCheckedChange = vm::setBudgetAlerts,
@@ -200,7 +224,7 @@ private fun TimePickRow(
                 onValueChange = {},
                 readOnly = true,
                 enabled = enabled,
-                label = { Text("Hour") },
+                label = { Text(stringResource(R.string.notifications_hour_label)) },
                 modifier = Modifier.weight(1f).menuAnchor(),
                 shape = RoundedCornerShape(18.dp)
             )
@@ -226,7 +250,7 @@ private fun TimePickRow(
                 onValueChange = {},
                 readOnly = true,
                 enabled = enabled,
-                label = { Text("Min") },
+                label = { Text(stringResource(R.string.notifications_min_label)) },
                 modifier = Modifier.weight(1f).menuAnchor(),
                 shape = RoundedCornerShape(18.dp)
             )

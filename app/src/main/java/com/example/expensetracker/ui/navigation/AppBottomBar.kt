@@ -33,6 +33,8 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.compose.material3.Text
+import androidx.compose.ui.res.stringResource
+import com.example.expensetracker.R
 
 private data class BottomBarItem(
     val route: String,
@@ -43,12 +45,12 @@ private data class BottomBarItem(
 @Composable
 fun AppBottomBar(navController: NavController) {
     val items = listOf(
-        BottomBarItem(Routes.HOME, "Home", Icons.Filled.Home),
-        BottomBarItem(Routes.BUDGETS, "Budgets", Icons.Filled.AccountBalanceWallet),
-        BottomBarItem(Routes.REPORTS, "Reports", Icons.Filled.BarChart),
-        BottomBarItem(Routes.CATEGORIES, "Categories", Icons.Filled.Category),
-        BottomBarItem(Routes.SETTINGS, "Settings", Icons.Filled.Settings),
-        BottomBarItem(Routes.RECURRING, "Recurring", Icons.Filled.Autorenew)
+        BottomBarItem(Routes.HOME, stringResource(R.string.nav_home), Icons.Filled.Home),
+        BottomBarItem(Routes.BUDGETS, stringResource(R.string.nav_budgets), Icons.Filled.AccountBalanceWallet),
+        BottomBarItem(Routes.REPORTS, stringResource(R.string.nav_reports), Icons.Filled.BarChart),
+        BottomBarItem(Routes.CATEGORIES, stringResource(R.string.nav_categories), Icons.Filled.Category),
+        BottomBarItem(Routes.SETTINGS, stringResource(R.string.nav_settings), Icons.Filled.Settings),
+        BottomBarItem(Routes.RECURRING, stringResource(R.string.nav_recurring), Icons.Filled.Autorenew)
     )
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()

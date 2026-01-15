@@ -6,8 +6,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.expensetracker.R
 import com.example.expensetracker.data.prefs.ProManager
 import com.example.expensetracker.data.repo.SettingsRepository
 import com.example.expensetracker.ui.viewmodel.ProViewModel
@@ -32,9 +34,9 @@ fun ProScreen(onBack: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Pro") },
+                title = { Text(stringResource(R.string.settings_pro_title)) },
                 navigationIcon = {
-                    TextButton(onClick = onBack) { Text("Back") }
+                    TextButton(onClick = onBack) { Text(stringResource(R.string.action_back)) }
                 }
             )
         }
@@ -48,7 +50,7 @@ fun ProScreen(onBack: () -> Unit) {
             horizontalAlignment = Alignment.Start
         ) {
             Text(
-                text = "Enable Pro to unlock premium features.",
+                text = stringResource(R.string.pro_screen_description),
                 style = MaterialTheme.typography.bodyLarge
             )
 
@@ -60,7 +62,13 @@ fun ProScreen(onBack: () -> Unit) {
                     checked = isPro,
                     onCheckedChange = { vm.setPro(it) }
                 )
-                Text(if (isPro) "Pro is enabled" else "Pro is disabled")
+                Text(
+                    if (isPro) {
+                        stringResource(R.string.pro_screen_enabled)
+                    } else {
+                        stringResource(R.string.pro_screen_disabled)
+                    }
+                )
             }
         }
     }

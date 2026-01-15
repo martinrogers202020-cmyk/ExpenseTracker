@@ -59,6 +59,7 @@ dependencies {
 
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.activity:activity-compose:1.9.2")
+    implementation("androidx.appcompat:appcompat:1.7.0")
 
     // ✅ Use ONE Compose BOM version
     implementation(platform("androidx.compose:compose-bom:2024.10.00"))

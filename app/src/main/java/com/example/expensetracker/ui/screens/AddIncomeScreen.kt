@@ -18,11 +18,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.expensetracker.R
 import com.example.expensetracker.data.model.CategoryEntity
 import com.example.expensetracker.ui.viewmodel.AddTransactionViewModel
 import com.example.expensetracker.ui.viewmodel.AddTransactionViewModelFactory
@@ -38,7 +40,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 @Composable
 fun AddIncomeScreen(onBack: () -> Unit) {
     AddTransactionScreen(
-        screenTitle = "Add Income",
+        screenTitle = stringResource(R.string.income_add_title),
         isIncome = true,
         onBack = onBack
     )
@@ -48,7 +50,7 @@ fun AddIncomeScreen(onBack: () -> Unit) {
 @Composable
 fun AddExpenseScreen(onBack: () -> Unit) {
     AddTransactionScreen(
-        screenTitle = "Add Expense",
+        screenTitle = stringResource(R.string.expense_add_title),
         isIncome = false,
         onBack = onBack
     )
@@ -98,7 +100,7 @@ private fun AddTransactionScreen(
                 title = { Text(screenTitle, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Outlined.ArrowBack, contentDescription = "Back", tint = textPrimary)
+                        Icon(Icons.Outlined.ArrowBack, contentDescription = stringResource(R.string.action_back), tint = textPrimary)
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.surface)
@@ -115,7 +117,7 @@ private fun AddTransactionScreen(
             error?.let { Text(it, color = MaterialTheme.colorScheme.error) }
 
             RoundedField(
-                label = "Amount",
+                label = stringResource(R.string.label_amount),
                 value = amount,
                 onValueChange = { amount = it },
                 bg = fieldBg,
@@ -123,7 +125,7 @@ private fun AddTransactionScreen(
             )
 
             SimpleDropdownField(
-                label = "Date",
+                label = stringResource(R.string.label_date),
                 bg = fieldBg,
                 valueText = date,
                 options = remember { (0..31).map { LocalDate.now().minusDays(it.toLong()).toString() } },
@@ -132,20 +134,20 @@ private fun AddTransactionScreen(
             )
 
             SimpleDropdownField(
-                label = "Category",
+                label = stringResource(R.string.label_category),
                 bg = fieldBg,
-                valueText = categories.firstOrNull { it.id == categoryId }?.name ?: "Select",
+                valueText = categories.firstOrNull { it.id == categoryId }?.name ?: stringResource(R.string.action_select),
                 options = categories,
                 optionText = { c: CategoryEntity -> c.name },
                 onPick = { picked: CategoryEntity -> categoryId = picked.id },
             )
             Text(
-                text = "Categories loaded: ${categories.size}",
+                text = stringResource(R.string.add_transaction_categories_loaded, categories.size),
                 color = Color.Red
             )
 
             RoundedField(
-                label = "Notes",
+                label = stringResource(R.string.label_notes),
                 value = notes,
                 onValueChange = { notes = it },
                 bg = fieldBg,
@@ -154,7 +156,7 @@ private fun AddTransactionScreen(
             )
 
             AttachmentRow(
-                label = "Add attachment",
+                label = stringResource(R.string.add_transaction_attachment_label),
                 value = attachmentUri,
                 onPick = { attachmentPicker.launch("*/*") },
                 bg = fieldBg,
@@ -192,7 +194,11 @@ private fun AddTransactionScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = if (saving) "Saving..." else "Save",
+                        text = if (saving) {
+                            stringResource(R.string.transaction_saving)
+                        } else {
+                            stringResource(R.string.action_save)
+                        },
                         color = MaterialTheme.colorScheme.surface,
                         fontWeight = FontWeight.SemiBold
                     )
@@ -254,7 +260,7 @@ private fun AttachmentRow(
             Column(Modifier.weight(1f)) {
                 Text(label, fontWeight = FontWeight.SemiBold)
                 Text(
-                    text = value ?: "Tap to choose a file",
+                    text = value ?: stringResource(R.string.add_transaction_attachment_hint),
                     color = textSecondary,
                     style = MaterialTheme.typography.bodySmall
                 )

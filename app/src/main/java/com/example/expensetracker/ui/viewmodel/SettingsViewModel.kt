@@ -25,7 +25,8 @@ class SettingsViewModel(
                 accentChoice = AccentChoice.PURPLE,
                 fontScale = 1.0f,
                 compactSpacing = false,
-                proEnabled = false
+                proEnabled = false,
+                languageTag = "en"
             )
         )
 
@@ -35,4 +36,5 @@ class SettingsViewModel(
     fun setFontScale(value: Float) = viewModelScope.launch { repo.setFontScale(value) }
     fun setCompactSpacing(value: Boolean) = viewModelScope.launch { repo.setCompactSpacing(value) }
     fun setProEnabled(value: Boolean) = viewModelScope.launch { repo.setProEnabled(value) }
+    fun setLanguageTag(value: String) = viewModelScope.launch { repo.setLanguageTag(value) }
 }

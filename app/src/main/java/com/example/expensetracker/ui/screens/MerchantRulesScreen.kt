@@ -16,11 +16,13 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.expensetracker.R
 import com.example.expensetracker.data.db.DatabaseProvider
 import com.example.expensetracker.data.model.CategoryEntity
 import com.example.expensetracker.data.model.MerchantRuleEntity
@@ -69,12 +71,12 @@ fun MerchantRulesScreen(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(Icons.Outlined.Rule, contentDescription = null)
                         Spacer(Modifier.width(8.dp))
-                        Text("Merchant Rules", fontWeight = FontWeight.SemiBold)
+                        Text(stringResource(R.string.merchant_rules_title), fontWeight = FontWeight.SemiBold)
                     }
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Outlined.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.Outlined.ArrowBack, contentDescription = stringResource(R.string.action_back))
                     }
                 }
             )
@@ -84,7 +86,7 @@ fun MerchantRulesScreen(
                 editingRuleId = null
                 showEditor = true
             }) {
-                Icon(Icons.Outlined.Add, contentDescription = "Add")
+                Icon(Icons.Outlined.Add, contentDescription = stringResource(R.string.action_add))
             }
         }
     ) { padding ->
@@ -99,7 +101,7 @@ fun MerchantRulesScreen(
             OutlinedTextField(
                 value = search,
                 onValueChange = { search = it },
-                label = { Text("Search") },
+                label = { Text(stringResource(R.string.action_search)) },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -110,9 +112,9 @@ fun MerchantRulesScreen(
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
             ) {
                 Column(Modifier.padding(14.dp)) {
-                    Text("Tip", fontWeight = FontWeight.SemiBold)
+                    Text(stringResource(R.string.merchant_rules_tip_title), fontWeight = FontWeight.SemiBold)
                     Text(
-                        "You can create rules to auto-map merchants to categories (used during CSV import).",
+                        stringResource(R.string.merchant_rules_tip_body),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -160,7 +162,8 @@ private fun RuleCard(
     onDelete: () -> Unit
 ) {
     val border = MaterialTheme.colorScheme.outlineVariant
-    val categoryName = categories.firstOrNull { it.id == rule.categoryId }?.name ?: "Unknown"
+    val categoryName = categories.firstOrNull { it.id == rule.categoryId }?.name
+        ?: stringResource(R.string.merchant_rules_unknown_category)
 
     Surface(
         modifier = Modifier.fillMaxWidth(),
@@ -178,7 +181,12 @@ private fun RuleCard(
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        "${rule.matchType} • $categoryName • priority ${rule.priority}",
+                        stringResource(
+                            R.string.merchant_rules_summary,
+                            matchTypeLabel(rule.matchType),
+                            categoryName,
+                            rule.priority
+                        ),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1,
@@ -196,12 +204,12 @@ private fun RuleCard(
                 OutlinedButton(onClick = onEdit, modifier = Modifier.weight(1f)) {
                     Icon(Icons.Outlined.Edit, contentDescription = null)
                     Spacer(Modifier.width(8.dp))
-                    Text("Edit")
+                    Text(stringResource(R.string.action_edit))
                 }
                 OutlinedButton(onClick = onDelete, modifier = Modifier.weight(1f)) {
                     Icon(Icons.Outlined.Delete, contentDescription = null)
                     Spacer(Modifier.width(8.dp))
-                    Text("Delete")
+                    Text(stringResource(R.string.action_delete))
                 }
             }
         }
@@ -216,27 +224,41 @@ private fun RuleEditorDialog(
     onDismiss: () -> Unit,
     onSave: (MerchantRuleEntity) -> Unit
 ) {
-    val matchTypes = listOf("CONTAINS", "STARTS_WITH", "REGEX")
+    val matchTypes = listOf(
+        MatchTypeOption("CONTAINS", stringResource(R.string.merchant_rules_match_contains)),
+        MatchTypeOption("STARTS_WITH", stringResource(R.string.merchant_rules_match_starts_with)),
+        MatchTypeOption("REGEX", stringResource(R.string.merchant_rules_match_regex))
+    )
 
     var pattern by rememberSaveable { mutableStateOf(initial?.pattern ?: "") }
     var enabled by rememberSaveable { mutableStateOf(initial?.enabled ?: true) }
     var priorityText by rememberSaveable { mutableStateOf((initial?.priority ?: 0).toString()) }
 
-    var matchType by rememberSaveable { mutableStateOf((initial?.matchType ?: "CONTAINS").uppercase(Locale.ROOT)) }
+    var matchType by rememberSaveable {
+        mutableStateOf((initial?.matchType ?: "CONTAINS").uppercase(Locale.ROOT))
+    }
     var selectedCategoryId by rememberSaveable {
         mutableStateOf(initial?.categoryId ?: categories.firstOrNull()?.id ?: 0L)
     }
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(if (initial == null) "Add rule" else "Edit rule") },
+        title = {
+            Text(
+                if (initial == null) {
+                    stringResource(R.string.merchant_rules_add_title)
+                } else {
+                    stringResource(R.string.merchant_rules_edit_title)
+                }
+            )
+        },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
 
                 OutlinedTextField(
                     value = pattern,
                     onValueChange = { pattern = it },
-                    label = { Text("Pattern (e.g. amazon)") },
+                    label = { Text(stringResource(R.string.merchant_rules_pattern_label)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -248,10 +270,10 @@ private fun RuleEditorDialog(
                     onExpandedChange = { mtExpanded = !mtExpanded }
                 ) {
                     OutlinedTextField(
-                        value = matchType,
+                        value = matchTypeLabel(matchType),
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text("Match type") },
+                        label = { Text(stringResource(R.string.merchant_rules_match_type_label)) },
                         modifier = Modifier
                             .menuAnchor()
                             .fillMaxWidth()
@@ -260,11 +282,11 @@ private fun RuleEditorDialog(
                         expanded = mtExpanded,
                         onDismissRequest = { mtExpanded = false }
                     ) {
-                        matchTypes.forEach { t ->
+                        matchTypes.forEach { option ->
                             DropdownMenuItem(
-                                text = { Text(t) },
+                                text = { Text(option.label) },
                                 onClick = {
-                                    matchType = t
+                                    matchType = option.value
                                     mtExpanded = false
                                 }
                             )
@@ -274,7 +296,9 @@ private fun RuleEditorDialog(
 
                 // Category dropdown
                 var catExpanded by remember { mutableStateOf(false) }
-                val selectedName = categories.firstOrNull { it.id == selectedCategoryId }?.let { "${it.emoji} ${it.name}" } ?: "Select"
+                val selectedName = categories.firstOrNull { it.id == selectedCategoryId }
+                    ?.let { "${it.emoji} ${it.name}" }
+                    ?: stringResource(R.string.action_select)
 
                 ExposedDropdownMenuBox(
                     expanded = catExpanded,
@@ -284,7 +308,7 @@ private fun RuleEditorDialog(
                         value = selectedName,
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text("Category") },
+                        label = { Text(stringResource(R.string.label_category)) },
                         modifier = Modifier
                             .menuAnchor()
                             .fillMaxWidth()
@@ -308,13 +332,13 @@ private fun RuleEditorDialog(
                 OutlinedTextField(
                     value = priorityText,
                     onValueChange = { priorityText = it },
-                    label = { Text("Priority (higher wins)") },
+                    label = { Text(stringResource(R.string.merchant_rules_priority_label)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("Enabled", modifier = Modifier.weight(1f))
+                    Text(stringResource(R.string.merchant_rules_enabled_label), modifier = Modifier.weight(1f))
                     Switch(checked = enabled, onCheckedChange = { enabled = it })
                 }
             }
@@ -336,10 +360,24 @@ private fun RuleEditorDialog(
                         createdAtEpochMs = initial?.createdAtEpochMs ?: System.currentTimeMillis()
                     )
                 )
-            }) { Text("Save") }
+            }) { Text(stringResource(R.string.action_save)) }
         },
         dismissButton = {
-            OutlinedButton(onClick = onDismiss) { Text("Cancel") }
+            OutlinedButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) }
         }
     )
 }
+
+private data class MatchTypeOption(
+    val value: String,
+    val label: String
+)
+
+@Composable
+private fun matchTypeLabel(value: String): String =
+    when (value.uppercase(Locale.ROOT)) {
+        "CONTAINS" -> stringResource(R.string.merchant_rules_match_contains)
+        "STARTS_WITH" -> stringResource(R.string.merchant_rules_match_starts_with)
+        "REGEX" -> stringResource(R.string.merchant_rules_match_regex)
+        else -> value
+    }

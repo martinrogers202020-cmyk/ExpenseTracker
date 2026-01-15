@@ -31,6 +31,7 @@ import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material.icons.outlined.ShowChart
+import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.material.icons.outlined.UploadFile
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
@@ -57,11 +58,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.expensetracker.R
 import com.example.expensetracker.data.datastore.ThemeMode
 import com.example.expensetracker.ui.viewmodel.SettingsViewModel
 import com.example.expensetracker.ui.viewmodel.SettingsViewModelFactory
@@ -107,13 +110,13 @@ fun SettingsScreen(
                     IconButton(onClick = onBack) {
                         Icon(
                             imageVector = Icons.Outlined.ArrowBack,
-                            contentDescription = "Back",
+                            contentDescription = stringResource(R.string.action_back),
                             tint = textPrimary
                         )
                     }
                     Spacer(Modifier.width(6.dp))
                     Text(
-                        text = "Settings",
+                        text = stringResource(R.string.settings_title),
                         fontWeight = FontWeight.Bold,
                         color = textPrimary,
                         style = MaterialTheme.typography.titleLarge
@@ -132,7 +135,7 @@ fun SettingsScreen(
             bottomPadding = 110.dp
         ) {
 
-            item { SectionHeader("Pro Mode", textPrimary) }
+            item { SectionHeader(stringResource(R.string.settings_section_pro_mode), textPrimary) }
 
             item {
                 ProCard(
@@ -143,13 +146,13 @@ fun SettingsScreen(
                 )
             }
 
-            item { SectionHeader("Preferences", textPrimary) }
+            item { SectionHeader(stringResource(R.string.settings_section_preferences), textPrimary) }
 
             item {
                 SettingsItem(
                     icon = { Icon(Icons.Outlined.Notifications, contentDescription = null, tint = accent) },
-                    title = "Notifications",
-                    subtitle = "Daily reminder & budget alerts",
+                    title = stringResource(R.string.nav_notifications),
+                    subtitle = stringResource(R.string.settings_notifications_subtitle),
                     borderColor = border,
                     textPrimary = textPrimary,
                     textSecondary = textSecondary,
@@ -162,8 +165,8 @@ fun SettingsScreen(
             item {
                 SettingsItem(
                     icon = { Icon(Icons.Outlined.Cloud, contentDescription = null, tint = accent) },
-                    title = "Backup & restore",
-                    subtitle = "Export / import using Drive or files",
+                    title = stringResource(R.string.settings_backup_restore_title),
+                    subtitle = stringResource(R.string.settings_backup_restore_subtitle),
                     borderColor = border,
                     textPrimary = textPrimary,
                     textSecondary = textSecondary,
@@ -176,8 +179,8 @@ fun SettingsScreen(
             item {
                 SettingsItem(
                     icon = { Icon(Icons.Outlined.ShowChart, contentDescription = null, tint = accent) },
-                    title = "Advanced reports",
-                    subtitle = "Custom ranges + trends",
+                    title = stringResource(R.string.settings_advanced_reports_title),
+                    subtitle = stringResource(R.string.settings_advanced_reports_subtitle),
                     borderColor = border,
                     textPrimary = textPrimary,
                     textSecondary = textSecondary,
@@ -190,8 +193,8 @@ fun SettingsScreen(
             item {
                 SettingsItem(
                     icon = { Icon(Icons.Outlined.UploadFile, contentDescription = null, tint = accent) },
-                    title = "Import bank CSV",
-                    subtitle = "Add withdrawals & deposits from a CSV file",
+                    title = stringResource(R.string.settings_import_csv_title),
+                    subtitle = stringResource(R.string.settings_import_csv_subtitle),
                     borderColor = border,
                     textPrimary = textPrimary,
                     textSecondary = textSecondary,
@@ -216,7 +219,20 @@ fun SettingsScreen(
                 )
             }
 
-            item { SectionHeader("Security", textPrimary) }
+            item {
+                LanguageItem(
+                    languageTag = prefs.languageTag,
+                    onLanguageChange = vm::setLanguageTag,
+                    accent = accent,
+                    borderColor = border,
+                    textPrimary = textPrimary,
+                    textSecondary = textSecondary,
+                    container = cs.surface,
+                    pill = cs.surfaceVariant
+                )
+            }
+
+            item { SectionHeader(stringResource(R.string.settings_section_security), textPrimary) }
 
             item {
                 SoftCard(border = border) {
@@ -227,16 +243,20 @@ fun SettingsScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             SecurityBadge(
-                                text = "Good",
+                                text = stringResource(R.string.settings_security_good),
                                 accent = accent,
                                 borderColor = border,
                                 textPrimary = textPrimary
                             )
                             Spacer(Modifier.width(10.dp))
                             Column(Modifier.weight(1f)) {
-                                Text("Security status", fontWeight = FontWeight.SemiBold, color = textPrimary)
                                 Text(
-                                    "Your data stays on device. Add protection features below.",
+                                    stringResource(R.string.settings_security_status_title),
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = textPrimary
+                                )
+                                Text(
+                                    stringResource(R.string.settings_security_status_subtitle),
                                     color = textSecondary,
                                     style = MaterialTheme.typography.bodySmall
                                 )
@@ -247,9 +267,9 @@ fun SettingsScreen(
 
                         SecurityActionRow(
                             icon = { Icon(Icons.Outlined.Security, contentDescription = null, tint = accent) },
-                            title = "Local data only",
-                            subtitle = "Transactions are stored on this device.",
-                            trailingText = "On",
+                            title = stringResource(R.string.settings_security_local_title),
+                            subtitle = stringResource(R.string.settings_security_local_subtitle),
+                            trailingText = stringResource(R.string.settings_security_on),
                             borderColor = border,
                             textPrimary = textPrimary,
                             textSecondary = textSecondary,
@@ -261,8 +281,8 @@ fun SettingsScreen(
                         var appLockEnabled by rememberSaveable { mutableStateOf(false) }
                         SecurityToggleRow(
                             icon = { Icon(Icons.Outlined.Lock, contentDescription = null, tint = accent) },
-                            title = "App lock",
-                            subtitle = "Require authentication to open the app.",
+                            title = stringResource(R.string.settings_security_app_lock_title),
+                            subtitle = stringResource(R.string.settings_security_app_lock_subtitle),
                             checked = appLockEnabled,
                             onCheckedChange = { appLockEnabled = it },
                             accent = accent,
@@ -274,13 +294,17 @@ fun SettingsScreen(
                         AnimatedVisibility(visible = appLockEnabled) {
                             SecurityMiniCard(border = border) {
                                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                                    Text("Lock method", fontWeight = FontWeight.SemiBold, color = textPrimary)
+                                    Text(
+                                        stringResource(R.string.settings_security_lock_method_title),
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = textPrimary
+                                    )
                                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                        AssistChip(onClick = { }, label = { Text("Biometric") })
-                                        AssistChip(onClick = { }, label = { Text("PIN") })
+                                        AssistChip(onClick = { }, label = { Text(stringResource(R.string.settings_security_biometric)) })
+                                        AssistChip(onClick = { }, label = { Text(stringResource(R.string.settings_security_pin)) })
                                     }
                                     Text(
-                                        "Wire later using BiometricPrompt / PIN screen.",
+                                        stringResource(R.string.settings_security_lock_method_hint),
                                         color = textSecondary,
                                         style = MaterialTheme.typography.bodySmall
                                     )
@@ -292,9 +316,9 @@ fun SettingsScreen(
 
                         SecurityActionRow(
                             icon = { Icon(Icons.Outlined.Info, contentDescription = null, tint = accent) },
-                            title = "Privacy & permissions",
-                            subtitle = "Review what the app can access.",
-                            trailingText = "View",
+                            title = stringResource(R.string.settings_security_privacy_title),
+                            subtitle = stringResource(R.string.settings_security_privacy_subtitle),
+                            trailingText = stringResource(R.string.action_view),
                             borderColor = border,
                             textPrimary = textPrimary,
                             textSecondary = textSecondary,
@@ -304,13 +328,13 @@ fun SettingsScreen(
                 }
             }
 
-            item { SectionHeader("About", textPrimary) }
+            item { SectionHeader(stringResource(R.string.settings_section_about), textPrimary) }
 
             item {
                 SettingsItem(
                     icon = { Icon(Icons.Outlined.Info, contentDescription = null, tint = accent) },
-                    title = "Version",
-                    subtitle = "1.0.0",
+                    title = stringResource(R.string.settings_version_title),
+                    subtitle = stringResource(R.string.settings_version_value),
                     borderColor = border,
                     textPrimary = textPrimary,
                     textSecondary = textSecondary,
@@ -344,17 +368,20 @@ private fun AppearanceItem(
     val subtitle = buildString {
         append(
             when (prefsThemeMode) {
-                ThemeMode.SYSTEM -> "System default"
-                ThemeMode.LIGHT -> "Light"
-                ThemeMode.DARK -> "Dark"
+                ThemeMode.SYSTEM -> stringResource(R.string.theme_system_default)
+                ThemeMode.LIGHT -> stringResource(R.string.theme_light)
+                ThemeMode.DARK -> stringResource(R.string.theme_dark)
             }
         )
-        if (prefsDynamicColor) append(" • Dynamic")
+        if (prefsDynamicColor) {
+            append(" • ")
+            append(stringResource(R.string.settings_dynamic_label))
+        }
     }
 
     SettingsItem(
         icon = { Icon(Icons.Outlined.Palette, contentDescription = null, tint = accent) },
-        title = "Appearance",
+        title = stringResource(R.string.settings_appearance_title),
         subtitle = subtitle,
         borderColor = borderColor,
         textPrimary = textPrimary,
@@ -375,23 +402,23 @@ private fun AppearanceItem(
         SoftCard(border = borderColor) {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
 
-                Text("Theme", fontWeight = FontWeight.SemiBold, color = textPrimary)
+                Text(stringResource(R.string.settings_theme_title), fontWeight = FontWeight.SemiBold, color = textPrimary)
 
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     FilterChip(
                         selected = prefsThemeMode == ThemeMode.SYSTEM,
                         onClick = { onThemeMode(ThemeMode.SYSTEM) },
-                        label = { Text("System") }
+                        label = { Text(stringResource(R.string.theme_system)) }
                     )
                     FilterChip(
                         selected = prefsThemeMode == ThemeMode.LIGHT,
                         onClick = { onThemeMode(ThemeMode.LIGHT) },
-                        label = { Text("Light") }
+                        label = { Text(stringResource(R.string.theme_light)) }
                     )
                     FilterChip(
                         selected = prefsThemeMode == ThemeMode.DARK,
                         onClick = { onThemeMode(ThemeMode.DARK) },
-                        label = { Text("Dark") }
+                        label = { Text(stringResource(R.string.theme_dark)) }
                     )
                 }
 
@@ -402,9 +429,13 @@ private fun AppearanceItem(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(Modifier.weight(1f)) {
-                        Text("Dynamic colors", fontWeight = FontWeight.SemiBold, color = textPrimary)
                         Text(
-                            "Uses system colors (Android 12+)",
+                            stringResource(R.string.settings_dynamic_colors_title),
+                            fontWeight = FontWeight.SemiBold,
+                            color = textPrimary
+                        )
+                        Text(
+                            stringResource(R.string.settings_dynamic_colors_subtitle),
                             color = textSecondary,
                             style = MaterialTheme.typography.bodySmall
                         )
@@ -421,6 +452,81 @@ private fun AppearanceItem(
                         )
                     )
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun LanguageItem(
+    languageTag: String,
+    onLanguageChange: (String) -> Unit,
+    accent: Color,
+    borderColor: Color,
+    textPrimary: Color,
+    textSecondary: Color,
+    container: Color,
+    pill: Color
+) {
+    var expanded by rememberSaveable { mutableStateOf(false) }
+
+    val currentLanguage = when (languageTag) {
+        "tr" -> stringResource(R.string.language_turkish)
+        else -> stringResource(R.string.language_english)
+    }
+
+    SettingsItem(
+        icon = { Icon(Icons.Outlined.Translate, contentDescription = null, tint = accent) },
+        title = stringResource(R.string.settings_language_title),
+        subtitle = currentLanguage,
+        borderColor = borderColor,
+        textPrimary = textPrimary,
+        textSecondary = textSecondary,
+        container = container,
+        pill = pill,
+        trailing = {
+            Icon(
+                imageVector = if (expanded) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore,
+                contentDescription = null,
+                tint = textSecondary
+            )
+        },
+        onClick = { expanded = !expanded }
+    )
+
+    AnimatedVisibility(visible = expanded) {
+        SoftCard(border = borderColor) {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Text(
+                    text = stringResource(R.string.settings_language_picker_title),
+                    fontWeight = FontWeight.SemiBold,
+                    color = textPrimary
+                )
+
+                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    FilterChip(
+                        selected = languageTag == "en",
+                        onClick = {
+                            onLanguageChange("en")
+                            expanded = false
+                        },
+                        label = { Text(stringResource(R.string.language_english)) }
+                    )
+                    FilterChip(
+                        selected = languageTag == "tr",
+                        onClick = {
+                            onLanguageChange("tr")
+                            expanded = false
+                        },
+                        label = { Text(stringResource(R.string.language_turkish)) }
+                    )
+                }
+
+                Text(
+                    text = stringResource(R.string.settings_language_picker_hint),
+                    color = textSecondary,
+                    style = MaterialTheme.typography.bodySmall
+                )
             }
         }
     }
@@ -523,14 +629,18 @@ private fun ProCard(
             Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                 Column(Modifier.weight(1f)) {
                     Text(
-                        "Pro",
+                        stringResource(R.string.settings_pro_title),
                         fontWeight = FontWeight.SemiBold,
                         color = cs.onSurface,
                         style = MaterialTheme.typography.titleMedium
                     )
                     Spacer(Modifier.height(2.dp))
                     Text(
-                        if (proEnabled) "Active" else "Not active",
+                        if (proEnabled) {
+                            stringResource(R.string.settings_pro_active)
+                        } else {
+                            stringResource(R.string.settings_pro_not_active)
+                        },
                         color = cs.onSurfaceVariant,
                         style = MaterialTheme.typography.bodySmall
                     )
@@ -551,11 +661,11 @@ private fun ProCard(
             Divider(color = border)
 
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                ProFeatureRow("Advanced Reports (custom ranges, trends)")
-                ProFeatureRow("Budgets + alerts (category limits)")
-                ProFeatureRow("Export CSV / PDF statements")
-                ProFeatureRow("Recurring transactions")
-                ProFeatureRow("Backup & restore (Drive / cloud)")
+                ProFeatureRow(stringResource(R.string.settings_pro_feature_reports))
+                ProFeatureRow(stringResource(R.string.settings_pro_feature_budgets))
+                ProFeatureRow(stringResource(R.string.settings_pro_feature_export))
+                ProFeatureRow(stringResource(R.string.settings_pro_feature_recurring))
+                ProFeatureRow(stringResource(R.string.settings_pro_feature_backup))
             }
 
             Divider(color = border)
@@ -565,16 +675,24 @@ private fun ProCard(
                     onClick = onUpgradeClick,
                     modifier = Modifier.weight(1f),
                     enabled = !proEnabled
-                ) { Text(if (proEnabled) "Pro active" else "Upgrade") }
+                ) {
+                    Text(
+                        if (proEnabled) {
+                            stringResource(R.string.settings_pro_active_cta)
+                        } else {
+                            stringResource(R.string.action_upgrade)
+                        }
+                    )
+                }
 
                 OutlinedButton(
                     onClick = onRestoreClick,
                     modifier = Modifier.weight(1f)
-                ) { Text("Restore") }
+                ) { Text(stringResource(R.string.action_restore)) }
             }
 
             Text(
-                "Replace the toggle with Google Play Billing later.",
+                stringResource(R.string.settings_pro_footer),
                 color = cs.onSurfaceVariant,
                 style = MaterialTheme.typography.bodySmall
             )
@@ -592,7 +710,7 @@ private fun ProFeatureRow(text: String) {
             border = BorderStroke(1.dp, cs.outlineVariant)
         ) {
             Text(
-                "✓",
+                stringResource(R.string.settings_pro_checkmark),
                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
                 color = cs.primary,
                 fontWeight = FontWeight.Bold,
