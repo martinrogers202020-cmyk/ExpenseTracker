@@ -52,6 +52,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.expensetracker.R
 import com.example.expensetracker.data.db.DatabaseProvider
+import com.example.expensetracker.data.importer.DecimalSeparator
 import com.example.expensetracker.ui.viewmodel.CsvImportViewModel
 import com.example.expensetracker.ui.viewmodel.CsvImportViewModelFactory
 import com.example.expensetracker.util.Formatters
@@ -135,14 +136,19 @@ fun CsvImportScreen(
                                     "text/csv",
                                     "text/comma-separated-values",
                                     "application/vnd.ms-excel",
-                                    "text/plain"
+                                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                                    "application/pdf",
+                                    "application/x-ofx",
+                                    "application/x-qfx",
+                                    "text/plain",
+                                    "*/*"
                                 )
                             )
                         }
                     ) {
                         Icon(Icons.Outlined.FileOpen, contentDescription = null)
                         Spacer(Modifier.width(8.dp))
-                        Text(stringResource(R.string.csv_import_choose_csv))
+                        Text(stringResource(R.string.import_choose_statement))
                     }
 
                     val pickedName = s.pickedName
@@ -150,6 +156,14 @@ fun CsvImportScreen(
                         Text(
                             stringResource(R.string.csv_import_selected_file, pickedName),
                             color = cs.onSurfaceVariant
+                        )
+                    }
+                    val formatLabel = s.detectedFormatLabel
+                    if (formatLabel != null) {
+                        Text(
+                            stringResource(R.string.import_detected_format, formatLabel),
+                            color = cs.onSurfaceVariant,
+                            style = MaterialTheme.typography.bodySmall
                         )
                     }
                 }
@@ -160,7 +174,7 @@ fun CsvImportScreen(
                 shape = RoundedCornerShape(22.dp)
             ) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text(stringResource(R.string.csv_import_step_category), fontWeight = FontWeight.SemiBold)
+                    Text(stringResource(R.string.import_step_category_mapping), fontWeight = FontWeight.SemiBold)
 
                     var expanded by rememberSaveable { mutableStateOf(false) }
                     val selected = s.categories.firstOrNull { it.id == s.selectedCategoryId }
@@ -205,6 +219,109 @@ fun CsvImportScreen(
                         color = cs.onSurfaceVariant,
                         style = MaterialTheme.typography.bodySmall
                     )
+
+                    if (s.mappingRequired) {
+                        Divider(color = border)
+                        Text(stringResource(R.string.import_mapping_title), fontWeight = FontWeight.SemiBold)
+                        Text(
+                            stringResource(R.string.import_mapping_subtitle),
+                            color = cs.onSurfaceVariant,
+                            style = MaterialTheme.typography.bodySmall
+                        )
+
+                        val columns = s.mappingColumns
+                        val columnOptions = remember(columns) { columns.mapIndexed { index, label -> index to label } }
+
+                        ColumnMappingDropdown(
+                            title = stringResource(R.string.import_mapping_date_column),
+                            options = columnOptions,
+                            selectedIndex = s.mappingDateColumn,
+                            onSelect = vm::updateMappingDateColumn
+                        )
+
+                        ColumnMappingDropdown(
+                            title = stringResource(R.string.import_mapping_description_column),
+                            options = columnOptions,
+                            selectedIndex = s.mappingDescriptionColumn,
+                            onSelect = vm::updateMappingDescriptionColumn,
+                            optional = true
+                        )
+
+                        ColumnMappingDropdown(
+                            title = stringResource(R.string.import_mapping_amount_column),
+                            options = columnOptions,
+                            selectedIndex = s.mappingAmountColumn,
+                            onSelect = vm::updateMappingAmountColumn,
+                            optional = true
+                        )
+
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+                            ColumnMappingDropdown(
+                                title = stringResource(R.string.import_mapping_debit_column),
+                                options = columnOptions,
+                                selectedIndex = s.mappingDebitColumn,
+                                onSelect = vm::updateMappingDebitColumn,
+                                optional = true,
+                                modifier = Modifier.weight(1f)
+                            )
+                            ColumnMappingDropdown(
+                                title = stringResource(R.string.import_mapping_credit_column),
+                                options = columnOptions,
+                                selectedIndex = s.mappingCreditColumn,
+                                onSelect = vm::updateMappingCreditColumn,
+                                optional = true,
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+
+                        val dateFormatOptions = listOf(
+                            null to stringResource(R.string.import_date_format_auto),
+                            "yyyy-MM-dd" to "yyyy-MM-dd",
+                            "MM/dd/yyyy" to "MM/dd/yyyy",
+                            "dd/MM/yyyy" to "dd/MM/yyyy",
+                            "dd.MM.yyyy" to "dd.MM.yyyy"
+                        )
+                        ColumnMappingDropdown(
+                            title = stringResource(R.string.import_mapping_date_format),
+                            options = dateFormatOptions.map { it.first to it.second },
+                            selectedIndex = dateFormatOptions.indexOfFirst { it.first == s.mappingDateFormat }.takeIf { it >= 0 },
+                            onSelect = { idx -> vm.updateMappingDateFormat(dateFormatOptions.getOrNull(idx)?.first) }
+                        )
+
+                        val decimalOptions = listOf(
+                            DecimalSeparator.DOT to stringResource(R.string.import_decimal_dot),
+                            DecimalSeparator.COMMA to stringResource(R.string.import_decimal_comma)
+                        )
+                        ColumnMappingDropdown(
+                            title = stringResource(R.string.import_mapping_decimal_separator),
+                            options = decimalOptions.map { it.first to it.second },
+                            selectedIndex = decimalOptions.indexOfFirst { it.first == s.mappingDecimalSeparator }.takeIf { it >= 0 },
+                            onSelect = { idx -> decimalOptions.getOrNull(idx)?.first?.let { vm.updateMappingDecimalSeparator(it) } }
+                        )
+
+                        val mappingError = s.mappingError
+                        if (mappingError != null) {
+                            Text(mappingError, color = cs.error, style = MaterialTheme.typography.bodySmall)
+                        }
+
+                        Button(onClick = { vm.applyMapping() }) {
+                            Text(stringResource(R.string.import_apply_mapping))
+                        }
+
+                        if (s.mappingSampleRows.isNotEmpty()) {
+                            Text(stringResource(R.string.import_mapping_sample_rows), fontWeight = FontWeight.SemiBold)
+                            LazyColumn(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(120.dp),
+                                verticalArrangement = Arrangement.spacedBy(6.dp)
+                            ) {
+                                items(s.mappingSampleRows) { row ->
+                                    Text(row.joinToString(" | "), style = MaterialTheme.typography.bodySmall)
+                                }
+                            }
+                        }
+                    }
                 }
             }
 
@@ -332,7 +449,7 @@ fun CsvImportScreen(
 
                     Button(
                         onClick = { vm.importNow() },
-                        enabled = !s.loading && s.rows.isNotEmpty() && (s.selectedCategoryId != null) && s.willImportCount > 0
+                        enabled = !s.loading && s.rows.isNotEmpty() && (s.selectedCategoryId != null) && s.willImportCount > 0 && !s.mappingRequired
                     ) {
                         Text(stringResource(R.string.action_import_now))
                     }
@@ -360,6 +477,67 @@ private fun StatPill(
             Text(title, color = cs.onSurfaceVariant, style = MaterialTheme.typography.labelMedium)
             Spacer(Modifier.height(2.dp))
             Text(value, fontWeight = FontWeight.Bold)
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun <T> ColumnMappingDropdown(
+    title: String,
+    options: List<Pair<T, String>>,
+    selectedIndex: Int?,
+    onSelect: (Int?) -> Unit,
+    optional: Boolean = false,
+    modifier: Modifier = Modifier
+) {
+    val cs = MaterialTheme.colorScheme
+    var expanded by rememberSaveable { mutableStateOf(false) }
+    val selectedLabel = selectedIndex?.let { options.getOrNull(it)?.second }
+        ?: if (optional) stringResource(R.string.import_mapping_optional) else stringResource(R.string.import_mapping_select)
+
+    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        Text(title, style = MaterialTheme.typography.labelMedium, color = cs.onSurfaceVariant)
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(12.dp),
+            border = BorderStroke(1.dp, cs.outlineVariant),
+            color = cs.surfaceVariant.copy(alpha = 0.35f),
+            onClick = { expanded = true }
+        ) {
+            Row(
+                modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = selectedLabel,
+                    modifier = Modifier.weight(1f),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(stringResource(R.string.action_change), color = cs.primary, fontWeight = FontWeight.SemiBold)
+            }
+        }
+
+        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+            if (optional) {
+                DropdownMenuItem(
+                    text = { Text(stringResource(R.string.import_mapping_none)) },
+                    onClick = {
+                        expanded = false
+                        onSelect(null)
+                    }
+                )
+            }
+            options.forEachIndexed { index, option ->
+                DropdownMenuItem(
+                    text = { Text(option.second) },
+                    onClick = {
+                        expanded = false
+                        onSelect(index)
+                    }
+                )
+            }
         }
     }
 }

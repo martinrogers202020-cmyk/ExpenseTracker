@@ -1,23 +1,38 @@
 package com.example.expensetracker.ui.viewmodel
 
-import androidx.compose.runtime.Immutable
 import android.content.Context
 import android.net.Uri
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.expensetracker.R
+import com.example.expensetracker.data.datastore.ImportMappingStore
 import com.example.expensetracker.data.db.AppDatabase
+import com.example.expensetracker.data.importer.ColumnMapping
+import com.example.expensetracker.data.importer.CsvImporter
+import com.example.expensetracker.data.importer.DecimalSeparator
+import com.example.expensetracker.data.importer.FormatDetection
+import com.example.expensetracker.data.importer.FormatDetector
+import com.example.expensetracker.data.importer.ImportFormat
+import com.example.expensetracker.data.importer.ImportSource
+import com.example.expensetracker.data.importer.ImportedTxn
+import com.example.expensetracker.data.importer.Importer
+import com.example.expensetracker.data.importer.ImporterResult
+import com.example.expensetracker.data.importer.ImportParsingUtils
+import com.example.expensetracker.data.importer.OfxImporter
+import com.example.expensetracker.data.importer.PdfTextImporter
+import com.example.expensetracker.data.importer.QifImporter
+import com.example.expensetracker.data.importer.XlsxImporter
 import com.example.expensetracker.data.model.CategoryEntity
 import com.example.expensetracker.data.model.MerchantRuleEntity
 import com.example.expensetracker.data.model.TransactionEntity
 import com.example.expensetracker.data.model.TransactionType
-import com.example.expensetracker.util.BankCsvParser
-import com.example.expensetracker.util.BankCsvRow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.math.BigDecimal
 import java.time.LocalDate
 import kotlin.math.abs
 
@@ -33,6 +48,7 @@ data class CsvPreviewRow(
 data class CsvImportState(
     val loading: Boolean = false,
     val pickedName: String? = null,
+    val detectedFormatLabel: String? = null,
 
     val categories: List<CategoryEntity> = emptyList(),
     val selectedCategoryId: Long? = null,
@@ -49,7 +65,20 @@ data class CsvImportState(
 
     val warnings: List<String> = emptyList(),
     val error: String? = null,
-    val importedCount: Int? = null
+    val importedCount: Int? = null,
+
+    val mappingRequired: Boolean = false,
+    val mappingColumns: List<String> = emptyList(),
+    val mappingSampleRows: List<List<String>> = emptyList(),
+    val mappingDateColumn: Int? = null,
+    val mappingDescriptionColumn: Int? = null,
+    val mappingAmountColumn: Int? = null,
+    val mappingDebitColumn: Int? = null,
+    val mappingCreditColumn: Int? = null,
+    val mappingDateFormat: String? = null,
+    val mappingDecimalSeparator: DecimalSeparator = DecimalSeparator.DOT,
+    val mappingProfileKey: String? = null,
+    val mappingError: String? = null
 )
 
 class CsvImportViewModel(
@@ -60,7 +89,9 @@ class CsvImportViewModel(
     private val _state = MutableStateFlow(CsvImportState(loading = true))
     val state: StateFlow<CsvImportState> = _state
 
-    private var lastParsed: List<BankCsvRow> = emptyList()
+    private var lastParsed: List<ImportedTxn> = emptyList()
+    private var lastImporter: Importer? = null
+    private var lastSource: ImportSource? = null
 
     init {
         viewModelScope.launch { loadCategories() }
@@ -73,6 +104,34 @@ class CsvImportViewModel(
         }
     }
 
+    fun updateMappingDateColumn(index: Int?) {
+        _state.value = _state.value.copy(mappingDateColumn = index, mappingError = null)
+    }
+
+    fun updateMappingDescriptionColumn(index: Int?) {
+        _state.value = _state.value.copy(mappingDescriptionColumn = index, mappingError = null)
+    }
+
+    fun updateMappingAmountColumn(index: Int?) {
+        _state.value = _state.value.copy(mappingAmountColumn = index, mappingError = null)
+    }
+
+    fun updateMappingDebitColumn(index: Int?) {
+        _state.value = _state.value.copy(mappingDebitColumn = index, mappingError = null)
+    }
+
+    fun updateMappingCreditColumn(index: Int?) {
+        _state.value = _state.value.copy(mappingCreditColumn = index, mappingError = null)
+    }
+
+    fun updateMappingDateFormat(format: String?) {
+        _state.value = _state.value.copy(mappingDateFormat = format, mappingError = null)
+    }
+
+    fun updateMappingDecimalSeparator(separator: DecimalSeparator) {
+        _state.value = _state.value.copy(mappingDecimalSeparator = separator, mappingError = null)
+    }
+
     fun pickAndParse(uri: Uri) {
         viewModelScope.launch {
             _state.value = _state.value.copy(
@@ -80,11 +139,18 @@ class CsvImportViewModel(
                 pickedName = uri.lastPathSegment,
                 error = null,
                 importedCount = null,
-                warnings = emptyList()
+                warnings = emptyList(),
+                mappingRequired = false,
+                mappingError = null
             )
+            val source = ImportSource(uri = uri, displayName = uri.lastPathSegment)
+            val detection = FormatDetector.detect(context, uri, source.displayName)
+            val importer = importerFor(detection.format)
+            lastImporter = importer
+            lastSource = source
 
             val result = try {
-                withContext(Dispatchers.IO) { BankCsvParser.parseFromUri(context, uri) }
+                withContext(Dispatchers.IO) { importer.import(context, source, null) }
             } catch (t: Throwable) {
                 _state.value = _state.value.copy(
                     loading = false,
@@ -93,32 +159,39 @@ class CsvImportViewModel(
                 return@launch
             }
 
-            lastParsed = result.rows
+            handleImportResult(detection, result)
+        }
+    }
 
-            val preview = result.rows
-                .sortedWith(compareBy<BankCsvRow> { it.date }.thenBy { it.rawLineIndex })
-                .map { r ->
-                    CsvPreviewRow(
-                        date = r.date,
-                        description = r.description,
-                        amountCentsAbs = r.amountCentsAbs,
-                        typeUpper = r.typeUpper
-                    )
-                }
+    fun applyMapping() {
+        viewModelScope.launch {
+            val s = _state.value
+            val importer = lastImporter ?: return@launch
+            val source = lastSource ?: return@launch
 
-            val start = preview.firstOrNull()?.date
-            val end = preview.lastOrNull()?.date
+            val mapping = buildMappingFromState(s) ?: run {
+                _state.value = s.copy(mappingError = context.getString(R.string.import_mapping_incomplete))
+                return@launch
+            }
 
-            _state.value = _state.value.copy(
-                loading = false,
-                rows = preview,
-                start = start,
-                end = end,
-                warnings = result.warnings,
-                error = null
-            )
+            _state.value = s.copy(loading = true, mappingError = null)
 
-            recomputeDuplicatesAndTotals()
+            val result = try {
+                withContext(Dispatchers.IO) { importer.import(context, source, mapping) }
+            } catch (t: Throwable) {
+                _state.value = s.copy(
+                    loading = false,
+                    error = context.getString(R.string.csv_import_failed_parse, t.message ?: "")
+                )
+                return@launch
+            }
+
+            val profileKey = result.diagnostics.bankProfileKey ?: s.mappingProfileKey
+            if (!profileKey.isNullOrBlank()) {
+                withContext(Dispatchers.IO) { ImportMappingStore.saveMapping(context, profileKey, mapping) }
+            }
+
+            handleImportResult(FormatDetector.detect(context, source.uri, source.displayName), result)
         }
     }
 
@@ -149,8 +222,8 @@ class CsvImportViewModel(
                 var d = 0
 
                 for (r in lastParsed) {
-                    val type = if (r.typeUpper == "EXPENSE") TransactionType.EXPENSE else TransactionType.INCOME
-                    val amountAbs = r.amountCentsAbs
+                    val type = if (r.amount < BigDecimal.ZERO) TransactionType.EXPENSE else TransactionType.INCOME
+                    val amountAbs = abs(ImportParsingUtils.normalizeAmountToCents(r.amount))
 
                     val catId = bestCategoryForDescription(r.description, rules) ?: fallbackCategoryId
 
@@ -204,6 +277,95 @@ class CsvImportViewModel(
 
     /* ---------------- helpers ---------------- */
 
+    private fun importerFor(format: ImportFormat): Importer {
+        return when (format) {
+            ImportFormat.CSV -> CsvImporter()
+            ImportFormat.XLSX -> XlsxImporter()
+            ImportFormat.OFX -> OfxImporter()
+            ImportFormat.QIF -> QifImporter()
+            ImportFormat.PDF -> PdfTextImporter()
+        }
+    }
+
+    private suspend fun handleImportResult(
+        detection: FormatDetection,
+        initialResult: ImporterResult
+    ) {
+        var result = initialResult
+        val diagnostics = result.diagnostics
+        val importer = lastImporter
+        val source = lastSource
+        val profileKey = diagnostics.bankProfileKey
+
+        if (diagnostics.needsMapping && !profileKey.isNullOrBlank() && importer != null && source != null) {
+            val stored = ImportMappingStore.loadMapping(context, profileKey)
+            if (stored != null) {
+                result = withContext(Dispatchers.IO) { importer.import(context, source, stored) }
+            }
+        }
+
+        val finalDiagnostics = result.diagnostics
+        lastParsed = result.transactions
+
+        val preview = lastParsed
+            .sortedWith(compareBy<ImportedTxn> { it.date }.thenBy { it.description })
+            .map { r ->
+                val amountAbs = abs(ImportParsingUtils.normalizeAmountToCents(r.amount))
+                CsvPreviewRow(
+                    date = r.date,
+                    description = r.description,
+                    amountCentsAbs = amountAbs,
+                    typeUpper = if (r.amount < BigDecimal.ZERO) "EXPENSE" else "INCOME"
+                )
+            }
+
+        val start = preview.firstOrNull()?.date
+        val end = preview.lastOrNull()?.date
+
+        val suggested = finalDiagnostics.suggestedMapping
+        _state.value = _state.value.copy(
+            loading = false,
+            rows = preview,
+            start = start,
+            end = end,
+            warnings = finalDiagnostics.warnings,
+            error = null,
+            detectedFormatLabel = detection.format.name,
+            mappingRequired = finalDiagnostics.needsMapping,
+            mappingColumns = finalDiagnostics.columns,
+            mappingSampleRows = finalDiagnostics.sampleRows,
+            mappingDateColumn = suggested?.dateColumn,
+            mappingDescriptionColumn = suggested?.descriptionColumn,
+            mappingAmountColumn = suggested?.amountColumn,
+            mappingDebitColumn = suggested?.debitColumn,
+            mappingCreditColumn = suggested?.creditColumn,
+            mappingDateFormat = suggested?.dateFormat,
+            mappingDecimalSeparator = suggested?.decimalSeparator ?: DecimalSeparator.DOT,
+            mappingProfileKey = finalDiagnostics.bankProfileKey,
+            mappingError = null
+        )
+
+        recomputeDuplicatesAndTotals()
+    }
+
+    private fun buildMappingFromState(state: CsvImportState): ColumnMapping? {
+        val date = state.mappingDateColumn ?: return null
+        val hasAmount = state.mappingAmountColumn != null
+        val hasDebitCredit = state.mappingDebitColumn != null || state.mappingCreditColumn != null
+        if (!hasAmount && !hasDebitCredit) return null
+
+        return ColumnMapping(
+            dateColumn = date,
+            descriptionColumn = state.mappingDescriptionColumn,
+            typeColumn = null,
+            amountColumn = state.mappingAmountColumn,
+            debitColumn = state.mappingDebitColumn,
+            creditColumn = state.mappingCreditColumn,
+            dateFormat = state.mappingDateFormat,
+            decimalSeparator = state.mappingDecimalSeparator
+        )
+    }
+
     private suspend fun loadCategories() {
         val cats = try {
             withContext(Dispatchers.IO) { db.categoryDao().getAllOnce() }
@@ -220,8 +382,7 @@ class CsvImportViewModel(
     }
 
     private suspend fun recomputeDuplicatesAndTotals() {
-        val preview = _state.value.rows
-        if (preview.isEmpty()) {
+        if (lastParsed.isEmpty()) {
             _state.value = _state.value.copy(
                 willImportCount = 0,
                 duplicatesDetected = 0,
@@ -231,15 +392,16 @@ class CsvImportViewModel(
             return
         }
 
-        val income = preview.sumOf { if (it.typeUpper == "INCOME") it.amountCentsAbs else 0L }
-        val expense = preview.sumOf { if (it.typeUpper == "EXPENSE") it.amountCentsAbs else 0L }
+        val income = lastParsed.sumOf { if (it.amount >= BigDecimal.ZERO) abs(ImportParsingUtils.normalizeAmountToCents(it.amount)) else 0L }
+        val expense = lastParsed.sumOf { if (it.amount < BigDecimal.ZERO) abs(ImportParsingUtils.normalizeAmountToCents(it.amount)) else 0L }
 
         val existing = withContext(Dispatchers.IO) { buildExistingFingerprintsForParsed() }
 
         var dupes = 0
-        for (r in preview) {
-            val type = if (r.typeUpper == "EXPENSE") TransactionType.EXPENSE else TransactionType.INCOME
-            val fp = fingerprint(r.date.toEpochDay(), type, abs(r.amountCentsAbs), r.description.trim())
+        for (r in lastParsed) {
+            val type = if (r.amount < BigDecimal.ZERO) TransactionType.EXPENSE else TransactionType.INCOME
+            val amountAbs = abs(ImportParsingUtils.normalizeAmountToCents(r.amount))
+            val fp = fingerprint(r.date.toEpochDay(), type, amountAbs, r.description.trim())
             if (existing.contains(fp)) dupes++
         }
 
@@ -247,7 +409,7 @@ class CsvImportViewModel(
             previewIncomeCents = income,
             previewExpenseCents = expense,
             duplicatesDetected = dupes,
-            willImportCount = (preview.size - dupes).coerceAtLeast(0)
+            willImportCount = (lastParsed.size - dupes).coerceAtLeast(0)
         )
     }
 

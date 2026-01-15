@@ -97,6 +97,10 @@ dependencies {
     // WorkManager
     implementation("androidx.work:work-runtime-ktx:2.9.0")
 
+    // Statement import (XLSX + PDF text)
+    implementation("org.apache.poi:poi-ooxml:5.2.5")
+    implementation("com.tom-roush:pdfbox-android:2.0.27.0")
+
     // Google Drive / Auth
     implementation("com.google.android.gms:play-services-auth:21.2.0")
     implementation("com.google.api-client:google-api-client-android:2.6.0")

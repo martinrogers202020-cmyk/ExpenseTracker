@@ -79,8 +79,8 @@
     <string name="settings_backup_restore_subtitle">Drive veya dosyalarla dışa/ içe aktar</string>
     <string name="settings_advanced_reports_title">Gelişmiş raporlar</string>
     <string name="settings_advanced_reports_subtitle">Özel aralıklar + trendler</string>
-    <string name="settings_import_csv_title">Banka CSV içe aktar</string>
-    <string name="settings_import_csv_subtitle">CSV dosyasından para çıkışları ve girişleri ekle</string>
+    <string name="settings_import_csv_title">Banka ekstresi içe aktar</string>
+    <string name="settings_import_csv_subtitle">CSV, XLSX, OFX/QFX, QIF veya PDF dosyalarından işlemleri ekle</string>
     <string name="settings_security_good">İyi</string>
     <string name="settings_security_status_title">Güvenlik durumu</string>
     <string name="settings_security_status_subtitle">Verileriniz cihazda kalır. Aşağıdan koruma özellikleri ekleyin.</string>
@@ -242,10 +242,10 @@
     <string name="expenses_no_note">Not yok</string>
 
     <!-- CSV Import -->
-    <string name="csv_import_step_pick_file">1) CSV dosyası seç</string>
-    <string name="csv_import_choose_csv">CSV seç</string>
+    <string name="csv_import_step_pick_file">1) Ekstre dosyası seç</string>
+    <string name="csv_import_choose_csv">Ekstre seç</string>
     <string name="csv_import_selected_file">Seçildi: %1$s</string>
-    <string name="csv_import_step_category">2) İçe aktarılacak işlemler için kategori</string>
+    <string name="csv_import_step_category">2) Kategori ve sütun eşleme</string>
     <string name="csv_import_select_category">Kategori seç</string>
     <string name="csv_import_tip">İpucu: daha sonra satıcıları kategorilere otomatik eşlemek için kurallar ekleyebilirsiniz.</string>
     <string name="csv_import_step_preview">3) Önizleme</string>
@@ -259,7 +259,7 @@
     <string name="csv_import_warning_item">• %1$s</string>
     <string name="csv_import_error">Hata: %1$s</string>
     <string name="csv_import_imported">İçe aktarılan: %1$d</string>
-    <string name="csv_import_failed_parse">CSV ayrıştırılamadı: %1$s</string>
+    <string name="csv_import_failed_parse">Ekstre ayrıştırılamadı: %1$s</string>
     <string name="csv_import_pick_category_error">Önce bir kategori seçin.</string>
     <string name="csv_import_no_rows_error">Satır bulunamadı.</string>
     <string name="csv_import_failed_import">İçe aktarma başarısız: %1$s</string>
@@ -375,7 +375,7 @@
     <string name="placeholder_home">Ana sayfa (TODO)</string>
     <string name="placeholder_categories">Kategoriler (TODO)</string>
     <string name="placeholder_reports">Raporlar (TODO)</string>
-    <string name="placeholder_import_csv">Banka CSV içe aktar (TODO)</string>
+    <string name="placeholder_import_csv">Banka ekstresi içe aktar (TODO)</string>
     <string name="placeholder_backup_restore">Yedekleme ve geri yükleme (TODO)</string>
     <string name="placeholder_notifications">Bildirimler (TODO)</string>
     <string name="placeholder_paywall">Ödeme ekranı (TODO)</string>
