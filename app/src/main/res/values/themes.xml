@@ -5,7 +5,7 @@
     <style name="Theme.ExpenseTracker" parent="Theme.MaterialComponents.DayNight.NoActionBar" />
 
     <!-- Splash theme (uses androidx core-splashscreen) -->
-    <style name="Theme.ExpenseTracker.Splash" parent="Theme.SplashScreen">
+    <style name="Theme.ExpenseTracker.Splash" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="windowSplashScreenBackground">@android:color/white</item>
         <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
         <item name="postSplashScreenTheme">@style/Theme.ExpenseTracker</item>

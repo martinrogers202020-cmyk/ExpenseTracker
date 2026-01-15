@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.ExpenseTracker" parent="Theme.Material3.DayNight.NoActionBar" />
+    <style name="Theme.ExpenseTracker" parent="Theme.MaterialComponents.DayNight.NoActionBar" />
+
+    <style name="Theme.ExpenseTracker.Splash" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="windowSplashScreenBackground">@android:color/black</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <item name="postSplashScreenTheme">@style/Theme.ExpenseTracker</item>
+    </style>
 </resources>
